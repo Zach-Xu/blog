@@ -1,0 +1,50 @@
+package com.zach.blog.model;
+
+import com.zach.blog.enums.DeleteFlag;
+import com.zach.blog.enums.PublishStatus;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Table( name = "blog_article")
+@Getter
+@Setter
+public class Article extends BaseEntity{
+
+    private String title;
+
+    @Column(columnDefinition = "longtext")
+    private String content;
+
+    @Column(columnDefinition = "varchar(1024)")
+    private String summary;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "category_id"
+    )
+    private Category category;
+
+    private String thumbnail;
+
+    private boolean pinned;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private PublishStatus publishStatus;
+
+    @Column(name = "view_count")
+    private Long viewCount;
+
+    @Column(name = "allowed_comment")
+    private boolean allowedComment;
+
+    @Column(name = "delete_flag")
+    @Enumerated(EnumType.ORDINAL)
+    private DeleteFlag deleteFlag;
+
+    @OneToOne
+    @JoinColumn(name = "author_id")
+    private ApplicationUser author;
+}
