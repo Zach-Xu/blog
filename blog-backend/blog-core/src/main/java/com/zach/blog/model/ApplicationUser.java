@@ -59,4 +59,8 @@ public class ApplicationUser extends BaseEntity{
         this.authorities.add(role);
     }
 
+    public ApplicationUser(){
+        this.deleteFlag = DeleteFlag.LIVE;
+    }
+
 }

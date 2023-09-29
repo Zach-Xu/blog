@@ -34,4 +34,8 @@ public class OutboundLink extends BaseEntity{
     @Column(name = "delete_flag")
     @Enumerated(EnumType.ORDINAL)
     private DeleteFlag deleteFlag;
+
+    public OutboundLink(){
+        this.deleteFlag = DeleteFlag.LIVE;
+    }
 }

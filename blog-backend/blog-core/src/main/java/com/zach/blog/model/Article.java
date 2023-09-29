@@ -20,7 +20,7 @@ public class Article extends BaseEntity{
     @Column(columnDefinition = "varchar(1024)")
     private String summary;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "category_id"
     )
@@ -44,7 +44,11 @@ public class Article extends BaseEntity{
     @Enumerated(EnumType.ORDINAL)
     private DeleteFlag deleteFlag;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private ApplicationUser author;
+
+    public Article(){
+        this.deleteFlag = DeleteFlag.LIVE;
+    }
 }

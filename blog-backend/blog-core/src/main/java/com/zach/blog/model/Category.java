@@ -27,4 +27,8 @@ public class Category extends BaseEntity{
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "delete_flag")
     private DeleteFlag deleteFlag;
+
+    public Category(){
+        this.deleteFlag = DeleteFlag.LIVE;
+    }
 }

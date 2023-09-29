@@ -16,7 +16,7 @@ public class Comment extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private CommentType type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
@@ -39,4 +39,8 @@ public class Comment extends BaseEntity {
     @Column(name = "delete_flag")
     @Enumerated(EnumType.ORDINAL)
     private DeleteFlag deleteFlag;
+
+    public Comment(){
+        this.deleteFlag = DeleteFlag.LIVE;
+    }
 }
