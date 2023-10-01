@@ -9,4 +9,6 @@ public interface ArticleService {
     List<Article> getAllArticles();
 
     void createArticles(List<Article> articles);
+
+    List<Article> getHotArticles();
 }

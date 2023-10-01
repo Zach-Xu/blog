@@ -1,5 +1,6 @@
 package com.zach.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.zach.blog.enums.DeleteFlag;
 import com.zach.blog.enums.PublishStatus;
 import jakarta.persistence.*;
@@ -7,10 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table( name = "blog_article")
+@Table(name = "blog_article")
 @Getter
 @Setter
-public class Article extends BaseEntity{
+public class Article extends BaseEntity {
 
     private String title;
 
@@ -46,9 +47,10 @@ public class Article extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
+    @JsonIgnoreProperties({"authorities"})
     private ApplicationUser author;
 
-    public Article(){
+    public Article() {
         this.deleteFlag = DeleteFlag.LIVE;
     }
 }
