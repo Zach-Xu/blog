@@ -1,10 +1,11 @@
 package com.zach.blog.model;
 
-import com.zach.blog.enums.DeleteFlag;
 import com.zach.blog.enums.Gender;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +14,8 @@ import java.util.Set;
 @Table(name = "blog_user")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE blog_user SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class ApplicationUser extends BaseEntity{
 
     private String username;
@@ -45,10 +48,6 @@ public class ApplicationUser extends BaseEntity{
     @Enumerated(EnumType.ORDINAL)
     private Gender gender;
 
-    @Column(name = "delete_flag")
-    @Enumerated(EnumType.ORDINAL)
-    private DeleteFlag deleteFlag;
-
     @Column(name = "created_by")
     private Long createdBy;
 
@@ -57,10 +56,6 @@ public class ApplicationUser extends BaseEntity{
 
     public void addAuthority(Role role){
         this.authorities.add(role);
-    }
-
-    public ApplicationUser(){
-        this.deleteFlag = DeleteFlag.LIVE;
     }
 
 }

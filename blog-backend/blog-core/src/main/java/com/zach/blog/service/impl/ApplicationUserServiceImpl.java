@@ -1,9 +1,9 @@
 package com.zach.blog.service.impl;
 
 import com.zach.blog.exception.UserNotExistException;
+import com.zach.blog.service.ApplicationUserService;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.repository.ApplicationUserRepository;
-import com.zach.blog.service.ApplicationUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

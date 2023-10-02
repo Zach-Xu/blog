@@ -1,9 +1,10 @@
 package com.zach.blog.service.impl;
 
 import com.zach.blog.exception.CategoryNotExistException;
+import com.zach.blog.service.CategoryService;
+import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.model.Category;
 import com.zach.blog.repository.CategoryRepository;
-import com.zach.blog.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,5 +26,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findByCategoryName(String categoryName) {
         return categoryRepository.findByName(categoryName).orElseThrow(CategoryNotExistException::new);
+    }
+
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.findCategoriesWithPublishedArticles(PublishStatus.PUBLISHED);
     }
 }

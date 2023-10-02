@@ -1,24 +1,20 @@
 package com.zach.blog.service.impl;
 
+import com.zach.blog.model.Category;
+import com.zach.blog.model.Role;
 import com.zach.blog.enums.Authority;
-import com.zach.blog.enums.DeleteFlag;
 import com.zach.blog.enums.Gender;
 import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Article;
-import com.zach.blog.model.Category;
-import com.zach.blog.model.Role;
-import com.zach.blog.repository.ArticleRepository;
-import com.zach.blog.repository.RoleRepository;
+
 import com.zach.blog.service.*;
 import lombok.RequiredArgsConstructor;
-import org.apache.juli.logging.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service

@@ -1,9 +1,9 @@
 package com.zach.blog.service.impl;
 
-import com.zach.blog.enums.Authority;
-import com.zach.blog.model.Role;
 import com.zach.blog.repository.RoleRepository;
 import com.zach.blog.service.RoleService;
+import com.zach.blog.enums.Authority;
+import com.zach.blog.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

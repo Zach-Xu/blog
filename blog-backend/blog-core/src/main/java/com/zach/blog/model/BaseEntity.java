@@ -24,4 +24,10 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;
+
+    private boolean deleted;
+
+    public BaseEntity(){
+        this.deleted = false;
+    }
 }

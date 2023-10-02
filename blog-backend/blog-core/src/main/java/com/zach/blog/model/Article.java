@@ -1,16 +1,19 @@
 package com.zach.blog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.zach.blog.enums.DeleteFlag;
 import com.zach.blog.enums.PublishStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "blog_article")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE blog_article SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Article extends BaseEntity {
 
     private String title;
@@ -41,16 +44,9 @@ public class Article extends BaseEntity {
     @Column(name = "allowed_comment")
     private boolean allowedComment;
 
-    @Column(name = "delete_flag")
-    @Enumerated(EnumType.ORDINAL)
-    private DeleteFlag deleteFlag;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     @JsonIgnoreProperties({"authorities"})
     private ApplicationUser author;
 
-    public Article() {
-        this.deleteFlag = DeleteFlag.LIVE;
-    }
 }

@@ -1,15 +1,18 @@
 package com.zach.blog.model;
 
 import com.zach.blog.enums.CommentType;
-import com.zach.blog.enums.DeleteFlag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "blog_comment")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE blog_comment SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Comment extends BaseEntity {
 
     @Column(name = "type")
@@ -36,11 +39,4 @@ public class Comment extends BaseEntity {
     @Column(name = "updated_by")
     private Long updatedBy;
 
-    @Column(name = "delete_flag")
-    @Enumerated(EnumType.ORDINAL)
-    private DeleteFlag deleteFlag;
-
-    public Comment(){
-        this.deleteFlag = DeleteFlag.LIVE;
-    }
 }

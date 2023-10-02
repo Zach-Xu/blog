@@ -1,6 +1,5 @@
 package com.zach.blog.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zach.blog.enums.HttpStatusCode;
 import com.zach.blog.exception.IllegalHttpStatusCodeException;
