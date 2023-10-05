@@ -18,13 +18,14 @@ import java.util.Set;
 @Where(clause = "deleted = false")
 public class ApplicationUser extends BaseEntity{
 
+    @Column(unique = true)
     private String username;
 
     private String nickname;
 
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
             joinColumns ={

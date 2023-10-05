@@ -1,12 +1,10 @@
 package com.zach.blog.service.impl;
 
-import com.zach.blog.model.Category;
-import com.zach.blog.model.Role;
+import com.zach.blog.enums.AuditStatus;
+import com.zach.blog.model.*;
 import com.zach.blog.enums.Authority;
 import com.zach.blog.enums.Gender;
 import com.zach.blog.enums.PublishStatus;
-import com.zach.blog.model.ApplicationUser;
-import com.zach.blog.model.Article;
 
 import com.zach.blog.service.*;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +25,12 @@ public class DbInitializationServiceImpl implements DbInitializationService {
     private final CategoryService categoryService;
     private final ArticleService articleService;
 
+    private final OutboundLinkService linkService;
+
     @Override
     public void populateRoles() {
-        Role userRole = new Role(Authority.USER);
-        Role adminRole = new Role(Authority.ADMIN);
+        Role userRole = new Role(Authority.ROLE_USER);
+        Role adminRole = new Role(Authority.ROLE_ADMIN);
 
         List<Role> roleList = new ArrayList<>();
         roleList.add(userRole);
@@ -41,7 +41,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
     @Override
     public void populateUsers() {
         ApplicationUser user1 = new ApplicationUser();
-        Role adminRole = roleService.findOrCreateRole(Authority.ADMIN);
+        Role adminRole = roleService.findOrCreateRole(Authority.ROLE_ADMIN);
         user1.addAuthority(adminRole);
         user1.setUsername("Zachary");
         user1.setNickname("NotNow");
@@ -91,7 +91,33 @@ public class DbInitializationServiceImpl implements DbInitializationService {
 
     @Override
     public void populateOutboundLinks() {
+        OutboundLink link1 = new OutboundLink();
+        link1.setName("Dishsoap");
+        link1.setDescription("Link to Dishsoap's blog");
+        link1.setAuditStatus(AuditStatus.ACCEPTED);
+        link1.setLogo("https://twitter.com/Dishsoaptft/photo");
+        link1.setUrl("https://twitter.com/Dishsoaptft");
 
+        OutboundLink link2 = new OutboundLink();
+        link2.setName("Milk");
+        link2.setDescription("Link to Milk's blog");
+        link2.setAuditStatus(AuditStatus.PENDING);
+        link2.setLogo("https://twitter.com/MilkTFT/photo");
+        link2.setUrl("https://twitter.com/MilkTFT");
+
+        OutboundLink link3 = new OutboundLink();
+        link3.setName("setsuko");
+        link3.setDescription("Link to setsuko's blog");
+        link3.setAuditStatus(AuditStatus.ACCEPTED);
+        link3.setLogo("https://twitter.com/setsukotft/photo");
+        link3.setUrl("https://twitter.com/setsukotft");
+
+        List<OutboundLink> links = new ArrayList<>();
+        links.add(link1);
+        links.add(link2);
+        links.add(link3);
+
+        linkService.createOutboundLinks(links);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.zach.blog.enums;
 
 public enum Authority {
-    ADMIN,
-    USER
+    ROLE_ADMIN,
+    ROLE_USER
 }

@@ -7,8 +7,8 @@ public enum HttpStatusCode {
     SYSTEM_ERROR(500, "Internal server error, please contact admin"),
     LOGIN_ERROR(401, "Invalid credentials"),
     RESOURCE_NOT_FOUND(404, "Resource is not existed"),
-    FORBIDDEN(403, "Not allowed to perform this action");
-
+    FORBIDDEN(403, "Not allowed to perform this action"),
+    TOKEN_INVALID(401, "Invalid or expired token");
 
     final int code;
     final String message;

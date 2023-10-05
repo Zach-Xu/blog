@@ -19,5 +19,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         dbInitializationService.populateUsers();
         dbInitializationService.populateCategories();
         dbInitializationService.populateArticles();
+        dbInitializationService.populateOutboundLinks();
     }
 }
