@@ -10,6 +10,7 @@ import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.service.AuthenticationService;
 import com.zach.blog.service.RoleService;
 import com.zach.blog.utils.JwtUtils;
+import com.zach.blog.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final RedisUtils redisUtils;
 
     @Override
     @Transactional
@@ -46,20 +50,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Persist new user
         ApplicationUser newUser = userRepository.save(user);
 
-        String jwt = jwtUtils.generateJwtToken(username);
+        redisUtils.set(USER_KEY + newUser.getId(), newUser);
+
+        String jwt = jwtUtils.generateJwtToken(newUser.getId());
         return new AuthResponse(newUser, jwt);
     }
 
     @Override
     public AuthResponse login(String username, String password) {
         // Validate user credentials
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
 
+        ApplicationUser user = userDetails.getUser();
+        // Store user info in redis
+        redisUtils.set(USER_KEY + user.getId(), user);
+
         // Generate Jwt
-        String jwt = jwtUtils.generateJwtToken(userDetails.getUsername());
+        String jwt = jwtUtils.generateJwtToken(userDetails.getUser().getId());
 
         return new AuthResponse(userDetails.getUser(), jwt);
     }

@@ -22,10 +22,10 @@ public class JwtUtils implements Serializable {
     @Value("${zach.blog.jwt.expirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(String username) {
+    public String generateJwtToken(Long userId) {
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(String.valueOf(userId))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
@@ -36,9 +36,9 @@ public class JwtUtils implements Serializable {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().getSubject();
+    public Long extractUserId(String token) {
+        return Long.valueOf(Jwts.parserBuilder().setSigningKey(key()).build()
+                .parseClaimsJws(token).getBody().getSubject());
     }
 
     public boolean validateJwtToken(String token) {

@@ -1,5 +1,6 @@
 package com.zach.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +18,12 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @CreationTimestamp
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "updated_time")
     private LocalDateTime updatedTime;

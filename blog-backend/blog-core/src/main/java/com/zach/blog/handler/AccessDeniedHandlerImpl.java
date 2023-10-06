@@ -2,6 +2,7 @@ package com.zach.blog.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zach.blog.dto.ResponseResult;
+import com.zach.blog.utils.JsonUtils;
 import com.zach.blog.utils.ResponseUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ResponseResult<?> result = new ResponseResult<>(HttpStatus.FORBIDDEN.value(),"No permission to perform such action");
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(result);
-        responseUtils.renderString(response,json);
+        ResponseResult<?> result = new ResponseResult<>(HttpStatus.FORBIDDEN.value(), "No permission to perform such action");
+        responseUtils.renderString(response, JsonUtils.stringify(request));
     }
 }

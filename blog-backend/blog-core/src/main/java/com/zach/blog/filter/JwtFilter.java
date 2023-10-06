@@ -1,12 +1,13 @@
 package com.zach.blog.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.zach.blog.dto.ResponseResult;
 import com.zach.blog.enums.HttpStatusCode;
-import com.zach.blog.exception.UserNotExistException;
+import com.zach.blog.exception.RequireLoginException;
 import com.zach.blog.model.ApplicationUser;
-import com.zach.blog.repository.ApplicationUserRepository;
+import com.zach.blog.utils.JsonUtils;
 import com.zach.blog.utils.JwtUtils;
+import com.zach.blog.utils.RedisUtils;
 import com.zach.blog.utils.ResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,15 +22,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Objects;
+
+import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final ApplicationUserRepository userRepository;
     private final ResponseUtils responseUtils;
+    private final RedisUtils redisUtils;
 
 
     @Override
@@ -45,20 +48,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             if (jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                Long userId = jwtUtils.extractUserId(jwt);
 
                 // Todo: query user from redis
-                Optional<ApplicationUser> userOpt = userRepository.findByUsername(username);
+                ApplicationUser user = redisUtils.get(USER_KEY + userId, ApplicationUser.class);
 
+                if(Objects.isNull(user)){
+                    throw new RequireLoginException();
+                }
                 // user is authenticated if no exception thrown
-                UsernamePasswordAuthenticationToken authentication = userOpt.map(u -> new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities()))
-                        .orElseThrow(UserNotExistException::new);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            responseUtils.renderString(response, new ObjectMapper().writeValueAsString(ResponseResult.error(HttpStatusCode.TOKEN_INVALID)));
+            ResponseResult<?> result = ResponseResult.error(HttpStatusCode.TOKEN_INVALID);
+            responseUtils.renderString(response, JsonUtils.stringify(result));
             return;
         }
 

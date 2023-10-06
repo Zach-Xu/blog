@@ -4,6 +4,6 @@ import com.zach.blog.enums.HttpStatusCode;
 
 public class IllegalHttpStatusCodeException extends RuntimeException {
     public IllegalHttpStatusCodeException(HttpStatusCode code) {
-        super("HttpStatusCode." + code.name() + " is not allowed");
+        super("HttpStatusCode." + code.name() + " is not allowed.");
     }
 }

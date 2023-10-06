@@ -1,5 +1,7 @@
 package com.zach.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.zach.blog.enums.Gender;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class ApplicationUser extends BaseEntity{
 
     private String nickname;
 
+    @JsonIgnore
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -35,6 +38,7 @@ public class ApplicationUser extends BaseEntity{
                     @JoinColumn(name = "role_id", referencedColumnName = "id")
             }
     )
+    @JsonIncludeProperties({"authority"})
     private Set<Role> authorities = new HashSet<>();
 
     private boolean enable;
