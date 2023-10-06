@@ -4,7 +4,7 @@ import com.zach.blog.dto.AuthResponse;
 import com.zach.blog.dto.LoginRequest;
 import com.zach.blog.dto.RegisterRequest;
 import com.zach.blog.dto.ResponseResult;
-import com.zach.blog.model.UserDetailsImpl;
+import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,8 +34,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseResult<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        authenticationService.logout(userDetails);
+    public ResponseResult<?> logout(@AuthenticationPrincipal ApplicationUser user) {
+        authenticationService.logout(user);
         return ResponseResult.ok();
     }
 }

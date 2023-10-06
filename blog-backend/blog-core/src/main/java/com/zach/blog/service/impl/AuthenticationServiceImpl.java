@@ -75,8 +75,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long userId = userDetails.getUser().getId();
+    public void logout(@AuthenticationPrincipal ApplicationUser user) {
+        Long userId = user.getId();
         redisUtils.delete(USER_KEY + userId);
     }
 }

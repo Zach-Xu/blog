@@ -53,15 +53,18 @@ public class JwtFilter extends OncePerRequestFilter {
                 // Todo: query user from redis
                 ApplicationUser user = redisUtils.get(USER_KEY + userId, ApplicationUser.class);
 
-                if(Objects.isNull(user)){
+                if (Objects.isNull(user)) {
                     throw new RequireLoginException();
                 }
                 // user is authenticated if no exception thrown
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        } catch (RequireLoginException e) {
+            ResponseResult<?> result = ResponseResult.error(HttpStatusCode.REQUIRE_LOGIN);
+            responseUtils.renderString(response, JsonUtils.stringify(result));
+            return;
         } catch (Exception e) {
             ResponseResult<?> result = ResponseResult.error(HttpStatusCode.TOKEN_INVALID);
             responseUtils.renderString(response, JsonUtils.stringify(result));
