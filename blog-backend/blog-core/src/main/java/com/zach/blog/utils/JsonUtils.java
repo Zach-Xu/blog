@@ -6,7 +6,7 @@ import org.apache.logging.log4j.util.Strings;
 import java.io.IOException;
 
 public class JsonUtils {
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static <T> String stringify(T obj) {
         if (obj == null) {

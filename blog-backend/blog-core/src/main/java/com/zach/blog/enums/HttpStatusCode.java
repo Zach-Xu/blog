@@ -3,11 +3,12 @@ package com.zach.blog.enums;
 public enum HttpStatusCode {
 
     SUCCESS(200, "Action successful"),
+    BAD_REQUEST(400, "Bad request"),
     REQUIRE_LOGIN(401, "Action required login"),
     SYSTEM_ERROR(500, "Internal server error, please contact admin"),
     LOGIN_ERROR(401, "Invalid credentials"),
-    RESOURCE_NOT_FOUND(404, "Resource is not existed"),
-    FORBIDDEN(403, "Not allowed to perform this action"),
+    RESOURCE_NOT_FOUND(404, "Resource does not exist"),
+    FORBIDDEN(403, "No permission to perform this action"),
     TOKEN_INVALID(401, "Invalid or expired token");
 
     final int code;

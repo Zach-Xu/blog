@@ -69,12 +69,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authRequests -> {
-                    authRequests.requestMatchers("/api/auth/**").permitAll();
+                    authRequests.requestMatchers("/api/auth/login","/api/auth/register").permitAll();
                     authRequests.requestMatchers("/api/articles/**").hasRole("ADMIN");
                     authRequests.requestMatchers("/api/categories/**").hasRole("USER");
                     authRequests.anyRequest().authenticated();
                 });
 
+        http
+                .logout(logout -> logout.disable());
 
         http
                 .authenticationProvider(authenticationProvider());

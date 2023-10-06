@@ -43,7 +43,10 @@ public class RedisUtils {
             return null;
         }
         return JsonUtils.parse(value, type);
+    }
 
+    public boolean delete(String key) {
+        return stringRedisTemplate.delete(key);
     }
 
 
