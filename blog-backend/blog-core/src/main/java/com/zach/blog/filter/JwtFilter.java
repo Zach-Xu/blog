@@ -50,7 +50,6 @@ public class JwtFilter extends OncePerRequestFilter {
             if (jwtUtils.validateJwtToken(jwt)) {
                 Long userId = jwtUtils.extractUserId(jwt);
 
-                // Todo: query user from redis
                 ApplicationUser user = redisUtils.get(USER_KEY + userId, ApplicationUser.class);
 
                 if (Objects.isNull(user)) {

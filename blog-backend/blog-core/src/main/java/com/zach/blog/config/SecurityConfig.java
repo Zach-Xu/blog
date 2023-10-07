@@ -7,6 +7,7 @@ import com.zach.blog.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -69,7 +70,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authRequests -> {
-                    authRequests.requestMatchers("/api/auth/login","/api/auth/register").permitAll();
+                    authRequests.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
+                    authRequests.requestMatchers(HttpMethod.GET, "/api/comments").permitAll();
                     authRequests.requestMatchers("/api/articles/**").hasRole("ADMIN");
                     authRequests.requestMatchers("/api/categories/**").hasRole("USER");
                     authRequests.anyRequest().authenticated();

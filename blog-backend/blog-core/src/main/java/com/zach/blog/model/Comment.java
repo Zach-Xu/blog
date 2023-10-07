@@ -19,6 +19,9 @@ public class Comment extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private CommentType type;
 
+    @Column(columnDefinition = "VARCHAR(512)")
+    private String content;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
@@ -26,17 +29,14 @@ public class Comment extends BaseEntity {
     @Column(name = "root_comment_id", columnDefinition = "BIGINT COMMENT 'id of the root comment, -1 for root comment'")
     private Long rootCommentId;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private ApplicationUser toCommentUser;
+    private ApplicationUser user;
 
-    @Column(name = "to_comment_id")
-    private Long toCommentId;
-
-    @Column(name = "created_by")
-    private Long createdBy;
+    @OneToOne(fetch = FetchType.LAZY )
+    @JoinColumn(name ="to_comment_id")
+    private Comment toComment;
 
     @Column(name = "updated_by")
     private Long updatedBy;
-
 }

@@ -4,6 +4,7 @@ public enum HttpStatusCode {
 
     SUCCESS(200, "Action successful"),
     BAD_REQUEST(400, "Bad request"),
+    MISSING_PARAMETER(400, "Query missing required parameters"),
     REQUIRE_LOGIN(401, "Action required login"),
     SYSTEM_ERROR(500, "Internal server error, please contact admin"),
     LOGIN_ERROR(401, "Invalid credentials"),

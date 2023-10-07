@@ -63,4 +63,5 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getArticleDetail(Long categoryId) {
         return articleRepository.findById(categoryId).orElseThrow(ArticleNotExistException::new);
     }
+
 }
