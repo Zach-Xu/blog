@@ -1,10 +1,10 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.ResponseResult;
+import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.Category;
 import com.zach.blog.service.CategoryService;
 import com.zach.blog.utils.BeanCopyUtils;
-import com.zach.blog.dto.CategoryResponse;
+import com.zach.blog.dto.response.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

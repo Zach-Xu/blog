@@ -1,6 +1,6 @@
 package com.zach.blog.service.impl;
 
-import com.zach.blog.dto.AuthResponse;
+import com.zach.blog.dto.response.AuthResponse;
 import com.zach.blog.enums.Authority;
 import com.zach.blog.exception.UsernameAlreadyTakenException;
 import com.zach.blog.model.ApplicationUser;

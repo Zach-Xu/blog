@@ -1,6 +1,6 @@
 package com.zach.blog.handler;
 
-import com.zach.blog.dto.ResponseResult;
+import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.enums.HttpStatusCode;
 import com.zach.blog.utils.JsonUtils;
 import com.zach.blog.utils.ResponseUtils;

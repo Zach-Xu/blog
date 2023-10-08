@@ -1,9 +1,9 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.AuthResponse;
-import com.zach.blog.dto.LoginRequest;
-import com.zach.blog.dto.RegisterRequest;
-import com.zach.blog.dto.ResponseResult;
+import com.zach.blog.dto.response.AuthResponse;
+import com.zach.blog.dto.request.LoginRequest;
+import com.zach.blog.dto.request.RegisterRequest;
+import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;

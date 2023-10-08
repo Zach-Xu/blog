@@ -1,7 +1,7 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.OutboundLinkResponse;
-import com.zach.blog.dto.ResponseResult;
+import com.zach.blog.dto.response.OutboundLinkResponse;
+import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.OutboundLink;
 import com.zach.blog.service.OutboundLinkService;
 import com.zach.blog.utils.BeanCopyUtils;

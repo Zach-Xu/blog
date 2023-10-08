@@ -5,6 +5,7 @@ public enum HttpStatusCode {
     SUCCESS(200, "Action successful"),
     BAD_REQUEST(400, "Bad request"),
     MISSING_PARAMETER(400, "Query missing required parameters"),
+    INVALID_PARAMETER(400, "Invalid parameters"),
     REQUIRE_LOGIN(401, "Action required login"),
     SYSTEM_ERROR(500, "Internal server error, please contact admin"),
     LOGIN_ERROR(401, "Invalid credentials"),
@@ -20,11 +21,11 @@ public enum HttpStatusCode {
         this.message = errorMessage;
     }
 
-    public int getCode(){
+    public int getCode() {
         return code;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 }

@@ -1,6 +1,6 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.*;
+import com.zach.blog.dto.response.*;
 import com.zach.blog.model.Article;
 import com.zach.blog.service.ArticleService;
 import com.zach.blog.utils.BeanCopyUtils;

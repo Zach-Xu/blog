@@ -1,4 +1,4 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.zach.blog.model.Category;

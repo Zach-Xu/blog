@@ -33,7 +33,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
 
-    @OneToOne(fetch = FetchType.LAZY )
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name ="to_comment_id")
     private Comment toComment;
 

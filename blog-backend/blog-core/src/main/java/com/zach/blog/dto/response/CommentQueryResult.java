@@ -1,6 +1,5 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,5 +30,15 @@ public class CommentQueryResult {
         this.rootCommentId = rootCommentId;
         this.username = username;
         this.toUsername = toUsername;
+    }
+
+    public CommentQueryResult(Long articleId, Long commentId, String content, Long userId, LocalDateTime createdTime, Long rootCommentId, String username) {
+        this.articleId = articleId;
+        this.commentId = commentId;
+        this.content = content;
+        this.userId = userId;
+        this.createdTime = createdTime;
+        this.rootCommentId = rootCommentId;
+        this.username = username;
     }
 }

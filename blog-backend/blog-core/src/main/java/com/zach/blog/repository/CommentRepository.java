@@ -1,7 +1,7 @@
 package com.zach.blog.repository;
 
 
-import com.zach.blog.dto.CommentQueryResult;
+import com.zach.blog.dto.response.CommentQueryResult;
 import com.zach.blog.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,22 +15,34 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query(value = """
-            SELECT new com.zach.blog.dto.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username, u2.username )
+            SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username)
             FROM Comment c1
             LEFT JOIN c1.user u
             LEFT JOIN c1.toComment c2
-            LEFT JOIN c2.user u2
             WHERE c1.article.id = :articleId
-            AND c1.rootCommentId = -1""")
+            AND c1.rootCommentId = -1
+            ORDER BY c1.createdTime ASC""")
     Page<CommentQueryResult> findRootCommentsByArticleId(@Param("articleId") Long articleId, Pageable pageable);
 
     @Query(value = """
-            SELECT new com.zach.blog.dto.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username, u2.username )
+            SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username, u2.username )
             FROM Comment c1
             LEFT JOIN c1.user u
             LEFT JOIN c1.toComment c2
             LEFT JOIN c2.user u2
-            WHERE c1.rootCommentId = :commentId""")
+            WHERE c1.rootCommentId = :commentId
+            ORDER BY c1.createdTime ASC""")
     Page<CommentQueryResult> findSubCommentsByRootCommentId(@Param("commentId") Long commentId, Pageable pageable);
 
+
+    @Query(value = """
+            SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username)
+            FROM Comment c1
+            LEFT JOIN c1.user u
+            LEFT JOIN c1.toComment c2
+            WHERE c1.type = com.zach.blog.enums.CommentType.LINK
+            AND c1.rootCommentId = -1
+            ORDER BY c1.createdTime ASC
+            """)
+    Page<CommentQueryResult> findRootLinkComments(Pageable pageable);
 }

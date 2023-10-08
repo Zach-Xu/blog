@@ -1,32 +1,42 @@
 package com.zach.blog.handler;
 
-import com.zach.blog.dto.ResponseResult;
+import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.enums.HttpStatusCode;
 import com.zach.blog.exception.*;
+import com.zach.blog.service.impl.ToCommentNotExistException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler({ArticleNotExistException.class, CategoryNotExistException.class, UserNotExistException.class})
+    @ExceptionHandler({ArticleNotExistException.class, CategoryNotExistException.class, UserNotExistException.class, RootCommentNotExistException.class, ToCommentNotExistException.class})
     public ResponseResult<?> resourceNotFoundException(RuntimeException e) {
         return ResponseResult.error(HttpStatusCode.RESOURCE_NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler({FailedToCopyBeanException.class, IllegalHttpStatusCodeException.class})
+    @ExceptionHandler({FailedToCopyBeanException.class, IllegalHttpStatusCodeException.class, SQLIntegrityConstraintViolationException.class, IllegalArgumentException.class})
     public ResponseResult<?> internalServerException(RuntimeException e) {
         e.printStackTrace();
         return ResponseResult.error(HttpStatusCode.SYSTEM_ERROR);
     }
 
-    @ExceptionHandler({MissingServletRequestParameterException.class})
+    @ExceptionHandler({MissingServletRequestParameterException.class, MissingParameterException.class})
+    public ResponseResult<?> missingParameterException(Exception e){
+        e.printStackTrace();
+        return ResponseResult.error(HttpStatusCode.MISSING_PARAMETER, e.getMessage());
+    }
+
+    @ExceptionHandler({HttpMessageNotReadableException.class})
     public ResponseResult<?> illegalParameterException(Exception e){
         e.printStackTrace();
-        return ResponseResult.error(HttpStatusCode.MISSING_PARAMETER);
+        return ResponseResult.error(HttpStatusCode.INVALID_PARAMETER);
     }
 
     @ExceptionHandler({AuthenticationException.class})
