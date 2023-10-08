@@ -6,6 +6,7 @@ public enum HttpStatusCode {
     BAD_REQUEST(400, "Bad request"),
     MISSING_PARAMETER(400, "Query missing required parameters"),
     INVALID_PARAMETER(400, "Invalid parameters"),
+    UNSUPPORTED_FILE_TYPE(400, "File type is not supported"),
     REQUIRE_LOGIN(401, "Action required login"),
     SYSTEM_ERROR(500, "Internal server error, please contact admin"),
     LOGIN_ERROR(401, "Invalid credentials"),

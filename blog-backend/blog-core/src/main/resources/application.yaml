@@ -40,3 +40,9 @@ zach:
     jwt:
       secret: ${JWT_SECRET}
       expirationMs: ${JWT_EXPIRATION_MS}
+
+    cloudinary:
+      name: ${CLOUD_NAME}
+      api:
+        key: ${CLOUD_API_KEY}
+        secret: ${CLOUD_API_SECRET}
