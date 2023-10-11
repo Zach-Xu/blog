@@ -39,4 +39,10 @@ public class ArticleController {
         return ResponseResult.ok(new PageResponse(articlesResponse, articlePage.getTotalPages(), articlesResponse.size()));
     }
 
+    @PutMapping("/view-count/{id}")
+    public ResponseResult<?> updateArticleViewCount(@PathVariable("id") Long articleId){
+        articleService.updateViewCount(articleId);
+        return ResponseResult.ok();
+    }
+
 }

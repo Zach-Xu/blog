@@ -15,7 +15,10 @@ spring:
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
+        jdbc:
+          batch_size: 20
         dialect: org.hibernate.dialect.MySQL8Dialect
+        order_updates: true
 
   data:
     redis:
@@ -28,6 +31,8 @@ spring:
           max-idle: 8
           min-idle: 0
           max-wait: 100ms
+      repositories:
+        enabled: false
 
 
 logging:

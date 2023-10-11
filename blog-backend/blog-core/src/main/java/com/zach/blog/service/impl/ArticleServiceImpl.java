@@ -5,6 +5,8 @@ import com.zach.blog.exception.ArticleNotExistException;
 import com.zach.blog.model.Article;
 import com.zach.blog.repository.ArticleRepository;
 import com.zach.blog.service.ArticleService;
+import com.zach.blog.utils.RedisUtils;
+import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static com.zach.blog.constants.RedisKeyPrefix.ARTICLE_VIEW_COUNT_KEY;
 import static com.zach.blog.repository.ArticleRepository.Specs.byCategoryId;
 import static com.zach.blog.repository.ArticleRepository.Specs.byPublishStatus;
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -26,6 +29,7 @@ import static org.springframework.data.jpa.domain.Specification.where;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final RedisUtils redisUtils;
 
     @Override
     public List<Article> getAllArticles() {
@@ -61,7 +65,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article getArticleDetail(Long categoryId) {
-        return articleRepository.findById(categoryId).orElseThrow(ArticleNotExistException::new);
+        Article article = articleRepository.findById(categoryId).orElseThrow(ArticleNotExistException::new);
+        String viewCountStr = redisUtils.getMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId));
+        if (Strings.hasText(viewCountStr)) {
+            Long viewCount = Long.valueOf(viewCountStr);
+            article.setViewCount(viewCount);
+        }
+        return article;
+    }
+
+    @Override
+    public void updateViewCount(Long articleId) {
+        redisUtils.increaseMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(articleId), 1);
     }
 
 }

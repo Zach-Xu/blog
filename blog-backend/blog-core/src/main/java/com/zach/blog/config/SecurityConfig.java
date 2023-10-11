@@ -72,7 +72,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequests -> {
                     authRequests.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
                     authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
-                    authRequests.requestMatchers("/api/articles/**").hasRole("ADMIN");
+                    authRequests.requestMatchers("/api/articles/**").hasRole("USER");
                     authRequests.requestMatchers("/api/categories/**").hasRole("USER");
                     authRequests.requestMatchers("/api/users/**").authenticated();
                     authRequests.requestMatchers(HttpMethod.POST,"/api/comments").hasRole("USER");

@@ -5,6 +5,8 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -43,6 +45,29 @@ public class RedisUtils {
             return null;
         }
         return JsonUtils.parse(value, type);
+    }
+
+
+    public void setMap(String key, Map<String, String> map) {
+        if (Objects.nonNull(map)) {
+            stringRedisTemplate.opsForHash().putAll(key, map);
+        }
+    }
+
+    public void setMapValue(String key, String hKey, String hValue) {
+        stringRedisTemplate.opsForHash().put(key, hKey, hValue);
+    }
+
+    public void increaseMapValue(String key, String hKey, int value){
+        stringRedisTemplate.opsForHash().increment(key, hKey, value);
+    }
+
+    public Map<?, ?> getMap(String key){
+        return stringRedisTemplate.opsForHash().entries(key);
+    }
+
+    public String getMapValue(String key, String hKey) {
+        return (String) stringRedisTemplate.opsForHash().get(key, hKey);
     }
 
     public boolean delete(String key) {

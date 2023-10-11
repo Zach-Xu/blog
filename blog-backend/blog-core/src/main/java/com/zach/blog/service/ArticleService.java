@@ -16,4 +16,6 @@ public interface ArticleService {
     Page<Article> getArticles(Integer pageNum, Integer pageSize, Long categoryId);
 
     Article getArticleDetail(Long categoryId);
+
+    void updateViewCount(Long articleId);
 }
