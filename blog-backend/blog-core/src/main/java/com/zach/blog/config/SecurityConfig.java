@@ -71,6 +71,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authRequests -> {
                     authRequests.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
+                    authRequests.requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll();
                     authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
                     authRequests.requestMatchers("/api/articles/**").hasRole("USER");
                     authRequests.requestMatchers("/api/categories/**").hasRole("USER");
