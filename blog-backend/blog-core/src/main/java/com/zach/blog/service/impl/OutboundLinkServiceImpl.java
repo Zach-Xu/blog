@@ -12,13 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OutboundLinkServiceImpl implements OutboundLinkService {
-
     private final OutboundLinkRepository linkRepository;
-
-    @Override
-    public void createOutboundLinks(List<OutboundLink> links) {
-        linkRepository.saveAll(links);
-    }
 
     @Override
     public List<OutboundLink> getAllOutBoundLinks() {

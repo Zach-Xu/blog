@@ -5,13 +5,15 @@ import com.zach.blog.dto.response.CommentQueryResult;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.service.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Tag(name = "Comment", description = "Manage comments on articles")
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @Operation(summary = "Get Comments", description = "Retrieve comments with optional pagination and filtering by article.")
     @GetMapping
     public ResponseResult<?> getComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                          @RequestParam Long articleId) {
@@ -26,12 +29,14 @@ public class CommentController {
         return ResponseResult.ok(comments);
     }
 
+    @Operation(summary = "Create Comment", description = "Create a new comment.")
     @PostMapping
     public ResponseResult<?> createComment(@AuthenticationPrincipal ApplicationUser user, @RequestBody CommentRequest commentRequest){
         commentService.createComment(user, commentRequest);
         return ResponseResult.ok();
     }
 
+    @Operation(summary = "Get Link Comments", description = "Retrieve comments containing links with optional pagination.")
     @GetMapping("/link")
     public ResponseResult<?> getLinkComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize){
         List<CommentQueryResult> comments = commentService.getLinkComments(pageNum,pageSize);

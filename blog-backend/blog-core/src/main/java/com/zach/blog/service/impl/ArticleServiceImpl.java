@@ -27,19 +27,8 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @RequiredArgsConstructor
 @Transactional
 public class ArticleServiceImpl implements ArticleService {
-
     private final ArticleRepository articleRepository;
     private final RedisUtils redisUtils;
-
-    @Override
-    public List<Article> getAllArticles() {
-        return articleRepository.findAll();
-    }
-
-    @Override
-    public void createArticles(List<Article> articles) {
-        articleRepository.saveAll(articles);
-    }
 
     @Override
     public List<Article> getHotArticles() {

@@ -17,10 +17,15 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        dbInitializationService.populateMenus();
         dbInitializationService.populateRoles();
         dbInitializationService.populateUsers();
         dbInitializationService.populateCategories();
+        dbInitializationService.populateTags();
         dbInitializationService.populateArticles();
         dbInitializationService.populateComments();
+        dbInitializationService.populateOutboundLinks();
+
+
     }
 }

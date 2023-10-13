@@ -6,11 +6,6 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ArticleService {
-
-    List<Article> getAllArticles();
-
-    void createArticles(List<Article> articles);
-
     List<Article> getHotArticles();
 
     Page<Article> getArticles(Integer pageNum, Integer pageSize, Long categoryId);

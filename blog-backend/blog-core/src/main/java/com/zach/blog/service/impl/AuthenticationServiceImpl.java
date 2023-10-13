@@ -1,7 +1,7 @@
 package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.response.AuthResponse;
-import com.zach.blog.enums.Authority;
+import com.zach.blog.enums.RoleName;
 import com.zach.blog.exception.UsernameAlreadyTakenException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Role;
@@ -45,8 +45,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ApplicationUser user = new ApplicationUser();
         user.setUsername(username);
         user.setPassword(encodedPassword);
-        Role role = roleService.findOrCreateRole(Authority.ROLE_USER);
-        user.addAuthority(role);
+        Role role = roleService.findOrCreateRole(RoleName.ROLE_USER);
+        user.addRole(role);
 
         // Persist new user
         ApplicationUser newUser = userRepository.save(user);

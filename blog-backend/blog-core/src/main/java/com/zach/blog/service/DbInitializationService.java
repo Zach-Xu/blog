@@ -1,7 +1,6 @@
 package com.zach.blog.service;
 
 public interface DbInitializationService {
-
     void populateRoles();
 
     void populateUsers();
@@ -13,4 +12,8 @@ public interface DbInitializationService {
     void populateCategories();
 
     void populateOutboundLinks();
+
+    void populateTags();
+
+    void populateMenus();
 }

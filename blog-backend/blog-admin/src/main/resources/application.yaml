@@ -1,0 +1,55 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: Blog-Admin
+  config:
+    import: env.properties
+  datasource:
+    url: ${DB_CONNECTION_STRING}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 20
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        order_updates: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: 100ms
+      repositories:
+        enabled: false
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+#    org.hibernate.SQL: DEBUG
+
+zach:
+  blog:
+    jwt:
+      secret: ${JWT_SECRET}
+      expirationMs: ${JWT_EXPIRATION_MS}
+
+    cloudinary:
+      name: ${CLOUD_NAME}
+      api:
+        key: ${CLOUD_API_KEY}
+        secret: ${CLOUD_API_SECRET}

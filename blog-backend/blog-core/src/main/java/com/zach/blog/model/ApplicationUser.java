@@ -38,8 +38,8 @@ public class ApplicationUser extends BaseEntity{
                     @JoinColumn(name = "role_id", referencedColumnName = "id")
             }
     )
-    @JsonIncludeProperties({"authority"})
-    private Set<Role> authorities = new HashSet<>();
+    @JsonIncludeProperties({"roleName"})
+    private Set<Role> roles = new HashSet<>();
 
     private boolean enable;
 
@@ -59,8 +59,8 @@ public class ApplicationUser extends BaseEntity{
     @Column(name = "updated_by")
     private Long updatedBy;
 
-    public void addAuthority(Role role){
-        this.authorities.add(role);
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 
 }

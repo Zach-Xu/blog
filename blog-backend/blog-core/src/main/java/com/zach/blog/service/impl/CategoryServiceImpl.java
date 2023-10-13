@@ -19,16 +19,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public void createCategories(List<Category> categoryList) {
-        categoryRepository.saveAll(categoryList);
-    }
-
-    @Override
-    public Category findByCategoryName(String categoryName) {
-        return categoryRepository.findByName(categoryName).orElseThrow(CategoryNotExistException::new);
-    }
-
-    @Override
     public List<Category> getCategories() {
         return categoryRepository.findCategoriesWithPublishedArticles(PublishStatus.PUBLISHED);
     }

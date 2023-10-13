@@ -27,16 +27,6 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     private final RedisUtils redisUtils;
 
     @Override
-    public void createUsers(List<ApplicationUser> userList) {
-        userRepository.saveAll(userList);
-    }
-
-    @Override
-    public ApplicationUser findUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(UserNotExistException::new);
-    }
-
-    @Override
     public void updateUserInfo(Long userId, UpdateUserInfoRequest updateUserInfoRequest) {
         ApplicationUser user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
         BeanCopyUtils.copyPropertiesIgnoreNull(updateUserInfoRequest, user);

@@ -12,7 +12,6 @@
         <module>blog-core</module>
         <module>blog-admin</module>
         <module>blog-public</module>
-        <module>app-launcher</module>
     </modules>
 
     <properties>

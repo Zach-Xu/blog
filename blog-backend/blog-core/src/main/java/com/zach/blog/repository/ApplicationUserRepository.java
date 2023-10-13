@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, Long> {
 
-    @EntityGraph(attributePaths = "authorities")
+    @EntityGraph(attributePaths = "roles")
     Optional<ApplicationUser> findByUsername(String username);
 
 }
