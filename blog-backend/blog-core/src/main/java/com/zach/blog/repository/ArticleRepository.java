@@ -35,8 +35,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
     })
     Page<Article> findAll(Specification<Article> spec, Pageable pageable);
 
-    @Query(value = "select a from Article a left join fetch a.category c join fetch a.author" +
-            " where a.publishStatus = :status order by a.viewCount asc")
+    @Query(value = "SELECT a FROM Article a LEFT JOIN FETCH a.category c JOIN FETCH a.author" +
+            " WHERE a.publishStatus = :status ORDER BY a.viewCount ASC")
     List<Article> findHotArticles(@Param("status") PublishStatus status, Pageable pageable);
 
     List<ArticleViewCount> findAllBy();

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class AuthResponse {
 
-    @JsonIncludeProperties({"username", "id", "authorities"})
+    @JsonIncludeProperties({"username", "id", "roles"})
     private ApplicationUser user;
 
     private String jwt;

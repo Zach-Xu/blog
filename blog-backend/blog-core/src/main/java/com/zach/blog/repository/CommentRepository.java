@@ -45,4 +45,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             ORDER BY c1.createdTime ASC
             """)
     Page<CommentQueryResult> findRootLinkComments(Pageable pageable);
+
 }

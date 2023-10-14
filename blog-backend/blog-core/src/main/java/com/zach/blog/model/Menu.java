@@ -38,7 +38,7 @@ public class Menu extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private MenuStatus status;
 
-    private String perms;
+    private String permission;
 
     private String icon;
 

@@ -209,7 +209,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu1.setMenuType(MenuType.CONTENT);
         menu1.setVisible(true);
         menu1.setStatus(MenuStatus.ENABLE);
-        menu1.setPerms("");
+        menu1.setPermission("");
         menu1.setIcon("system");
         menuRepository.save(menu1);
 
@@ -223,7 +223,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu2.setMenuType(MenuType.MENU);
         menu2.setVisible(true);
         menu2.setStatus(MenuStatus.ENABLE);
-        menu2.setPerms("system:user:list");
+        menu2.setPermission("system:user:list");
         menu2.setIcon("user");
         menu2 = menuRepository.save(menu2);
 
@@ -237,7 +237,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu3.setMenuType(MenuType.CONTENT);
         menu3.setVisible(true);
         menu3.setStatus(MenuStatus.ENABLE);
-        menu3.setPerms("system:role:list");
+        menu3.setPermission("system:role:list");
         menu3.setIcon("peoples");
         menu3 = menuRepository.save(menu3);
 
@@ -251,7 +251,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu4.setMenuType(MenuType.MENU);
         menu4.setVisible(true);
         menu4.setStatus(MenuStatus.ENABLE);
-        menu4.setPerms("system:menu:list");
+        menu4.setPermission("system:menu:list");
         menu4.setIcon("tree-table");
         menu4 = menuRepository.save(menu4);
 
@@ -265,7 +265,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu5.setMenuType(MenuType.BUTTON);
         menu5.setVisible(true);
         menu5.setStatus(MenuStatus.ENABLE);
-        menu5.setPerms("system:user:query");
+        menu5.setPermission("system:user:query");
         menu5.setIcon("#");
         menuRepository.save(menu5);
 
@@ -279,7 +279,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu6.setMenuType(MenuType.BUTTON);
         menu6.setVisible(true);
         menu6.setStatus(MenuStatus.ENABLE);
-        menu6.setPerms("system:user:add");
+        menu6.setPermission("system:user:add");
         menu6.setIcon("#");
         menuRepository.save(menu6);
 
@@ -293,7 +293,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu7.setMenuType(MenuType.BUTTON);
         menu7.setVisible(true);
         menu7.setStatus(MenuStatus.ENABLE);
-        menu7.setPerms("system:user:edit");
+        menu7.setPermission("system:user:edit");
         menu7.setIcon("#");
         menuRepository.save(menu7);
 
@@ -307,7 +307,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu8.setMenuType(MenuType.BUTTON);
         menu8.setVisible(true);
         menu8.setStatus(MenuStatus.ENABLE);
-        menu8.setPerms("system:user:remove");
+        menu8.setPermission("system:user:remove");
         menu8.setIcon("#");
         menuRepository.save(menu8);
 
@@ -321,7 +321,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu9.setMenuType(MenuType.BUTTON);
         menu9.setVisible(true);
         menu9.setStatus(MenuStatus.ENABLE);
-        menu9.setPerms("system:user:export");
+        menu9.setPermission("system:user:export");
         menu9.setIcon("#");
         menuRepository.save(menu9);
 
@@ -335,7 +335,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu10.setMenuType(MenuType.BUTTON);
         menu10.setVisible(true);
         menu10.setStatus(MenuStatus.ENABLE);
-        menu10.setPerms("system:user:import");
+        menu10.setPermission("system:user:import");
         menu10.setIcon("#");
         menuRepository.save(menu10);
 
@@ -349,7 +349,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu11.setMenuType(MenuType.BUTTON);
         menu11.setVisible(true);
         menu11.setStatus(MenuStatus.ENABLE);
-        menu11.setPerms("system:user:resetPwd");
+        menu11.setPermission("system:user:resetPwd");
         menu11.setIcon("#");
         menuRepository.save(menu11);
 
@@ -363,7 +363,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu12.setMenuType(MenuType.BUTTON);
         menu12.setVisible(true);
         menu12.setStatus(MenuStatus.ENABLE);
-        menu12.setPerms("system:role:query");
+        menu12.setPermission("system:role:query");
         menu12.setIcon("#");
         menuRepository.save(menu12);
 
@@ -377,7 +377,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu13.setMenuType(MenuType.BUTTON);
         menu13.setVisible(true);
         menu13.setStatus(MenuStatus.ENABLE);
-        menu13.setPerms("system:role:add");
+        menu13.setPermission("system:role:add");
         menu13.setIcon("#");
         menuRepository.save(menu13);
 
@@ -391,7 +391,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu14.setMenuType(MenuType.BUTTON);
         menu14.setVisible(true);
         menu14.setStatus(MenuStatus.ENABLE);
-        menu14.setPerms("system:role:edit");
+        menu14.setPermission("system:role:edit");
         menu14.setIcon("#");
         menuRepository.save(menu14);
 
@@ -405,7 +405,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu15.setMenuType(MenuType.BUTTON);
         menu15.setVisible(true);
         menu15.setStatus(MenuStatus.ENABLE);
-        menu15.setPerms("system:role:remove");
+        menu15.setPermission("system:role:remove");
         menu15.setIcon("#");
         menuRepository.save(menu15);
 
@@ -419,7 +419,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu16.setMenuType(MenuType.BUTTON);
         menu16.setVisible(true);
         menu16.setStatus(MenuStatus.ENABLE);
-        menu16.setPerms("system:role:export");
+        menu16.setPermission("system:role:export");
         menu16.setIcon("#");
         menuRepository.save(menu16);
 
@@ -433,7 +433,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu17.setMenuType(MenuType.BUTTON);
         menu17.setVisible(true);
         menu17.setStatus(MenuStatus.ENABLE);
-        menu17.setPerms("system:menu:query");
+        menu17.setPermission("system:menu:query");
         menu17.setIcon("#");
         menuRepository.save(menu17);
 
@@ -447,7 +447,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu18.setMenuType(MenuType.BUTTON);
         menu18.setVisible(true);
         menu18.setStatus(MenuStatus.ENABLE);
-        menu18.setPerms("system:menu:add");
+        menu18.setPermission("system:menu:add");
         menu18.setIcon("#");
         menuRepository.save(menu18);
 
@@ -461,7 +461,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu19.setMenuType(MenuType.BUTTON);
         menu19.setVisible(true);
         menu19.setStatus(MenuStatus.ENABLE);
-        menu19.setPerms("system:menu:edit");
+        menu19.setPermission("system:menu:edit");
         menu19.setIcon("#");
         menuRepository.save(menu19);
 
@@ -475,7 +475,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu20.setMenuType(MenuType.BUTTON);
         menu20.setVisible(true);
         menu20.setStatus(MenuStatus.ENABLE);
-        menu20.setPerms("system:menu:remove");
+        menu20.setPermission("system:menu:remove");
         menu20.setIcon("#");
         menuRepository.save(menu20);
 
@@ -489,7 +489,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu21.setMenuType(MenuType.CONTENT);
         menu21.setVisible(true);
         menu21.setStatus(MenuStatus.ENABLE);
-        menu21.setPerms(null);
+        menu21.setPermission(null);
         menu21.setIcon("table");
         menu21 = menuRepository.save(menu21);
 
@@ -503,7 +503,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu22.setMenuType(MenuType.MENU);
         menu22.setVisible(true);
         menu22.setStatus(MenuStatus.ENABLE);
-        menu22.setPerms("content:category:list");
+        menu22.setPermission("content:category:list");
         menu22.setIcon("example");
         menu22 = menuRepository.save(menu22);
 
@@ -517,7 +517,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu23.setMenuType(MenuType.MENU);
         menu23.setVisible(true);
         menu23.setStatus(MenuStatus.ENABLE);
-        menu23.setPerms("content:article:list");
+        menu23.setPermission("content:article:list");
         menu23.setIcon("build");
         menuRepository.save(menu23);
 
@@ -531,7 +531,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu24.setMenuType(MenuType.MENU);
         menu24.setVisible(true);
         menu24.setStatus(MenuStatus.ENABLE);
-        menu24.setPerms("content:tag:index");
+        menu24.setPermission("content:tag:index");
         menu24.setIcon("button");
         menuRepository.save(menu24);
 
@@ -545,7 +545,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu25.setMenuType(MenuType.MENU);
         menu25.setVisible(true);
         menu25.setStatus(MenuStatus.ENABLE);
-        menu25.setPerms("content:link:list");
+        menu25.setPermission("content:link:list");
         menu25.setIcon("404");
         menu25 = menuRepository.save(menu25);
 
@@ -559,7 +559,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu26.setMenuType(MenuType.MENU);
         menu26.setVisible(true);
         menu26.setStatus(MenuStatus.ENABLE);
-        menu26.setPerms("content:article:writer");
+        menu26.setPermission("content:article:writer");
         menu26.setIcon("build");
         menuRepository.save(menu26);
 
@@ -573,7 +573,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu27.setMenuType(MenuType.BUTTON);
         menu27.setVisible(true);
         menu27.setStatus(MenuStatus.ENABLE);
-        menu27.setPerms("content:link:add");
+        menu27.setPermission("content:link:add");
         menu27.setIcon("#");
         menuRepository.save(menu27);
 
@@ -587,7 +587,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu28.setMenuType(MenuType.BUTTON);
         menu28.setVisible(true);
         menu28.setStatus(MenuStatus.ENABLE);
-        menu28.setPerms("content:link:edit");
+        menu28.setPermission("content:link:edit");
         menu28.setIcon("#");
         menuRepository.save(menu28);
 
@@ -601,7 +601,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu29.setMenuType(MenuType.BUTTON);
         menu29.setVisible(true);
         menu29.setStatus(MenuStatus.ENABLE);
-        menu29.setPerms("content:link:remove");
+        menu29.setPermission("content:link:remove");
         menu29.setIcon("#");
         menuRepository.save(menu29);
 
@@ -615,7 +615,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu30.setMenuType(MenuType.BUTTON);
         menu30.setVisible(true);
         menu30.setStatus(MenuStatus.ENABLE);
-        menu30.setPerms("content:link:query");
+        menu30.setPermission("content:link:query");
         menu30.setIcon("#");
         menuRepository.save(menu30);
 
@@ -629,7 +629,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu31.setMenuType(MenuType.BUTTON);
         menu31.setVisible(true);
         menu31.setStatus(MenuStatus.ENABLE);
-        menu31.setPerms("content:category:export");
+        menu31.setPermission("content:category:export");
         menu31.setIcon("#");
         menuRepository.save(menu31);
     }

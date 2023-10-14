@@ -46,7 +46,7 @@ public class ResponseResult<T> implements Serializable {
         return build(HttpStatusCode.SUCCESS);
     }
 
-    public static ResponseResult<?> ok(Object data) {
+    public static <T> ResponseResult<T> ok(T data) {
         return build(HttpStatusCode.SUCCESS.getCode(), HttpStatusCode.SUCCESS.getMessage(), data);
     }
 

@@ -2,6 +2,7 @@ package com.zach.blog.model;
 
 import com.zach.blog.enums.RoleName;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "blog_role")
 @Setter
+@Getter
 @SQLDelete(sql = "UPDATE blog_role SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class Role extends BaseEntity implements GrantedAuthority {
