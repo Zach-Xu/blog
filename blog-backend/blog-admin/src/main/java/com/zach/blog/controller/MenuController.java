@@ -3,12 +3,11 @@ package com.zach.blog.controller;
 import com.zach.blog.dto.MenuResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.Menu;
 import com.zach.blog.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +19,39 @@ public class MenuController {
     private final MenuService menuService;
 
     @GetMapping("/user-menu")
-    public ResponseResult<?> getCurrentUserMenu(@AuthenticationPrincipal ApplicationUser user){
+    public ResponseResult<?> getCurrentUserMenus(@AuthenticationPrincipal ApplicationUser user) {
         List<MenuResponse> userMenus = menuService.getUserMenus(user);
         return ResponseResult.ok(userMenus);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult<?> getMenuById(@PathVariable Long id){
+        Menu menu = menuService.getMenuById(id);
+        return ResponseResult.ok(menu);
+    }
+
+    @GetMapping("/all")
+
+    public ResponseResult<?> getAllMenus() {
+        List<Menu> menus = menuService.getAllMenus();
+        return ResponseResult.ok(menus);
+    }
+
+    @PostMapping
+    public ResponseResult<?> createMenu(@RequestBody Menu menu) {
+        menuService.createMenu(menu);
+        return ResponseResult.ok();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseResult<?> updateMenu(@PathVariable Long id, @RequestBody Menu menu) {
+        menuService.updateMenu(id, menu);
+        return ResponseResult.ok();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult<?> deleteMenu(@PathVariable Long id){
+        menuService.deleteMenu(id);
+        return ResponseResult.ok();
     }
 }

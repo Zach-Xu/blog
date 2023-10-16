@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Tag(name = "Article", description = "Manage articles and their view counts")
@@ -22,7 +24,7 @@ public class ArticleController {
 
     @Operation(summary = "Get Article Detail", description = "Retrieve detailed information about an article by its ID.")
     @GetMapping("/{id}")
-    public ResponseResult<?> getArticleDetail(@PathVariable("id") Long categoryId){
+    public ResponseResult<?> getArticleDetails(@PathVariable("id") Long categoryId) {
         Article article = articleService.getArticleDetail(categoryId);
         ArticleDetailResponse articleDetailResponse = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
         return ResponseResult.ok(articleDetailResponse);
@@ -40,14 +42,17 @@ public class ArticleController {
     @GetMapping
     public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                          @RequestParam(required = false) Long categoryId) {
-        Page<Article> articlePage = articleService.getArticles(pageNum, pageSize, categoryId);
-        List<ArticleResponse> articlesResponse = BeanCopyUtils.copyBeanListWithAssociationPropertyAsField(articlePage.getContent(), ArticleResponse.class);
-        return ResponseResult.ok(new PageResponse(articlesResponse, articlePage.getTotalPages(), articlesResponse.size()));
+        Page<Article> page = articleService.getArticles(pageNum, pageSize, categoryId);
+        int totalPages = page.getTotalPages();
+        // ToDo: refactor DTO conversion logic
+        List<ArticleResponse> articles = BeanCopyUtils.copyBeanListWithAssociationPropertyAsField(page.getContent(), ArticleResponse.class);
+        PageResponse pageResponse = new PageResponse(articles, totalPages, articles.size());
+        return ResponseResult.ok(pageResponse);
     }
 
     @Operation(summary = "Update Article View Count", description = "Increment the view count of a specific article by its ID.")
     @PutMapping("/view-count/{id}")
-    public ResponseResult<?> updateArticleViewCount(@PathVariable("id") Long articleId){
+    public ResponseResult<?> updateArticleViewCount(@PathVariable("id") Long articleId) {
         articleService.updateViewCount(articleId);
         return ResponseResult.ok();
     }

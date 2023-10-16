@@ -16,9 +16,12 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 
     Optional<Menu> findByName(String menuName);
 
-    @Query(value = "SELECT m from Menu  m " +
+    @Query(value = "" +
+            "SELECT m from Menu  m " +
             "WHERE m.parentId = ?1 " +
             "AND m.menuType IN ?2 " +
             "ORDER BY m.displayOrder ASC")
     List<Menu> findSubMenus(Long rootMenuId, List<MenuType> menuTypes);
+
+    boolean existsByParentId(Long id);
 }

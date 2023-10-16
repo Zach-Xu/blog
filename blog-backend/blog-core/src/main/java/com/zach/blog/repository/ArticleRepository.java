@@ -25,18 +25,20 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
 
     @Override
     @EntityGraph(attributePaths = {
-            "category"
+            "category",
+            "tags"
     })
     Optional<Article> findById(Long id);
 
     @Override
-    @EntityGraph(attributePaths = {
-            "category"
-    })
     Page<Article> findAll(Specification<Article> spec, Pageable pageable);
 
-    @Query(value = "SELECT a FROM Article a LEFT JOIN FETCH a.category c JOIN FETCH a.author" +
-            " WHERE a.publishStatus = :status ORDER BY a.viewCount ASC")
+    @Query(value = "" +
+            "SELECT a FROM Article a " +
+            "LEFT JOIN FETCH a.category c " +
+            "JOIN FETCH a.author " +
+            "WHERE a.publishStatus = :status " +
+            "ORDER BY a.viewCount ASC")
     List<Article> findHotArticles(@Param("status") PublishStatus status, Pageable pageable);
 
     List<ArticleViewCount> findAllBy();
@@ -52,12 +54,20 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
                     builder.equal(root.get("publishStatus"), publishStatus);
         }
 
-//        static Specification<Article> orderByPinned(Specification<Article> spec){
-//            return (root, query, builder) -> {
-//                query.orderBy(builder.desc(root.get("pinned")));
-//                return spec.toPredicate(root, query, builder);
-//            };
-//        }
+        static Specification<Article> containsTitle(String title) {
+            return (root, query, builder) -> {
+                String titleLowerCase = title.toLowerCase();
+                return builder.like(builder.lower(root.get("title")), "%" + titleLowerCase + "%");
+            };
+        }
+
+        static Specification<Article> containsSummary(String summary) {
+            return (root, query, builder) -> {
+                String summaryLowerCase = summary.toLowerCase();
+                return builder.like(builder.lower(root.get("summary")), "%" + summaryLowerCase + "%");
+            };
+        }
+
     }
 
 }

@@ -8,6 +8,9 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "blog_article")
 @Getter
@@ -30,6 +33,18 @@ public class Article extends BaseEntity {
     )
     private Category category;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "tag_article",
+            joinColumns = {
+                    @JoinColumn(name = "article_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "tag_id", referencedColumnName = "id")
+            }
+    )
+    private Set<Tag> tags = new HashSet<>();
+
     private String thumbnail;
 
     private boolean pinned;
@@ -48,5 +63,9 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "author_id")
     @JsonIgnoreProperties({"authorities"})
     private ApplicationUser author;
+
+    public void addTag(Tag tag){
+        this.tags.add(tag);
+    }
 
 }

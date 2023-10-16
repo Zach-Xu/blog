@@ -14,10 +14,11 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
     @EntityGraph(attributePaths = "roles")
     Optional<ApplicationUser> findByUsername(String username);
 
-    @Query(value = "SELECT u FROM ApplicationUser u" +
-            " LEFT JOIN FETCH u.roles r" +
-            " LEFT JOIN FETCH r.menus m" +
-            " WHERE u.id = ?1 ")
+    @Query(value = "" +
+            "SELECT u FROM ApplicationUser u " +
+            "LEFT JOIN FETCH u.roles r " +
+            "LEFT JOIN FETCH r.menus m " +
+            "WHERE u.id = ?1 ")
     Optional<ApplicationUser> findUserRoleAndPermissionsById(Long id);
 
 }

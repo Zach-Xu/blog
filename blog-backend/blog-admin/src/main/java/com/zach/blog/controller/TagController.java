@@ -1,12 +1,18 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.dto.CreateTagRequest;
+import com.zach.blog.dto.TagResponse;
+import com.zach.blog.dto.UpdateTagRequest;
+import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
+import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Tag;
 import com.zach.blog.service.TagService;
+import com.zach.blog.utils.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +24,37 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping
-    public ResponseResult<?> getTags(){
-        List<Tag> tags = tagService.getTags();
+    public ResponseResult<?> getTags(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
+                                     @RequestParam(required = false) String name, @RequestParam(required = false) String description){
+        Page<Tag> page = tagService.getTags(pageNum, pageSize, name, description);
+        List<TagResponse> tags = BeanCopyUtils.copyBeanList(page.getContent(), TagResponse.class);
+        int totalPages = page.getTotalPages();
+        PageResponse pageResponse = new PageResponse(tags, totalPages, tags.size());
+        return ResponseResult.ok(pageResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseResult<?> getAllTags(){
+        List<Tag> allTags = tagService.getAllTags();
+        List<TagResponse> tags = BeanCopyUtils.copyBeanList(allTags, TagResponse.class);
         return ResponseResult.ok(tags);
+    }
+
+    @PostMapping
+    public ResponseResult<?> createTag(@AuthenticationPrincipal ApplicationUser user, @RequestBody CreateTagRequest createTagRequest){
+        tagService.createTag(user, createTagRequest.name(), createTagRequest.description());
+        return ResponseResult.ok();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseResult<?> updateTag(@AuthenticationPrincipal ApplicationUser user, @PathVariable("id") Long tagId, @RequestBody UpdateTagRequest updateTagRequest){
+        tagService.updateTag(user, tagId, updateTagRequest.name(), updateTagRequest.description());
+        return ResponseResult.ok();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult<?> deleteTag(@AuthenticationPrincipal ApplicationUser user, @PathVariable("id") Long tagId){
+        tagService.deleteTag(user, tagId);
+        return ResponseResult.ok();
     }
 }

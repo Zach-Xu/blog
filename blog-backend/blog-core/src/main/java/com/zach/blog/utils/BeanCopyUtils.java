@@ -30,6 +30,18 @@ public class BeanCopyUtils {
         return target;
     }
 
+    public static <T> T copyBean(Object source, Class<T> clazz, String... ignoreProperties) {
+        T target;
+
+        try {
+            target = clazz.getDeclaredConstructor().newInstance();
+            BeanUtils.copyProperties(source, target, ignoreProperties);
+        } catch (Exception e) {
+            throw new FailedToCopyBeanException();
+        }
+        return target;
+    }
+
     public static void copyPropertiesIgnoreNull(Object src, Object target) {
         BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
     }

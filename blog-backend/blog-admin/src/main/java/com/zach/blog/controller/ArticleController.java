@@ -1,0 +1,62 @@
+package com.zach.blog.controller;
+
+import com.zach.blog.dto.ArticleResponse;
+import com.zach.blog.dto.request.UpdateArticleRequest;
+import com.zach.blog.dto.request.WriteArticleRequest;
+import com.zach.blog.dto.response.ArticleDetailResponse;
+import com.zach.blog.dto.response.PageResponse;
+import com.zach.blog.dto.response.ResponseResult;
+import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.Article;
+import com.zach.blog.service.ArticleService;
+import com.zach.blog.utils.BeanCopyUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/articles")
+public class ArticleController {
+    private final ArticleService articleService;
+
+    @PostMapping
+    public ResponseResult<?> writeArticle(@AuthenticationPrincipal ApplicationUser user, WriteArticleRequest writeArticleRequest) {
+        articleService.createArticle(user, writeArticleRequest);
+        return ResponseResult.ok();
+    }
+
+    @GetMapping
+    public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
+                                         @RequestParam(required = false) String title, @RequestParam(required = false) String summary) {
+        Page<Article> page = articleService.getArticles(pageNum, pageSize, title, summary);
+        List<Article> articles = page.getContent();
+        List<ArticleResponse> articleResponses = BeanCopyUtils.copyBeanList(articles, ArticleResponse.class);
+        int totalPages = page.getTotalPages();
+        PageResponse pageResponse = new PageResponse(articleResponses, totalPages, articleResponses.size());
+        return ResponseResult.ok(pageResponse);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult<?> getArticleDetails(@PathVariable Long id){
+        Article article = articleService.getArticleDetail(id);
+        ArticleDetailResponse articleDetailResponse = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
+        return ResponseResult.ok(articleDetailResponse);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseResult<?> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest updateArticleRequest){
+        articleService.updateArticle(id, updateArticleRequest);
+        return ResponseResult.ok();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult<?> deleteArticle(@PathVariable Long id){
+        articleService.deleteArticle(id);
+        return ResponseResult.ok();
+    }
+
+}

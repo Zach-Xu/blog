@@ -14,7 +14,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Optional<Role> findByRoleName(RoleName roleName);
 
-    @Query(value = "SELECT r from Role r " +
+    @Query(value = "" +
+            "SELECT r from Role r " +
             "LEFT JOIN FETCH r.menus m " +
             "WHERE m.parentId = -1L AND r.id = ?1 " +
             "ORDER BY m.displayOrder ASC")

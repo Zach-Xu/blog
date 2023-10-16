@@ -15,8 +15,12 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByName(String name);
 
-    @Query(value = "SELECT c FROM Category c WHERE c.id IN " +
-            "(SELECT a.category.id FROM Article a GROUP BY a.category.id HAVING SUM(CASE WHEN a.publishStatus = :status THEN 1 ELSE 0 END) > 0)")
+    @Query(value = "" +
+            "SELECT c FROM Category c " +
+            "WHERE c.id IN " +
+            "(SELECT a.category.id FROM Article a " +
+            "GROUP BY a.category.id " +
+            "HAVING SUM(CASE WHEN a.publishStatus = :status THEN 1 ELSE 0 END) > 0)")
     List<Category> findCategoriesWithPublishedArticles(@Param("status") PublishStatus status);
 
 

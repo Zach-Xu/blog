@@ -15,7 +15,6 @@ public class PageResponse {
 
     private int total;
 
-
     public PageResponse(){
 
     }
