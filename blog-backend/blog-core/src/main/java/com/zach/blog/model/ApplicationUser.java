@@ -41,7 +41,7 @@ public class ApplicationUser extends BaseEntity{
     @JsonIncludeProperties({"roleName", "id"})
     private Set<Role> roles = new HashSet<>();
 
-    private boolean enable;
+    private boolean enable = true;
 
     private String email;
 

@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ApplicationUser user = new ApplicationUser();
         user.setUsername(username);
         user.setPassword(encodedPassword);
-        Role role = roleService.findOrCreateRole(RoleName.ROLE_USER);
+        Role role = roleService.findOrCreateRole(RoleName.ROLE_USER.toString());
         user.addRole(role);
 
         // Persist new user

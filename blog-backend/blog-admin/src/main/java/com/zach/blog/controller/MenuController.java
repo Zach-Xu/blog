@@ -1,6 +1,7 @@
 package com.zach.blog.controller;
 
 import com.zach.blog.dto.MenuResponse;
+import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
@@ -31,11 +32,24 @@ public class MenuController {
     }
 
     @GetMapping("/all")
-
     public ResponseResult<?> getAllMenus() {
         List<Menu> menus = menuService.getAllMenus();
         return ResponseResult.ok(menus);
     }
+
+    @GetMapping("/all/tree")
+    public ResponseResult<?> getAllMenusInTreeView(){
+        List<MenuTreeViewResponse> menusInTreeView = menuService.getMenusInTreeView();
+        return ResponseResult.ok(menusInTreeView);
+    }
+
+    @GetMapping("/tree")
+    public ResponseResult<?> getRoleMenusInTreeView(@RequestParam Long roleId){
+        List<MenuTreeViewResponse> roleMenusInTreeView = menuService.getRoleMenusInTreeView(roleId);
+        return ResponseResult.ok(roleMenusInTreeView);
+    }
+
+
 
     @PostMapping
     public ResponseResult<?> createMenu(@RequestBody Menu menu) {

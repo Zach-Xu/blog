@@ -1,6 +1,7 @@
 package com.zach.blog.service;
 
 import com.zach.blog.dto.MenuResponse;
+import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
 
@@ -18,4 +19,8 @@ public interface MenuService {
     Menu getMenuById(Long id);
 
     void deleteMenu(Long id);
+
+    List<MenuTreeViewResponse> getMenusInTreeView();
+
+    List<MenuTreeViewResponse> getRoleMenusInTreeView(Long roleId);
 }

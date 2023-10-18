@@ -21,12 +21,12 @@ import java.util.Set;
 public class Role extends BaseEntity implements GrantedAuthority {
 
     @Column(name = "role_name")
-    @Enumerated(EnumType.STRING)
-    private RoleName roleName;
+    private String roleName;
 
     @Column(name = "display_order")
     private Integer displayOrder;
 
+    private String description;
     private boolean enable;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -50,7 +50,12 @@ public class Role extends BaseEntity implements GrantedAuthority {
 
     public Role(RoleName roleName) {
         this();
-        this.roleName = roleName;
+        this.roleName = roleName.toString();
+    }
+
+    public Role(String roleName) {
+        this();
+        this.roleName = roleName.toString();
     }
 
     public String getRoleName() {

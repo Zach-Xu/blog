@@ -72,7 +72,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         }
 
         ApplicationUser user1 = new ApplicationUser();
-        Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN).get();
+        Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN.toString()).get();
         user1.addRole(adminRole);
         user1.setUsername("Zachary");
         user1.setNickname("NotNow");
@@ -211,11 +211,11 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu1.setStatus(MenuStatus.ENABLE);
         menu1.setPermission("");
         menu1.setIcon("system");
-        menuRepository.save(menu1);
+        menu1 = menuRepository.save(menu1);
 
         Menu menu2 = new Menu();
         menu2.setName(USER_MANAGEMENT);
-        menu2.setParentId(-1L);
+        menu2.setParentId(menu1.getId());
         menu2.setDisplayOrder(1);
         menu2.setRouterPath("user");
         menu2.setComponent("system/user/index");
@@ -229,7 +229,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
 
         Menu menu3 = new Menu();
         menu3.setName(ROLE_MANAGEMENT);
-        menu3.setParentId(-1L);
+        menu3.setParentId(menu1.getId());
         menu3.setDisplayOrder(2);
         menu3.setRouterPath("role");
         menu3.setComponent("system/role/index");
@@ -243,7 +243,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
 
         Menu menu4 = new Menu();
         menu4.setName(MENU_MANAGEMENT);
-        menu4.setParentId(-1L);
+        menu4.setParentId(menu1.getId());
         menu4.setDisplayOrder(3);
         menu4.setRouterPath("menu");
         menu4.setComponent("system/menu/index");

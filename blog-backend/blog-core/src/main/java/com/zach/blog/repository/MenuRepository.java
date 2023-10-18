@@ -1,10 +1,9 @@
 package com.zach.blog.repository;
 
 import com.zach.blog.enums.MenuType;
-import com.zach.blog.model.Article;
 import com.zach.blog.model.Menu;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +20,9 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
             "WHERE m.parentId = ?1 " +
             "AND m.menuType IN ?2 " +
             "ORDER BY m.displayOrder ASC")
-    List<Menu> findSubMenus(Long rootMenuId, List<MenuType> menuTypes);
+    List<Menu> findSubMenusByTypes(Long rootMenuId, List<MenuType> menuTypes);
+
+    List<Menu> findAllByParentId(Long parentId, Sort sort);
 
     boolean existsByParentId(Long id);
 }
