@@ -112,4 +112,10 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.save(role);
     }
 
+    @Override
+    public List<Role> getAllActiveRoles() {
+        Sort sort = Sort.by("displayOrder");
+        return roleRepository.findAllByEnable(true, sort);
+    }
+
 }

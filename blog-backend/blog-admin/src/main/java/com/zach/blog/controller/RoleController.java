@@ -1,6 +1,7 @@
 package com.zach.blog.controller;
 
 import com.zach.blog.dto.ChangeRoleStatusRequest;
+import com.zach.blog.dto.RoleNameResponse;
 import com.zach.blog.dto.request.CreateRoleRequest;
 import com.zach.blog.dto.RoleResponse;
 import com.zach.blog.dto.request.UpdateRoleRequest;
@@ -30,6 +31,13 @@ public class RoleController {
         List<RoleResponse> roleResponse = BeanCopyUtils.copyBeanList(roles, RoleResponse.class);
         PageResponse pageResponse = new PageResponse(roleResponse, totalPages, roles.size());
         return ResponseResult.ok(pageResponse);
+    }
+
+    @GetMapping("/all")
+    public ResponseResult<?> getAllActiveRoles(){
+        List<Role> roles = roleService.getAllActiveRoles();
+        List<RoleNameResponse> roleResponse = BeanCopyUtils.copyBeanList(roles, RoleNameResponse.class);
+        return ResponseResult.ok(roleResponse);
     }
 
     @PostMapping("/{id}")
