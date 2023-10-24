@@ -16,10 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -38,7 +35,7 @@ public class MenuServiceImpl implements MenuService {
                 .toList();
 
         List<Menu> rootMenus = roles.stream()
-                .flatMap(role -> role.getMenus().stream())
+                .flatMap(role -> role.getMenus().stream()).sorted(Comparator.comparing(Menu::getDisplayOrder))
                 .toList();
 
         List<MenuType> menuTypes = Arrays.asList(MenuType.CONTENT, MenuType.MENU);
