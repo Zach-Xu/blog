@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import SideNav from '../../components/side-nav';
 import TopNav from '../../components/top-nav';
+import PrivateRoute from '../../components/common/private-route';
 
 interface Props {
     children: React.ReactNode

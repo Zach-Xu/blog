@@ -1,12 +1,21 @@
-import React, { useCallback, useState } from 'react'
+import React, { FormEvent, useCallback, useState } from 'react'
 import Layout from '../../layouts/auth/layout'
-import { Box, Button, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import Box from '@mui/material/Box';
+import { LoadingButton } from '@mui/lab';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { login } from '../../redux/slices/auth-slice';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
 
     const [method, setMethod] = useState('username');
     const [account, setAccount] = useState('')
     const [password, setPassword] = useState('')
+
+    const { isLoading } = useSelector((state: RootState) => state.loading)
 
     const handleMethodChange = useCallback(
         (_: any, value: React.SetStateAction<string>) => {
@@ -15,8 +24,18 @@ const Login = () => {
         []
     );
 
-    const handleSubmit = () => {
-        alert(123)
+    const dispatch = useDispatch<AppDispatch>()
+
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault()
+        dispatch(login({
+            username: account,
+            password
+        }))
+
+        navigate('/tag')
     }
 
     return (
@@ -70,30 +89,25 @@ const Login = () => {
                         </Tabs>
                         <Stack spacing={3}>
                             <TextField
-                                // error={()=>{}}
                                 fullWidth
-                                // helperText={}
                                 label={method === 'email' ? "Email Address" : 'Username'}
                                 name={method === 'email' ? "email" : 'username'}
-                                // onBlur={formik.handleBlur}
                                 onChange={e => setAccount(e.target.value)}
                                 type={method === 'email' ? 'email' : 'text'}
                                 value={account}
                             />
                             <TextField
-                                // error={!!(formik.touched.password && formik.errors.password)}
                                 fullWidth
-                                // helperText={formik.touched.password && formik.errors.password}
                                 label="Password"
                                 name="password"
-                                // onBlur={formik.handleBlur}
                                 onChange={e => setPassword(e.target.value)}
                                 type="password"
                                 value={password}
                             />
                         </Stack>
 
-                        <Button
+                        <LoadingButton
+                            loading={isLoading}
                             fullWidth
                             size="large"
                             sx={{ mt: 3 }}
@@ -101,7 +115,7 @@ const Login = () => {
                             variant="contained"
                         >
                             Continue
-                        </Button>
+                        </LoadingButton>
                     </form>
                 </Box>
             </Box>

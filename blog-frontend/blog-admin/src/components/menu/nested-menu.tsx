@@ -1,25 +1,10 @@
-import { ExpandLess, ExpandMore, StarBorder } from '@mui/icons-material';
-import { ListItemButton, ListItemIcon, ListItemText, Collapse, List } from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ListItemButton, ListItemText, Collapse, List } from '@mui/material';
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSelectedMenu } from '../../redux/slices/menuslice';
+import { updateSelectedMenu } from '../../redux/slices/menu-slice';
 import { RootState } from '../../redux/store';
-
-
-interface Menu {
-    id: number
-    name: string
-    parentId: number
-    displayOrder: number
-    routerPath: string
-    component: null | string
-    frame: boolean
-    menuType: string
-    visible: boolean
-    status: string
-    permission: null | string
-    icon: null | string
-}
+import { updateRouterPath } from '../../redux/slices/router-path-slice';
 
 interface Props {
     menu: Menu
@@ -43,9 +28,12 @@ const NestedMenu = ({ menu, subMenus }: Props) => {
         }
     }
 
-    const selectMenu = (id: number) => {
+    const selectMenu = (menu: Menu) => {
         dispatch(updateSelectedMenu({
-            id
+            id: menu.id
+        }))
+        dispatch(updateRouterPath({
+            path: menu.component
         }))
     }
 
@@ -72,7 +60,7 @@ const NestedMenu = ({ menu, subMenus }: Props) => {
                         subMenus.map(sMenu => (
                             <ListItemButton
                                 key={sMenu.id}
-                                onClick={() => selectMenu(sMenu.id)}
+                                onClick={() => selectMenu(sMenu)}
                                 selected={selectedMenuId === sMenu.id}
                                 sx={{
                                     pl: 4,

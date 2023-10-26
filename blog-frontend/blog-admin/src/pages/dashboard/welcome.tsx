@@ -1,11 +1,10 @@
-import React from 'react'
-import Layout from '../../layouts/dashboard/layout'
+import DashboardLayout from '../../layouts/dashboard/layout'
 
 const welcome = () => {
     return (
-        <Layout>
+        <DashboardLayout>
             <div >welcome</div>
-        </Layout>
+        </DashboardLayout>
     )
 }
 

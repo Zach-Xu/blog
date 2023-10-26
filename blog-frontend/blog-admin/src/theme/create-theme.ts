@@ -185,12 +185,13 @@ export const theme = createTheme({
         MuiOutlinedInput: {
             styleOverrides: {
                 input: {
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: 500,
                     lineHeight: '24px',
+                    padding: '0.8rem 0'
                 },
                 notchedOutline: {
-                    borderColor: palette.neutral[200],
+                    borderColor: palette.neutral[400],
                     transition: muiTheme.transitions.create([
                         'border-color',
                         'box-shadow'

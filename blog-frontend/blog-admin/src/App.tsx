@@ -1,18 +1,16 @@
-import { Routes, Route } from 'react-router-dom'
-import Login from './pages/auth/login'
-import { ThemeProvider } from '@emotion/react'
+import { RouterProvider } from 'react-router-dom'
+import { ThemeProvider } from '@mui/material'
 import { theme } from './theme/create-theme'
-import Welcome from './pages/dashboard/welcome'
+import { useAppRouter } from './routers/router'
+import { ToastContainer } from 'react-toastify'
+
 
 function App() {
-
+  const { router } = useAppRouter()
   return (
     <ThemeProvider theme={theme}>
-      <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/' element={<Welcome />} />
-        <Route path='*' element={<Login />} />
-      </Routes>
+      <RouterProvider router={router} />
+      <ToastContainer />
     </ThemeProvider>
   )
 }

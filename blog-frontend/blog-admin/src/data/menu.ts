@@ -3,21 +3,73 @@ export const menu = {
     "message": "Action successful",
     "data": [
         {
-            "menu": {
-                "id": 21,
-                "deleted": false,
-                "name": "Content management",
-                "parentId": -1,
-                "displayOrder": 4,
-                "routerPath": "content",
-                "component": null,
-                "frame": false,
-                "menuType": "CONTENT",
-                "visible": true,
-                "status": "ENABLE",
-                "permission": null,
-                "icon": "table"
-            },
+            "id": 1,
+            "name": "System management",
+            "parentId": -1,
+            "displayOrder": 1,
+            "routerPath": "system",
+            "component": null,
+            "menuType": "CONTENT",
+            "permission": "",
+            "icon": "system",
+            "subMenus": [
+                {
+                    "id": 2,
+                    "deleted": false,
+                    "name": "User management",
+                    "parentId": 1,
+                    "displayOrder": 1,
+                    "routerPath": "user",
+                    "component": "system/user/index",
+                    "frame": false,
+                    "menuType": "MENU",
+                    "visible": true,
+                    "status": "ENABLE",
+                    "permission": "system:user:list",
+                    "icon": "user"
+                },
+                {
+                    "id": 3,
+                    "deleted": false,
+                    "name": "Role management",
+                    "parentId": 1,
+                    "displayOrder": 2,
+                    "routerPath": "role",
+                    "component": "system/role/index",
+                    "frame": false,
+                    "menuType": "CONTENT",
+                    "visible": true,
+                    "status": "ENABLE",
+                    "permission": "system:role:list",
+                    "icon": "peoples"
+                },
+                {
+                    "id": 4,
+                    "deleted": false,
+                    "name": "Menu management",
+                    "parentId": 1,
+                    "displayOrder": 3,
+                    "routerPath": "menu",
+                    "component": "system/menu/index",
+                    "frame": false,
+                    "menuType": "MENU",
+                    "visible": true,
+                    "status": "ENABLE",
+                    "permission": "system:menu:list",
+                    "icon": "tree-table"
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "name": "Content management",
+            "parentId": -1,
+            "displayOrder": 4,
+            "routerPath": "content",
+            "component": null,
+            "menuType": "CONTENT",
+            "permission": null,
+            "icon": "table",
             "subMenus": [
                 {
                     "id": 23,
@@ -78,70 +130,6 @@ export const menu = {
                     "status": "ENABLE",
                     "permission": "content:tag:index",
                     "icon": "button"
-                }
-            ]
-        },
-        {
-            "menu": {
-                "id": 1,
-                "deleted": false,
-                "name": "System management",
-                "parentId": -1,
-                "displayOrder": 1,
-                "routerPath": "system",
-                "component": null,
-                "frame": false,
-                "menuType": "CONTENT",
-                "visible": true,
-                "status": "ENABLE",
-                "permission": "",
-                "icon": "system"
-            },
-            "subMenus": [
-                {
-                    "id": 2,
-                    "deleted": false,
-                    "name": "User management",
-                    "parentId": 1,
-                    "displayOrder": 1,
-                    "routerPath": "user",
-                    "component": "system/user/index",
-                    "frame": false,
-                    "menuType": "MENU",
-                    "visible": true,
-                    "status": "ENABLE",
-                    "permission": "system:user:list",
-                    "icon": "user"
-                },
-                {
-                    "id": 3,
-                    "deleted": false,
-                    "name": "Role management",
-                    "parentId": 1,
-                    "displayOrder": 2,
-                    "routerPath": "role",
-                    "component": "system/role/index",
-                    "frame": false,
-                    "menuType": "CONTENT",
-                    "visible": true,
-                    "status": "ENABLE",
-                    "permission": "system:role:list",
-                    "icon": "peoples"
-                },
-                {
-                    "id": 4,
-                    "deleted": false,
-                    "name": "Menu management",
-                    "parentId": 1,
-                    "displayOrder": 3,
-                    "routerPath": "menu",
-                    "component": "system/menu/index",
-                    "frame": false,
-                    "menuType": "MENU",
-                    "visible": true,
-                    "status": "ENABLE",
-                    "permission": "system:menu:list",
-                    "icon": "tree-table"
                 }
             ]
         }

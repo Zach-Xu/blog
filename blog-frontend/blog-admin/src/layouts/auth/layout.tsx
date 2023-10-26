@@ -2,7 +2,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import React from 'react'
 
 interface Props {
-    children: React.ReactElement
+    children: React.ReactNode
 }
 
 const layout = ({ children }: Props) => {
@@ -63,15 +63,8 @@ const layout = ({ children }: Props) => {
                                 sx={{ color: '#15B79E' }}
                                 target="_blank"
                             >
-                                Devias Kit
+                                Blog Admin Dashboard
                             </Box>
-                        </Typography>
-                        <Typography
-                            align="center"
-                            sx={{ mb: 3 }}
-                            variant="subtitle1"
-                        >
-                            A professional kit that comes with ready-to-use MUI components.
                         </Typography>
                     </Box>
                 </Grid>

@@ -1,28 +1,20 @@
-import { ExpandLess, ExpandMore, StarBorder } from '@mui/icons-material';
-import { ListItemButton, ListItemIcon, ListItemText, Collapse, List } from '@mui/material';
-import { useState } from 'react'
-
-
-interface Menu {
-    id: number
-    name: string
-    parentId: number
-    displayOrder: number
-    routerPath: string
-    component: null | string
-    frame: boolean
-    menuType: string
-    visible: boolean
-    status: string
-    permission: null | string
-    icon: null | string
-}
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { updateRouterPath } from '../../redux/slices/router-path-slice';
 
 interface Props {
     menu: Menu
 }
 
 const SingleLevelMenu = ({ menu }: Props) => {
+
+    const dispatch = useDispatch()
+
+    const clickHandler = () => {
+        dispatch(updateRouterPath({
+            path: menu.component
+        }))
+    }
 
     return (
         <>
@@ -33,6 +25,7 @@ const SingleLevelMenu = ({ menu }: Props) => {
                         backgroundColor: '#252e3e'
                     },
                 }}
+                onClick={clickHandler}
             >
                 {/* <ListItemIcon>
                     <SendIcon />
