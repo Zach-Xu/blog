@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Page<Tag> getTags(Integer pageNum, Integer pageSize, String tagName, String description) {
-        PageRequest pageRequest = PageRequest.of(pageNum,pageSize, Sort.by("name").ascending());
+        PageRequest pageRequest = PageRequest.of(pageNum,pageSize, Sort.by("id").ascending());
 
         Specification<Tag> spec = Specification.where(null);
         if(Strings.hasText(tagName)){

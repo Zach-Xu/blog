@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { authService } from "../../services/auth-sevice"
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { authService } from "../../services/auth/auth-sevice"
 
 const initialState: {
     user: User | null
@@ -17,8 +17,12 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        updateUser: (state, action: PayloadAction<User>) => {
+            state.user = action.payload
+        }
     },
     extraReducers: (builder) => {
+        // all axios request will be fulfilled because the way we configured
         builder
             .addCase(login.fulfilled, (state, action) => {
                 if (action.payload) {
@@ -32,5 +36,5 @@ export const authSlice = createSlice({
     }
 })
 
-
+export const { updateUser } = authSlice.actions
 export default authSlice.reducer

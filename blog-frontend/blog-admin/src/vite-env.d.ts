@@ -15,9 +15,13 @@ interface MenuTree extends Menu {
     subMenus?: MenuTree[]
 }
 
-interface Tag {
-    id: number
-    name: string
-    description: string
+interface PageRequest {
+    pageSize?: number
+    pageNum?: number
 }
 
+interface PageRespsone<T> {
+    rows: T[]
+    totalPages: number
+    total: number
+}

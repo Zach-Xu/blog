@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import SideNav from '../../components/side-nav';
 import TopNav from '../../components/top-nav';
-import PrivateRoute from '../../components/common/private-route';
+import AuthGuard from '../../components/auth-guard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import Loading from '../../components/common/loading';
 
 interface Props {
     children: React.ReactNode
@@ -17,38 +20,40 @@ const Layout = ({ children }: Props) => {
     const theme = useTheme()
 
     return (
-        <>
-            <TopNav onNavOpen={() => setOpenNav(true)} />
-            <SideNav
-                onClose={() => setOpenNav(false)}
-                open={openNav}
-            />
-            <Box
-                component='main'
-                sx={{
-                    display: 'flex',
-                    flex: '1 1 auto',
-                    maxWidth: '100%',
-                    [theme.breakpoints.up('lg')]: {
-                        paddingLeft: SIDE_NAV_WIDTH
-                    },
-                }}
-
-            >
+        <AuthGuard>
+            <>
+                <TopNav onNavOpen={() => setOpenNav(true)} />
+                <SideNav
+                    onClose={() => setOpenNav(false)}
+                    open={openNav}
+                />
                 <Box
-                    component='div'
+                    component='main'
                     sx={{
                         display: 'flex',
                         flex: '1 1 auto',
-                        flexDirection: 'column',
-                        width: '100%'
+                        maxWidth: '100%',
+                        [theme.breakpoints.up('lg')]: {
+                            paddingLeft: SIDE_NAV_WIDTH
+                        },
                     }}
 
                 >
-                    {children}
+                    <Box
+                        component='div'
+                        sx={{
+                            display: 'flex',
+                            flex: '1 1 auto',
+                            flexDirection: 'column',
+                            width: '100%'
+                        }}
+
+                    >
+                        {children}
+                    </Box>
                 </Box>
-            </Box>
-        </>
+            </>
+        </AuthGuard>
     )
 }
 

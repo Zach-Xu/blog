@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -56,9 +57,10 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173","http://localhost:81")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedOrigins("http://localhost:5173", "http://localhost:81")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true)
+                        .allowedHeaders("*")
                         .maxAge(3600);
             }
         };
@@ -68,18 +70,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> corsConfigurer())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authRequests -> {
                     authRequests.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
-                    authRequests.requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll();
+                    authRequests.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                     authRequests.requestMatchers("/api/tags/**").permitAll();
                     authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
                     authRequests.requestMatchers("/api/articles/**").hasRole("USER");
                     authRequests.requestMatchers("/api/categories/**").hasRole("USER");
                     authRequests.requestMatchers("/api/users/**").authenticated();
-                    authRequests.requestMatchers(HttpMethod.POST,"/api/comments").hasRole("USER");
+                    authRequests.requestMatchers(HttpMethod.POST, "/api/comments").hasRole("USER");
                     authRequests.anyRequest().authenticated();
                 });
+
+
 
         http
                 .logout(logout -> logout.disable());

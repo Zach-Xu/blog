@@ -18,10 +18,7 @@ export const menuSlice = createSlice({
     reducers: {
         updateSelectedMenu(state, action: PayloadAction<UpdatePayload>) {
             let { id } = action.payload
-            return {
-                ...state,
-                selectedMenuId: id
-            }
+            state.selectedMenuId = id
         }
     }
 })

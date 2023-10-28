@@ -1,6 +1,4 @@
-import { authAxios } from "../utils/axios-utils"
-
-
+import { authAxios } from "../../utils/axios-utils"
 
 
 export const authService = {
@@ -15,5 +13,10 @@ export const authService = {
         const result = await authAxios.post('/register', {
 
         })
+    },
+
+    verifyToken: async () => {
+        const result = await authAxios.get<void, User | undefined>('/token')
+        return result
     }
 }

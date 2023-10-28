@@ -1,18 +1,19 @@
 import { Pagination, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
 
 
 interface Props {
-    total: number
     pageSize: number
+    totalPages: number
+    currentPageNum: number
+    onChangeHandler: (event: React.ChangeEvent<unknown>, value: number) => void
 }
 
-const CustomPagination = ({ total, pageSize = 5 }: Props) => {
+const CustomPagination = ({ totalPages, pageSize = 5, currentPageNum, onChangeHandler }: Props) => {
 
-    const [page, setPage] = useState(1);
-    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
-    };
+
     return (
         <Stack
             direction='row'
@@ -25,7 +26,7 @@ const CustomPagination = ({ total, pageSize = 5 }: Props) => {
             <Typography>
                 {`${pageSize} rows per page`}
             </Typography>
-            <Pagination count={Math.ceil(total / pageSize)} page={page} onChange={handleChange} />
+            <Pagination count={totalPages} page={currentPageNum} onChange={onChangeHandler} />
 
         </Stack>
     )

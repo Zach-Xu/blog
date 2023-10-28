@@ -3,12 +3,24 @@ import Scrollbar from 'simplebar-react';
 import CustomPagination from '../common/pagination';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { useCallback } from 'react';
+import { getTags, updatePageNum } from '../../redux/slices/tag-slice';
 
 interface Props {
     tags: Tag[],
 };
 
 export const TagsTable = ({ tags }: Props) => {
+
+    const { totalPages, currentPageNum } = useSelector((state: RootState) => state.tag)
+
+    const dispatch = useDispatch<AppDispatch>()
+
+    const onChangeHandler = useCallback((event: React.ChangeEvent<unknown>, value: number) => {
+        dispatch(updatePageNum(value - 1))
+    }, [])
 
     return (
         <Box
@@ -102,7 +114,12 @@ export const TagsTable = ({ tags }: Props) => {
                         </Table>
                     </Box>
                 </Scrollbar>
-                <CustomPagination total={20} pageSize={5} />
+                <CustomPagination
+                    totalPages={totalPages}
+                    currentPageNum={currentPageNum + 1}
+                    pageSize={5}
+                    onChangeHandler={onChangeHandler}
+                />
             </Stack>
         </Box >
     );

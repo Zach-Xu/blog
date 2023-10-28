@@ -21,8 +21,8 @@ public class MenuController {
 
     @GetMapping("/user-menu")
     public ResponseResult<?> getCurrentUserMenus(@AuthenticationPrincipal ApplicationUser user) {
-        List<MenuResponse> userMenus = menuService.getUserMenus(user);
-        return ResponseResult.ok(userMenus);
+        List<MenuResponse> menus = menuService.getUserMenus(user);
+        return ResponseResult.ok(menus);
     }
 
     @GetMapping("/{id}")
@@ -48,8 +48,6 @@ public class MenuController {
         List<MenuTreeViewResponse> roleMenusInTreeView = menuService.getRoleMenusInTreeView(roleId);
         return ResponseResult.ok(roleMenusInTreeView);
     }
-
-
 
     @PostMapping
     public ResponseResult<?> createMenu(@RequestBody Menu menu) {

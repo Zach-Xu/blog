@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Authentication", description = "User authentication and authorization")
 @RestController
@@ -35,6 +32,12 @@ public class AuthenticationController {
     public ResponseResult<?> login(@RequestBody LoginRequest loginRequest) {
         AuthResponse response = authenticationService.login(loginRequest.username(), loginRequest.password());
         return ResponseResult.ok(response);
+    }
+
+    @Operation(summary = "Token verification", description = "Verify user token.")
+    @GetMapping("/token")
+    public ResponseResult<?> verifyToken(@AuthenticationPrincipal ApplicationUser user){
+        return ResponseResult.ok(user);
     }
 
     @Operation(summary = "User Logout", description = "Log out the currently authenticated user.")

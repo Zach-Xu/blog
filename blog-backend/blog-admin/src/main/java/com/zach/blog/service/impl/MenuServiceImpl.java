@@ -43,8 +43,7 @@ public class MenuServiceImpl implements MenuService {
         // For each root menu, fetch its sub menus as well
         return rootMenus.stream().map(menu -> {
             List<Menu> subMenus = menuRepository.findSubMenusByTypes(menu.getId(), menuTypes);
-            MenuResponse menuResponse = new MenuResponse();
-            menuResponse.setMenu(menu);
+            MenuResponse menuResponse = BeanCopyUtils.copyBean(menu, MenuResponse.class);
             menuResponse.setSubMenus(subMenus);
             return menuResponse;
         }).collect(Collectors.toList());

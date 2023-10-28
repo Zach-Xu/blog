@@ -3,13 +3,15 @@ import menuReducer from './slices/menu-slice'
 import routerReducer from './slices/router-path-slice'
 import loadingReducer from './slices/loading-slice'
 import authReducer from './slices/auth-slice'
+import tagReducer from './slices/tag-slice'
 
 export const store = configureStore({
     reducer: {
         menu: menuReducer,
         router: routerReducer,
         loading: loadingReducer,
-        auth: authReducer
+        auth: authReducer,
+        tag: tagReducer
     }
 })
 
