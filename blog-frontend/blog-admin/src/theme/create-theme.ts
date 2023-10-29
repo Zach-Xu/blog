@@ -2,7 +2,8 @@ import {
     createTheme,
     filledInputClasses,
     paperClasses,
-    tableCellClasses
+    tableCellClasses,
+    outlinedInputClasses
 } from '@mui/material';
 import { palette } from './create-palette';
 
@@ -182,16 +183,69 @@ export const theme = createTheme({
                 }
             }
         },
+        // MuiOutlinedInput: {
+        //     styleOverrides: {
+        //         root: {
+        //             borderRadius: '8px',
+        //             boxShadow: `0px 2px 2px ${palette.color.grey[50]}`,
+        //             border: `1px solid ${palette.color.grey[200]}`,
+        //             '&:hover': {
+        //                 borderColor: palette.color.blue[400]
+        //             },
+        //             // [`&.${outlinedInputClasses.focused}`]: {
+        //             //     // backgroundColor: 'transparent',
+        //             //     borderColor: palette.color.blue[400],
+        //             //     boxShadow: `0 0 0 3px ${palette.color.blue[200]}`
+        //             // },
+        //         },
+        //         input: {
+        //             fontSize: 16,
+        //             fontWeight: 500,
+        //             lineHeight: '24px',
+        //             padding: '0.8rem 0',
+        //         },
+        //         notchedOutline: {
+        //             borderColor: palette.neutral[400],
+        //             transition: muiTheme.transitions.create([
+        //                 'border-color',
+        //                 'box-shadow'
+        //             ])
+        //         }
+        //     }
+        // },
         MuiOutlinedInput: {
             styleOverrides: {
+                root: {
+                    [`& .${outlinedInputClasses.notchedOutline}`]: {
+                        border: `1px solid ${palette.color.grey[200]}`,
+                        transitionDuration: '0s'
+                    },
+                    '&:hover': {
+                        [`& .${outlinedInputClasses.notchedOutline}`]: {
+                            borderColor: palette.color.blue[400]
+                        }
+                    },
+                    [`&.${outlinedInputClasses.focused}`]: {
+                        backgroundColor: 'transparent',
+                        [`& .${outlinedInputClasses.notchedOutline}`]: {
+                            border: `1px solid ${palette.color.blue[400]}`,
+                            boxShadow: `0 0 0 2px ${palette.color.blue[200]}`
+                        }
+                    },
+                    [`&.${filledInputClasses.error}`]: {
+                        [`& .${outlinedInputClasses.notchedOutline}`]: {
+                            borderColor: palette.error.main,
+                            boxShadow: `${palette.error.main} 0 0 0 2px`
+                        }
+                    }
+                },
                 input: {
                     fontSize: 16,
                     fontWeight: 500,
                     lineHeight: '24px',
-                    padding: '0.8rem 0'
                 },
                 notchedOutline: {
-                    borderColor: palette.neutral[400],
+                    borderColor: palette.neutral[200],
                     transition: muiTheme.transitions.create([
                         'border-color',
                         'box-shadow'

@@ -4,9 +4,6 @@ import { useTheme } from '@mui/material/styles'
 import SideNav from '../../components/side-nav';
 import TopNav from '../../components/top-nav';
 import AuthGuard from '../../components/auth-guard';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import Loading from '../../components/common/loading';
 
 interface Props {
     children: React.ReactNode
@@ -21,38 +18,36 @@ const Layout = ({ children }: Props) => {
 
     return (
         <AuthGuard>
-            <>
-                <TopNav onNavOpen={() => setOpenNav(true)} />
-                <SideNav
-                    onClose={() => setOpenNav(false)}
-                    open={openNav}
-                />
+            <TopNav onNavOpen={() => setOpenNav(true)} />
+            <SideNav
+                onClose={() => setOpenNav(false)}
+                open={openNav}
+            />
+            <Box
+                component='main'
+                sx={{
+                    display: 'flex',
+                    flex: '1 1 auto',
+                    maxWidth: '100%',
+                    [theme.breakpoints.up('lg')]: {
+                        paddingLeft: SIDE_NAV_WIDTH
+                    },
+                }}
+
+            >
                 <Box
-                    component='main'
+                    component='div'
                     sx={{
                         display: 'flex',
                         flex: '1 1 auto',
-                        maxWidth: '100%',
-                        [theme.breakpoints.up('lg')]: {
-                            paddingLeft: SIDE_NAV_WIDTH
-                        },
+                        flexDirection: 'column',
+                        width: '100%'
                     }}
 
                 >
-                    <Box
-                        component='div'
-                        sx={{
-                            display: 'flex',
-                            flex: '1 1 auto',
-                            flexDirection: 'column',
-                            width: '100%'
-                        }}
-
-                    >
-                        {children}
-                    </Box>
+                    {children}
                 </Box>
-            </>
+            </Box>
         </AuthGuard>
     )
 }

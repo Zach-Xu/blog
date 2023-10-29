@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { authService } from '../services/auth/auth-sevice'
+import { AppDispatch, RootState } from '../redux/store'
 import { useLocalStorage } from '../hooks/use-localstorage'
 import { Navigate } from 'react-router-dom'
-import { updateUser } from '../redux/slices/auth-slice'
+import { verifyToken } from '../redux/slices/auth-slice'
 import { useEffect, useState } from 'react'
 import Loading from './common/loading'
+
 
 interface Props {
     children: React.ReactNode
@@ -15,31 +15,22 @@ const AuthGuard = ({ children }: Props) => {
     const { user } = useSelector((state: RootState) => state.auth)
 
     const [isLoading, setIsLoading] = useState(true)
-    const [validated, setValidate] = useState(false)
+    const [valid, setValid] = useState(false)
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
     const [token] = useLocalStorage<string>('tk')
 
     useEffect(() => {
-        const verifyToken = async () => {
-            const user = await authService.verifyToken()
-            if (user) {
-                dispatch(updateUser(user))
-                setValidate(true)
-            } else {
-                // invalid or expired token
-                setValidate(false)
-            }
-            setIsLoading(false)
-        }
-
         if (!user && token) {
-            verifyToken()
+            dispatch(verifyToken())
+                .then(() => setValid(true))
+                .catch(() => setValid(false))
+                .finally(() => setIsLoading(false))
         } else {
             // user is presented in redux state
             setIsLoading(false)
-            setValidate(true)
+            setValid(true)
         }
 
     }, [user, token])
@@ -53,11 +44,11 @@ const AuthGuard = ({ children }: Props) => {
         isLoading ?
             (<Loading />)
             :
-            (validated ?
-                (children)
+            (valid ?
+                children
                 :
-                (<Navigate to='/login' />))
-
+                < Navigate to='/login' />
+            )
     )
 }
 

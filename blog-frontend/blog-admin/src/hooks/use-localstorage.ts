@@ -16,7 +16,9 @@ export const useLocalStorage = <T>(key: string, defaultValue?: T): [T, Dispatch<
     })
 
     useEffect(() => {
-        localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value))
+        if (value) {
+            localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value))
+        }
     }, [key, value])
 
     return [value, setValue];

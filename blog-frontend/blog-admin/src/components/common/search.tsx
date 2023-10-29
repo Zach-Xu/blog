@@ -14,19 +14,18 @@ const Search = ({ name, placeholder, onKeyUpHandler, clickHandler, searchName }:
 
     const [value, setValue] = useState(searchName)
 
-    const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'))
+    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     return (
         <Stack
             direction='row'
             alignItems='center'
+            justifyContent={mdUp ? '' : 'space-between'}
             spacing={2}
-            sx={{
-                pl: 3
-            }}
+            width={'100%'}
         >
             {
-                lgUp && (
+                mdUp && (
                     <Typography variant='subtitle1'>
                         {name}
                     </Typography>
@@ -34,14 +33,14 @@ const Search = ({ name, placeholder, onKeyUpHandler, clickHandler, searchName }:
             }
             <OutlinedInput
                 fullWidth
-                placeholder={lgUp ? '' : placeholder}
+                placeholder={mdUp ? '' : placeholder}
                 startAdornment={(
                     <InputAdornment position="start">
                     </InputAdornment>
                 )}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                sx={lgUp ? { maxWidth: 250 } : { maxWidth: 500 }}
+                sx={mdUp ? { maxWidth: 350 } : { maxWidth: 500 }}
                 onKeyUp={onKeyUpHandler}
             />
 

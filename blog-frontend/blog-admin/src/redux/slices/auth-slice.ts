@@ -12,6 +12,11 @@ export const login = createAsyncThunk('/login', async (data: LoginRequest) => {
     return result
 })
 
+export const verifyToken = createAsyncThunk('/verify-token', async () => {
+    const result = await authService.verifyToken()
+    return result
+})
+
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -22,17 +27,16 @@ export const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        // all axios request will be fulfilled because the way we configured
         builder
             .addCase(login.fulfilled, (state, action) => {
-                if (action.payload) {
-                    const { user, jwt } = action.payload
-                    state.user = user
-                    localStorage.setItem('tk', jwt)
-                }
+                const { user, jwt } = action.payload
+                state.user = user
+                localStorage.setItem('tk', jwt)
             })
-        // rejected promises are aleady handled by intercepters
-
+            .addCase(verifyToken.fulfilled, (state, action) => {
+                const user = action.payload
+                state.user = user
+            })
     }
 })
 

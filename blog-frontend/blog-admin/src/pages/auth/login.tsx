@@ -30,12 +30,15 @@ const Login = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
+
         dispatch(login({
             username: account,
             password
-        }))
-
-        navigate('/tag')
+        })).then(result => {
+            if (result.meta.requestStatus === 'fulfilled') {
+                navigate('/tag')
+            }
+        })
     }
 
     return (

@@ -1,4 +1,4 @@
-import { resourceAxios } from "../../utils/axios-utils"
+import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
 
 export const tagService = {
     getTags: async ({ pageSize = 5, pageNum = 0, name, description }: GetTags) => {
@@ -8,7 +8,8 @@ export const tagService = {
                 pageNum,
                 ...(name !== '' ? { name } : {}),
                 // ...(description ? { description } : {})
-            }
+            },
+            headers: requireTokenHeader
         })
         return result
     }

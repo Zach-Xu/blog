@@ -1,10 +1,10 @@
-import { authAxios } from "../../utils/axios-utils"
+import { authAxios, requireTokenHeader } from "../../utils/axios-utils"
 
 
 export const authService = {
     login: async (data: LoginRequest) => {
-        const result = await authAxios.post<void, LoginResponse | undefined>('/login', {
-            ...data
+        const result = await authAxios.post<void, LoginResponse>('/login', {
+            ...data,
         })
         return result
     },
@@ -16,7 +16,9 @@ export const authService = {
     },
 
     verifyToken: async () => {
-        const result = await authAxios.get<void, User | undefined>('/token')
+        const result = await authAxios.get<void, User>('/token', {
+            headers: requireTokenHeader
+        })
         return result
     }
 }

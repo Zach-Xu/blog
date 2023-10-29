@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 import { menu } from "../data/menu";
 import Welcome from "../pages/dashboard/welcome";
-import TagList from "../pages/dashboard/content/tag-list";
 import Login from "../pages/auth/login";
+import TagPage from "../pages/dashboard/content/tag-page";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
@@ -13,7 +13,7 @@ const MapRouterToComponent: { [key: string]: JSX.Element } = {
     // 'content/article/index': <ArticleList/>,
     // 'content/category/index': <CategoryList/>,
     // 'content/link/index': <LinkList/>,
-    'content/tag/index': <TagList />,
+    'content/tag/index': <TagPage />,
 }
 
 export const useAppRouter = () => {

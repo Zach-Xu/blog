@@ -60,6 +60,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getRoles());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else{
+                throw new RuntimeException("Invalid token");
             }
         } catch (RequireLoginException e) {
             ResponseResult<?> result = ResponseResult.error(HttpStatusCode.REQUIRE_LOGIN);

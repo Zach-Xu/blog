@@ -1,8 +1,4 @@
 import { Pagination, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
-
 
 interface Props {
     pageSize: number

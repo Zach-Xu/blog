@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosResponse, InternalAxiosRequestConfig, RawAxiosRequestHeaders } from 'axios'
 import { errorCode } from './error-code'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { endLoading, onLoading } from '../redux/slices/loading-slice'
@@ -10,7 +10,12 @@ export const injectStore = (_store: ToolkitStore) => {
     store = _store
 }
 
-// axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+
+export const requireTokenHeader: Partial<RawAxiosRequestHeaders> = {
+    requireToken: true
+}
+
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 export const authAxios = axios.create({
     baseURL: 'http://localhost:8081/api/auth',
@@ -19,13 +24,13 @@ export const authAxios = axios.create({
 
 export const resourceAxios = axios.create({
     baseURL: 'http://localhost:8081/api',
-    timeout: 10000
+    // timeout: 10000
 })
 
 const commonRequestInterceptor = (config: InternalAxiosRequestConfig<any>) => {
-
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('tk')}`
-
+    if (config.headers['requireToken']) {
+        config.headers['Authorization'] = `Bearer ${localStorage.getItem('tk')}`
+    }
     store.dispatch(onLoading())
     return config
 }
@@ -33,23 +38,26 @@ const commonRequestInterceptor = (config: InternalAxiosRequestConfig<any>) => {
 const commonResponseInterceptor = (res: AxiosResponse) => {
 
     let code: string | number = (res.data.code as number || 200).toString()
-
     let message = errorCode[code] || res.data.msg || errorCode['default']
-
     code = parseInt(code)
-
-    if (code !== 200 && code !== 201) {
-        toast.error(message)
-    }
 
     store.dispatch(endLoading())
 
-    return res.data.data
+    // The response status code is defaulting to 200 
+    // because we wrap the code and error message in a custom object
+    // Therefore we should manully check the code and handle the error
+    if (code !== 200 && code !== 201) {
+        console.log('http status code is neither 200 nor 201')
+        toast.error(message)
+        return Promise.reject(new Error(message))
+    }
 
+    return res.data.data
 }
 
+// This error interceptor is used to handle errors caused by external factors, such as network issues, 
+// and any exceptional cases that are not handled by the backend.
 const commonErrorInterceptor = (error: any) => {
-    console.log('err123' + error)
     let { message } = error
     if (message === 'Network Error') {
         message = 'Network error'
@@ -59,13 +67,11 @@ const commonErrorInterceptor = (error: any) => {
         message = 'Internal system error'
     }
     store.dispatch(endLoading())
-    toast.error(message, {
-
-    })
+    toast.error(message)
 }
 
-authAxios.interceptors.request.use(commonRequestInterceptor)
+authAxios.interceptors.request.use(commonRequestInterceptor, commonErrorInterceptor)
 authAxios.interceptors.response.use(commonResponseInterceptor, commonErrorInterceptor)
 
-resourceAxios.interceptors.request.use(commonRequestInterceptor)
+resourceAxios.interceptors.request.use(commonRequestInterceptor, commonErrorInterceptor)
 resourceAxios.interceptors.response.use(commonResponseInterceptor, commonErrorInterceptor)
