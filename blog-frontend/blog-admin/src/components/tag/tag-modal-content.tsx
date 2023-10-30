@@ -1,5 +1,9 @@
-import { Stack, Typography, OutlinedInput, InputAdornment, Button, useMediaQuery, Theme, Box, TextareaAutosize } from "@mui/material"
-import Textarea from "../common/textarea"
+import { Stack, Typography, OutlinedInput, InputAdornment, Button, useMediaQuery, Theme, Box, TextareaAutosize, TextField } from "@mui/material"
+import { useState } from "react"
+import { tagService } from "../../services/resources/tag-service"
+import LoadingButton from "@mui/lab/LoadingButton"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/store"
 
 interface Props {
     handleClose(): void
@@ -9,6 +13,16 @@ interface Props {
 const TagModelContent = ({ handleClose }: Props) => {
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
+
+    const { isLoading } = useSelector((state: RootState) => state.loading)
+
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault()
+        tagService.addTag({ name, description }).then(handleClose)
+    }
 
     return (
         <Stack
@@ -40,71 +54,87 @@ const TagModelContent = ({ handleClose }: Props) => {
                 </Typography>
 
                 <OutlinedInput
+                    required
                     fullWidth
                     placeholder={''}
                     startAdornment={(
                         <InputAdornment position="start">
                         </InputAdornment>
                     )}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                 />
             </Stack>
-            <Stack
-                sx={{
-                    width: '100%',
-                    flexDirection: lgUp ? 'row' : 'column',
-                    alignItems: lgUp ? 'center' : '',
-                    pt: 2,
-                    pl: 2
-                }}
+            <form onSubmit={handleSubmit}>
+                <Stack
+                    sx={{
+                        width: '100%',
+                        flexDirection: lgUp ? 'row' : 'column',
+                        alignItems: lgUp ? 'center' : '',
+                        pt: 2,
+                        pl: 2
+                    }}
 
-            >
-                <Typography variant="subtitle2"
+                >
+                    <Typography variant="subtitle2"
+                        sx={{
+                            width: 100,
+                            mb: lgUp ? '' : 1
+                        }}>
+                        Description
+                    </Typography>
+
+                    <TextField
+                        required
+                        fullWidth
+                        rows={3}
+                        multiline
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                </InputAdornment>
+                            ),
+                        }}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                    />
+                </Stack>
+                <Stack
+                    direction='row'
+                    spacing={2}
                     sx={{
-                        width: 100,
-                        mb: lgUp ? '' : 1
-                    }}>
-                    Description
-                </Typography>
-                <Textarea
-                // startAdornment={(
-                //     <InputAdornment position="start">
-                //     </InputAdornment>
-                // )}
-                />
-            </Stack>
-            <Stack
-                direction='row'
-                spacing={2}
-                sx={{
-                    marginTop: 4,
-                    justifyContent: 'flex-end'
-                }}
-            >
-                <Button
-                    variant="outlined"
-                    sx={{
-                        bgcolor: 'white',
-                        '&:hover': {
-                            bgcolor: 'white'
-                        }
+                        marginTop: 4,
+                        justifyContent: 'flex-end'
                     }}
                 >
-                    Confirm
-                </Button>
-                <Button
-                    variant="outlined"
-                    color='error'
-                    sx={{
-                        bgcolor: 'white',
-                        '&:hover': {
-                            bgcolor: 'white'
-                        }
-                    }}
-                    onClick={handleClose}
-                >
-                    Cancel
-                </Button>
-            </Stack>
+                    <LoadingButton
+                        loading={isLoading}
+                        type="submit"
+                        variant="outlined"
+                        sx={{
+                            bgcolor: 'white',
+                            '&:hover': {
+                                bgcolor: 'white'
+                            }
+                        }}
+                    >
+                        Confirm
+                    </LoadingButton>
+                    <Button
+                        variant="outlined"
+                        color='error'
+                        sx={{
+                            bgcolor: 'white',
+                            '&:hover': {
+                                bgcolor: 'white'
+                            }
+                        }}
+                        onClick={handleClose}
+                    >
+                        Cancel
+                    </Button>
+                </Stack>
+            </form>
         </Stack>
     )
 }

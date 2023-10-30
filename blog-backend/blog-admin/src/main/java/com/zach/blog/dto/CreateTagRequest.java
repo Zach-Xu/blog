@@ -1,4 +1,11 @@
 package com.zach.blog.dto;
 
-public record CreateTagRequest(String name, String description) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateTagRequest(
+        @NotBlank(message = "Tag name must be provided")
+        String name,
+        @NotBlank(message = "Description must be provided")
+        String description
+) {
 }

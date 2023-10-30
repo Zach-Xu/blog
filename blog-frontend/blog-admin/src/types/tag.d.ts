@@ -8,3 +8,8 @@ interface GetTags extends PageRequest {
     name?: string
     description?: string
 }
+
+interface AddTag {
+    name: string
+    description: string
+}

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificationExecutor<Tag> {
 
+    boolean existsByNameIgnoreCase(String name);
+
     interface Specs {
         static Specification<Tag> containsTagName(String tagName) {
             return (root, query, builder) -> {

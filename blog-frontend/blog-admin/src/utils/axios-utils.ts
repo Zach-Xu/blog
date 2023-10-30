@@ -38,7 +38,8 @@ const commonRequestInterceptor = (config: InternalAxiosRequestConfig<any>) => {
 const commonResponseInterceptor = (res: AxiosResponse) => {
 
     let code: string | number = (res.data.code as number || 200).toString()
-    let message = errorCode[code] || res.data.msg || errorCode['default']
+
+    let message = res.data.message || errorCode[code] || errorCode['default']
     code = parseInt(code)
 
     store.dispatch(endLoading())
@@ -52,6 +53,9 @@ const commonResponseInterceptor = (res: AxiosResponse) => {
         return Promise.reject(new Error(message))
     }
 
+    if (!res.data.data) {
+        toast.success(message)
+    }
     return res.data.data
 }
 

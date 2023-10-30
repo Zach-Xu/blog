@@ -1,4 +1,4 @@
-package com.zach.blog.enums;
+package com.zach.blog.enums.code;
 
 public enum HttpStatusCode {
 

@@ -1,6 +1,6 @@
 package com.zach.blog.exception;
 
-import com.zach.blog.enums.HttpStatusCode;
+import com.zach.blog.enums.code.HttpStatusCode;
 
 public class IllegalHttpStatusCodeException extends RuntimeException {
     public IllegalHttpStatusCodeException(HttpStatusCode code) {

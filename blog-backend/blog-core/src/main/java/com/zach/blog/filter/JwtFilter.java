@@ -2,7 +2,7 @@ package com.zach.blog.filter;
 
 
 import com.zach.blog.dto.response.ResponseResult;
-import com.zach.blog.enums.HttpStatusCode;
+import com.zach.blog.enums.code.HttpStatusCode;
 import com.zach.blog.exception.RequireLoginException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.utils.JsonUtils;

@@ -183,41 +183,11 @@ export const theme = createTheme({
                 }
             }
         },
-        // MuiOutlinedInput: {
-        //     styleOverrides: {
-        //         root: {
-        //             borderRadius: '8px',
-        //             boxShadow: `0px 2px 2px ${palette.color.grey[50]}`,
-        //             border: `1px solid ${palette.color.grey[200]}`,
-        //             '&:hover': {
-        //                 borderColor: palette.color.blue[400]
-        //             },
-        //             // [`&.${outlinedInputClasses.focused}`]: {
-        //             //     // backgroundColor: 'transparent',
-        //             //     borderColor: palette.color.blue[400],
-        //             //     boxShadow: `0 0 0 3px ${palette.color.blue[200]}`
-        //             // },
-        //         },
-        //         input: {
-        //             fontSize: 16,
-        //             fontWeight: 500,
-        //             lineHeight: '24px',
-        //             padding: '0.8rem 0',
-        //         },
-        //         notchedOutline: {
-        //             borderColor: palette.neutral[400],
-        //             transition: muiTheme.transitions.create([
-        //                 'border-color',
-        //                 'box-shadow'
-        //             ])
-        //         }
-        //     }
-        // },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
                     [`& .${outlinedInputClasses.notchedOutline}`]: {
-                        border: `1px solid ${palette.color.grey[200]}`,
+                        border: `1px solid ${palette.color.grey[400]}`,
                         transitionDuration: '0s'
                     },
                     '&:hover': {
@@ -307,8 +277,21 @@ export const theme = createTheme({
             }
         },
         MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                            border: `1px solid ${palette.color.grey[400]}`,
+                        },
+                        '&:hover fieldset': {
+                            borderColor: palette.color.blue[400],
+                        }
+                    },
+                    transitionDuration: '0s'
+                }
+            },
             defaultProps: {
-                variant: 'filled'
+                variant: 'outlined'
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.zach.blog.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.zach.blog.enums.HttpStatusCode;
+import com.zach.blog.enums.code.HttpStatusCode;
 import com.zach.blog.exception.IllegalHttpStatusCodeException;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +36,10 @@ public class ResponseResult<T> implements Serializable {
         return build(HttpStatusCode.BAD_REQUEST.getCode() ,message);
     }
 
+
+    public static ResponseResult<?> error(int code, String message) {
+        return build(code, message);
+    }
 
     public static ResponseResult<?> error(HttpStatusCode code, String message) {
         if (code == HttpStatusCode.SUCCESS) throw new IllegalHttpStatusCodeException(code);

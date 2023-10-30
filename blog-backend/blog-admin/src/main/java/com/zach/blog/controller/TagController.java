@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.CreateTagRequest;
 import com.zach.blog.dto.TagResponse;
 import com.zach.blog.dto.UpdateTagRequest;
@@ -9,9 +10,11 @@ import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Tag;
 import com.zach.blog.service.TagService;
 import com.zach.blog.utils.BeanCopyUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,8 +43,9 @@ public class TagController {
         return ResponseResult.ok(tags);
     }
 
+    @Validate
     @PostMapping
-    public ResponseResult<?> createTag(@AuthenticationPrincipal ApplicationUser user, @RequestBody CreateTagRequest createTagRequest){
+    public ResponseResult<?> createTag(@AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid CreateTagRequest createTagRequest, BindingResult bindingResult){
         tagService.createTag(user, createTagRequest.name(), createTagRequest.description());
         return ResponseResult.ok();
     }

@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom'
 import { verifyToken } from '../redux/slices/auth-slice'
 import { useEffect, useState } from 'react'
 import Loading from './common/loading'
+import { toast } from 'react-toastify'
 
 
 interface Props {
@@ -37,6 +38,7 @@ const AuthGuard = ({ children }: Props) => {
 
 
     if (!token) {
+        toast.error('Session expired, please log in again')
         return <Navigate to='/login' />
     }
 

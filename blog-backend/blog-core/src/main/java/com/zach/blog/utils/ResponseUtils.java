@@ -17,6 +17,5 @@ public class ResponseUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

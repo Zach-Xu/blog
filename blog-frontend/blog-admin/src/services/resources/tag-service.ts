@@ -12,6 +12,16 @@ export const tagService = {
             headers: requireTokenHeader
         })
         return result
+    },
+
+    addTag: async ({ name, description }: AddTag) => {
+        await resourceAxios.post<void, void>('/tags', {
+            name,
+            description
+        }, {
+            headers: requireTokenHeader
+        })
     }
+
 
 }

@@ -1,5 +1,7 @@
 package com.zach.blog.service.impl;
 
+import com.zach.blog.enums.code.ResourceAlreadyExistCode;
+import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.SystemException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Tag;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.zach.blog.enums.code.ResourceAlreadyExistCode.TAG_NAME_EXIST;
 import static com.zach.blog.repository.TagRepository.Specs.containsDescription;
 import static com.zach.blog.repository.TagRepository.Specs.containsTagName;
 
@@ -39,6 +42,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void createTag(ApplicationUser user, String name, String description) {
+        if( tagRepository.existsByNameIgnoreCase(name)){
+            throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
+        }
+
         Tag tag = new Tag();
         // ToDo: DTO Validation
         tag.setName(name);

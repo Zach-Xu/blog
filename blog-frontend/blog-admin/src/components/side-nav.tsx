@@ -1,6 +1,7 @@
 import { Box, Divider, Theme, Typography, useMediaQuery } from '@mui/material';
 import Drawer from '@mui/material/Drawer'
 import SideNavItem from './side-nav-item';
+import { Scrollbar } from './common/scrollbar';
 
 interface Props {
     open: boolean,
@@ -18,7 +19,7 @@ const SideNav = ({ open, onClose }: Props) => {
             onClose={lgUp ? undefined : onClose}
             PaperProps={{
                 sx: {
-                    backgroundColor: 'neutral.800',
+                    backgroundColor: '#1c2536',
                     color: 'common.white',
                     width: 280
                 }
@@ -26,54 +27,69 @@ const SideNav = ({ open, onClose }: Props) => {
             sx={lgUp ? { bgcolor: 'black' } : { zIndex: (theme) => theme.zIndex.appBar + 100 }}
             variant={lgUp ? "permanent" : "temporary"}
         >
-            <Box
+            <Scrollbar
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
                     height: '100%',
-                    bgcolor: '#1c2536'
+                    '& .simplebar-content': {
+                        height: '100%'
+                    },
+                    '& .simplebar-scrollbar:before': {
+                        background: 'neutral.400'
+                    }
                 }}
             >
-                <Box sx={{ p: 3 }}>
-                    <Box
-                        sx={{
-                            alignItems: 'center',
-                            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                            borderRadius: 1,
-                            cursor: 'pointer',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            mt: 2,
-                            p: '12px'
-                        }}
-                    >
-                        <div>
-                            <Typography
-                                color="inherit"
-                                variant="subtitle1"
-                            >
-                                Blog
-                            </Typography>
-                            <Typography
-                                color="neutral.400"
-                                variant="body2"
-                            >
-                                Admin dashboard
-                            </Typography>
-                        </div>
 
-                    </Box>
-                </Box>
-                <Divider sx={{ borderColor: 'neutral.700', bgcolor: '#2f3746' }} />
                 <Box
-                    component="nav"
                     sx={{
-                        flexGrow: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: '100%',
+                        bgcolor: '#1c2536'
                     }}
                 >
-                    <SideNavItem />
+                    <Box sx={{ p: 3 }}>
+                        <Box
+                            sx={{
+                                alignItems: 'center',
+                                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                                borderRadius: 1,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                mt: 2,
+                                p: '12px'
+                            }}
+                        >
+                            <div>
+                                <Typography
+                                    color="inherit"
+                                    variant="subtitle1"
+                                >
+                                    Blog
+                                </Typography>
+                                <Typography
+                                    color="neutral.400"
+                                    variant="body2"
+                                >
+                                    Admin dashboard
+                                </Typography>
+                            </div>
+
+                        </Box>
+                    </Box>
+                    <Divider sx={{ borderColor: 'neutral.700', bgcolor: '#2f3746' }} />
+                    <Box
+                        component="nav"
+                        sx={{
+                            flexGrow: 1,
+                        }}
+                    >
+                        <SideNavItem />
+                    </Box>
                 </Box>
-            </Box>
+
+            </Scrollbar>
+
         </Drawer>
     )
 }

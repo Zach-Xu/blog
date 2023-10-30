@@ -1,7 +1,7 @@
 package com.zach.blog.handler;
 
 import com.zach.blog.dto.response.ResponseResult;
-import com.zach.blog.enums.HttpStatusCode;
+import com.zach.blog.enums.code.HttpStatusCode;
 import com.zach.blog.exception.*;
 import com.zach.blog.service.impl.ToCommentNotExistException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -19,6 +19,11 @@ public class RestExceptionHandler {
     @ExceptionHandler({ArticleNotExistException.class, CategoryNotExistException.class, UserNotExistException.class, RootCommentNotExistException.class, ToCommentNotExistException.class})
     public ResponseResult<?> resourceNotFoundException(RuntimeException e) {
         return ResponseResult.error(HttpStatusCode.RESOURCE_NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler({ResourceAlreadyExistException.class})
+    public ResponseResult<?> resourceAlreadyExistException(ResourceAlreadyExistException e) {
+        return ResponseResult.error(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler({FailedToCopyBeanException.class, IllegalHttpStatusCodeException.class, SQLIntegrityConstraintViolationException.class, IllegalArgumentException.class})
@@ -48,4 +53,6 @@ public class RestExceptionHandler {
     public ResponseResult<?> userNameTakenException(RuntimeException e) {
         return ResponseResult.error(e.getMessage());
     }
+
+
 }
