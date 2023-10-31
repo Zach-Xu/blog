@@ -9,8 +9,9 @@ import { getTags, updateSearchName } from '../../../redux/slices/tag-slice'
 import Loading from '../../../components/common/loading'
 import { PlusIcon } from '@heroicons/react/20/solid'
 import Modal from '../../../components/common/modal'
-import { useModal } from '../../../hooks/use-modal'
+import { useOpenClose } from '../../../hooks/use-open-close'
 import TagModelContent from '../../../components/tag/tag-modal-content'
+import AddTagModal from '../../../components/tag/add-tag-modal'
 
 
 const TagList = () => {
@@ -39,7 +40,7 @@ const TagList = () => {
         }))
     }, [])
 
-    const tagModal = useModal()
+    const { open, handleOpen, handleClose } = useOpenClose()
 
     useEffect(() => {
         dispatch(getTags({
@@ -93,7 +94,7 @@ const TagList = () => {
                                         </SvgIcon>
                                     )}
                                     variant="contained"
-                                    onClick={tagModal.handleOpen}
+                                    onClick={handleOpen}
                                 >
                                     Add
                                 </Button>
@@ -109,14 +110,10 @@ const TagList = () => {
                     </Stack>
                 </Container>
             </Box>
-            <Modal
-                open={tagModal.open}
-                handleClose={tagModal.handleClose}
-            >
-                <TagModelContent
-                    handleClose={tagModal.handleClose}
-                />
-            </Modal>
+            <AddTagModal
+                open={open}
+                handleClose={handleClose}
+            />
         </>
     )
 }

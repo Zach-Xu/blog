@@ -1,9 +1,9 @@
-import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import SideNav from '../../components/side-nav';
 import TopNav from '../../components/top-nav';
 import AuthGuard from '../../components/auth-guard';
+import { Box } from '@mui/material'
 
 interface Props {
     children: React.ReactNode

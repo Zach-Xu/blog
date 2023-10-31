@@ -9,7 +9,8 @@ interface GetTags extends PageRequest {
     description?: string
 }
 
-interface AddTag {
+interface CreateTag {
     name: string
     description: string
 }
+

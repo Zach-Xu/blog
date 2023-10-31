@@ -21,6 +21,21 @@ export const getTags = createAsyncThunk('/tags', async (query: GetTags) => {
     return result
 })
 
+export const deleteTag = createAsyncThunk('/tags/delete', async (id: number) => {
+    await tagService.deleteTag(id)
+    return id
+})
+
+export const createTag = createAsyncThunk('/tags/create', async (data: CreateTag) => {
+    const tag = await tagService.createTag(data)
+    return tag
+})
+
+export const updateTag = createAsyncThunk('/tags/update', async (data: Tag) => {
+    await tagService.updateTag(data)
+    return data
+})
+
 export const tagSlice = createSlice({
     name: 'tag',
     initialState,
@@ -36,12 +51,41 @@ export const tagSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getTags.fulfilled, (state, action) => {
-                if (action.payload) {
-                    const { rows, total, totalPages } = action.payload
-                    state.rows = rows
-                    state.total = total
-                    state.totalPages = totalPages
+                const { rows, total, totalPages } = action.payload
+                state.rows = rows
+                state.total = total
+                state.totalPages = totalPages
+            })
+            .addCase(createTag.fulfilled, (state, action) => {
+                const tag = action.payload
+                if (state.rows.length >= 5) {
+                    state.rows.pop()
+                    state.total++
+                    state.totalPages = Math.ceil(state.total / 5)
                 }
+                state.rows.unshift(tag)
+            })
+            .addCase(updateTag.fulfilled, (state, action) => {
+                const updatedTag = action.payload
+                state.rows = state.rows.map(tag => {
+                    if (tag.id !== updatedTag.id) {
+                        return tag
+                    } else {
+                        return {
+                            ...tag,
+                            ...updatedTag
+                        }
+                    }
+                })
+            })
+            .addCase(deleteTag.fulfilled, (state, action) => {
+                const { rows, currentPageNum } = state
+                state.rows = rows.filter(tag => tag.id != action.payload)
+                if (state.rows.length === 0 && currentPageNum > 0) {
+                    state.currentPageNum--
+                }
+                state.total--
+                state.totalPages = Math.ceil(state.total / 5)
             })
     }
 })

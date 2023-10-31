@@ -14,11 +14,29 @@ export const tagService = {
         return result
     },
 
-    addTag: async ({ name, description }: AddTag) => {
-        await resourceAxios.post<void, void>('/tags', {
+    createTag: async ({ name, description }: CreateTag) => {
+        const result = await resourceAxios.post<void, Tag>('/tags', {
             name,
             description
         }, {
+            headers: requireTokenHeader
+        })
+
+        return result
+    },
+
+    updateTag: async (data: Tag) => {
+        const { id, name, description } = data
+        await resourceAxios.put<void, void>(`/tags/${id}`, {
+            name: data.name,
+            description: data.description
+        }, {
+            headers: requireTokenHeader
+        })
+    },
+
+    deleteTag: async (id: number) => {
+        await resourceAxios.delete<void, void>(`/tags/${id}`, {
             headers: requireTokenHeader
         })
     }

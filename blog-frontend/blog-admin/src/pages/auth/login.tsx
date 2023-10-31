@@ -34,11 +34,8 @@ const Login = () => {
         dispatch(login({
             username: account,
             password
-        })).then(result => {
-            if (result.meta.requestStatus === 'fulfilled') {
-                navigate('/tag')
-            }
-        })
+        }))
+            .unwrap().then(() => navigate('/tag'))
     }
 
     return (

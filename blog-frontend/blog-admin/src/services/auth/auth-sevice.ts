@@ -19,6 +19,7 @@ export const authService = {
         const result = await authAxios.get<void, User>('/token', {
             headers: requireTokenHeader
         })
+
         return result
     }
 }

@@ -24,7 +24,7 @@ const AuthGuard = ({ children }: Props) => {
 
     useEffect(() => {
         if (!user && token) {
-            dispatch(verifyToken())
+            dispatch(verifyToken()).unwrap()
                 .then(() => setValid(true))
                 .catch(() => setValid(false))
                 .finally(() => setIsLoading(false))

@@ -1,8 +1,7 @@
 package com.zach.blog.service.impl;
 
-import com.zach.blog.enums.code.ResourceAlreadyExistCode;
 import com.zach.blog.exception.ResourceAlreadyExistException;
-import com.zach.blog.exception.SystemException;
+import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Tag;
 import com.zach.blog.repository.TagRepository;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.zach.blog.enums.code.ResourceAlreadyExistCode.TAG_NAME_EXIST;
+import static com.zach.blog.enums.code.ResourceNotFoundCode.TAG_NOT_FOUND;
 import static com.zach.blog.repository.TagRepository.Specs.containsDescription;
 import static com.zach.blog.repository.TagRepository.Specs.containsTagName;
 
@@ -41,7 +41,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void createTag(ApplicationUser user, String name, String description) {
+    public Tag createTag(ApplicationUser user, String name, String description) {
         if( tagRepository.existsByNameIgnoreCase(name)){
             throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
         }
@@ -51,13 +51,12 @@ public class TagServiceImpl implements TagService {
         tag.setName(name);
         tag.setDescription(description);
         tag.setCreatedBy(user.getId());
-        tagRepository.save(tag);
+        return tagRepository.save(tag);
     }
 
     @Override
     public void deleteTag(ApplicationUser user, Long tagId) {
-        // ToDo: refactor exception handling
-        Tag tag = tagRepository.findById(tagId).orElseThrow(SystemException::new);
+        Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new ResourceNotFoundException(TAG_NOT_FOUND));
         tag.setDeleted(true);
         tag.setUpdateBy(user.getId());
         tagRepository.save(tag);
@@ -65,8 +64,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void updateTag(ApplicationUser user, Long tagId, String name, String description) {
-        // ToDo: refactor exception handling
-        Tag tag = tagRepository.findById(tagId).orElseThrow(SystemException::new);
+        Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new ResourceNotFoundException(TAG_NOT_FOUND));
+        if(tagRepository.existsByNameIgnoreCase(name)){
+            throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
+        }
         tag.setName(name);
         tag.setDescription(description);
         tag.setUpdateBy(user.getId());

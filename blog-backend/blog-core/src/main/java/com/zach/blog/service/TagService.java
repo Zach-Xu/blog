@@ -10,7 +10,7 @@ public interface TagService {
 
     Page<Tag> getTags(Integer pageNum, Integer pageSize, String tagName, String description);
 
-    void createTag(ApplicationUser user, String name, String description);
+    Tag createTag(ApplicationUser user, String name, String description);
 
     void deleteTag(ApplicationUser user, Long tagId);
 

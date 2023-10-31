@@ -22,13 +22,14 @@ interface Props {
 }
 
 
-export default function TagModal({ open, handleClose, children }: Props) {
+export default function MyModal({ open, handleClose, children }: Props) {
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
     return (
         <div>
             <Modal
+                keepMounted
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"

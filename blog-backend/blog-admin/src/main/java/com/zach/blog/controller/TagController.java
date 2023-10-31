@@ -46,12 +46,14 @@ public class TagController {
     @Validate
     @PostMapping
     public ResponseResult<?> createTag(@AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid CreateTagRequest createTagRequest, BindingResult bindingResult){
-        tagService.createTag(user, createTagRequest.name(), createTagRequest.description());
-        return ResponseResult.ok();
+        Tag tag = tagService.createTag(user, createTagRequest.name(), createTagRequest.description());
+        TagResponse response = BeanCopyUtils.copyBean(tag, TagResponse.class);
+        return ResponseResult.ok(response);
     }
 
+    @Validate
     @PutMapping("/{id}")
-    public ResponseResult<?> updateTag(@AuthenticationPrincipal ApplicationUser user, @PathVariable("id") Long tagId, @RequestBody UpdateTagRequest updateTagRequest){
+    public ResponseResult<?> updateTag(@AuthenticationPrincipal ApplicationUser user, @PathVariable("id") Long tagId, @RequestBody @Valid UpdateTagRequest updateTagRequest, BindingResult bindingResult){
         tagService.updateTag(user, tagId, updateTagRequest.name(), updateTagRequest.description());
         return ResponseResult.ok();
     }

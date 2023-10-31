@@ -5,12 +5,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { useCallback } from 'react';
-import { getTags, updatePageNum } from '../../redux/slices/tag-slice';
+import { useCallback, useState } from 'react';
+import { deleteTag, updatePageNum } from '../../redux/slices/tag-slice';
+import AlertDialog from '../common/alert-dialog';
+import { useOpenClose } from '../../hooks/use-open-close';
+import EditTagModal from './edit-tag-modal';
+
 
 interface Props {
     tags: Tag[],
 };
+
 
 export const TagsTable = ({ tags }: Props) => {
 
@@ -18,9 +23,31 @@ export const TagsTable = ({ tags }: Props) => {
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const onChangeHandler = useCallback((event: React.ChangeEvent<unknown>, value: number) => {
+    const onPageChangeHandler = useCallback((event: React.ChangeEvent<unknown>, value: number) => {
         dispatch(updatePageNum(value - 1))
     }, [])
+
+    const [selectedTag, setSeletedTag] = useState<Tag>()
+
+    const { open, handleOpen, handleClose } = useOpenClose()
+
+    const editTagModal = useOpenClose()
+
+    const deleteTagHandler = (tag: Tag) => {
+        setSeletedTag(tag)
+        handleOpen()
+    }
+
+    const editTagHandler = (tag: Tag) => {
+        setSeletedTag(tag)
+        editTagModal.handleOpen()
+    }
+
+    const confirmDelete = useCallback(() => {
+        if (selectedTag) {
+            dispatch(deleteTag(selectedTag.id))
+        }
+    }, [selectedTag])
 
     return (
         <Box
@@ -89,6 +116,7 @@ export const TagsTable = ({ tags }: Props) => {
                                                                 bgcolor: 'white'
                                                             }
                                                         }}
+                                                        onClick={() => editTagHandler(tag)}
                                                     >
                                                         Edit
                                                     </Button>
@@ -102,6 +130,7 @@ export const TagsTable = ({ tags }: Props) => {
                                                                 bgcolor: 'white'
                                                             }
                                                         }}
+                                                        onClick={() => deleteTagHandler(tag)}
                                                     >
                                                         Delete
                                                     </Button>
@@ -112,15 +141,26 @@ export const TagsTable = ({ tags }: Props) => {
                                 })}
                             </TableBody>
                         </Table>
+                        <AlertDialog
+                            open={open}
+                            handleClose={handleClose}
+                            tagName={selectedTag?.name}
+                            confirmAction={confirmDelete}
+                        />
                     </Box>
                 </Scrollbar>
                 <CustomPagination
                     totalPages={totalPages}
                     currentPageNum={currentPageNum + 1}
                     pageSize={5}
-                    onChangeHandler={onChangeHandler}
+                    onChangeHandler={onPageChangeHandler}
                 />
             </Stack>
+            <EditTagModal
+                open={editTagModal.open}
+                handleClose={editTagModal.handleClose}
+                tag={selectedTag}
+            />
         </Box >
     );
 };

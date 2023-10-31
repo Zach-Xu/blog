@@ -1,28 +1,23 @@
 import { Stack, Typography, OutlinedInput, InputAdornment, Button, useMediaQuery, Theme, Box, TextareaAutosize, TextField } from "@mui/material"
-import { useState } from "react"
-import { tagService } from "../../services/resources/tag-service"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
 
 interface Props {
+    title: string
     handleClose(): void
+    handleSubmit: (event: React.FormEvent) => void
+    name: string
+    description: string
+    setName: React.Dispatch<string>
+    setDescription: React.Dispatch<string>
 }
 
-
-const TagModelContent = ({ handleClose }: Props) => {
+const TagModelContent = ({ title, handleClose, handleSubmit, name, description, setName, setDescription }: Props) => {
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
     const { isLoading } = useSelector((state: RootState) => state.loading)
-
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault()
-        tagService.addTag({ name, description }).then(handleClose)
-    }
 
     return (
         <Stack
@@ -35,7 +30,7 @@ const TagModelContent = ({ handleClose }: Props) => {
                 component="h2"
                 sx={{ mb: 2 }}
             >
-                Add Tag
+                {title}
             </Typography>
             <Stack
                 sx={{
