@@ -17,16 +17,25 @@ const AuthGuard = ({ children }: Props) => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [valid, setValid] = useState(false)
-
     const dispatch = useDispatch<AppDispatch>()
 
-    const [token] = useLocalStorage<string>('tk')
 
     useEffect(() => {
-        if (!user && token) {
+        const token = localStorage.getItem('tk')
+
+        if (!token) {
+            setIsLoading(false)
+            setValid(false)
+            return
+        }
+
+        if (!user) {
             dispatch(verifyToken()).unwrap()
                 .then(() => setValid(true))
-                .catch(() => setValid(false))
+                .catch(() => {
+                    setValid(false)
+                    toast.error('Session expired, please log in again')
+                })
                 .finally(() => setIsLoading(false))
         } else {
             // user is presented in redux state
@@ -34,13 +43,8 @@ const AuthGuard = ({ children }: Props) => {
             setValid(true)
         }
 
-    }, [user, token])
+    }, [user])
 
-
-    if (!token) {
-        toast.error('Session expired, please log in again')
-        return <Navigate to='/login' />
-    }
 
     return (
         isLoading ?

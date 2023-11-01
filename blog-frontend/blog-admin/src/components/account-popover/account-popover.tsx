@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { logout } from '../../redux/slices/auth-slice';
 
 
 interface Props {
@@ -16,16 +17,15 @@ export const AccountPopover = (props: Props) => {
 
     const navigate = useNavigate()
 
+    const dispatch = useDispatch<AppDispatch>()
+
     const { user } = useSelector((state: RootState) => state.auth)
 
-    const handleSignOut = useCallback(
-        () => {
-            onClose?.();
-            // ToDo: dispatch logout action
-            navigate('/login')
-        },
-        [onClose]
-    );
+    const handleSignOut = useCallback(() => {
+        onClose?.();
+        dispatch(logout())
+
+    }, [onClose]);
 
     return (
         <Popover

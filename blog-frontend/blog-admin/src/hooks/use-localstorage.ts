@@ -1,7 +1,8 @@
 import { Dispatch, useEffect, useState } from "react";
 
-export const useLocalStorage = <T>(key: string, defaultValue?: T): [T, Dispatch<T>] => {
-    const [value, setValue] = useState<T>(() => {
+export const useLocalStorage = <T>(key: string, defaultValue?: T): [T | undefined, Dispatch<T>] => {
+
+    const getValueFromLocalStorage = (): T | undefined => {
         const itemValue = localStorage.getItem(key)
 
         if (!itemValue) {
@@ -11,9 +12,11 @@ export const useLocalStorage = <T>(key: string, defaultValue?: T): [T, Dispatch<
         try {
             return JSON.parse(itemValue)
         } catch (error) {
-            return itemValue;
+            return itemValue as T
         }
-    })
+    }
+
+    const [value, setValue] = useState<T | undefined>(getValueFromLocalStorage)
 
     useEffect(() => {
         if (value) {

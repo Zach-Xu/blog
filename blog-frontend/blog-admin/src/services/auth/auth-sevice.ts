@@ -15,6 +15,12 @@ export const authService = {
         })
     },
 
+    logout: async () => {
+        await authAxios.post('/logout', {}, {
+            headers: requireTokenHeader
+        })
+    },
+
     verifyToken: async () => {
         const result = await authAxios.get<void, User>('/token', {
             headers: requireTokenHeader

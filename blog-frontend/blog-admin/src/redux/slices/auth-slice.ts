@@ -1,10 +1,12 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { authService } from "../../services/auth/auth-sevice"
 
-const initialState: {
+interface AuthState {
     user: User | null
-} = {
-    user: null
+}
+
+const initialState: AuthState = {
+    user: null,
 }
 
 export const login = createAsyncThunk('/login', async (data: LoginRequest) => {
@@ -17,6 +19,9 @@ export const verifyToken = createAsyncThunk('/verify-token', async () => {
     return result
 })
 
+export const logout = createAsyncThunk('/logout', async () => {
+    await authService.logout()
+})
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -36,6 +41,10 @@ export const authSlice = createSlice({
             .addCase(verifyToken.fulfilled, (state, action) => {
                 const user = action.payload
                 state.user = user
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                state.user = null
+                localStorage.removeItem('tk')
             })
     }
 })
