@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../redux/store'
-import { useLocalStorage } from '../hooks/use-localstorage'
 import { Navigate } from 'react-router-dom'
 import { verifyToken } from '../redux/slices/auth-slice'
 import { useEffect, useState } from 'react'
@@ -34,7 +33,6 @@ const AuthGuard = ({ children }: Props) => {
                 .then(() => setValid(true))
                 .catch(() => {
                     setValid(false)
-                    toast.error('Session expired, please log in again')
                 })
                 .finally(() => setIsLoading(false))
         } else {

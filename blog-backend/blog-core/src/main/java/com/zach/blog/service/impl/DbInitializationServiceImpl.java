@@ -107,15 +107,17 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         }
 
         Category category1 = new Category();
-        category1.setName("java");
+        category1.setName("Java");
         category1.setPid(-1L);
-        category1.setDescription("A high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible");
+        category1.setDescription(
+                "A high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible");
         category1.setEnable(true);
 
         Category category2 = new Category();
-        category2.setName("react");
+        category2.setName("React");
         category2.setPid(-1L);
-        category2.setDescription("A free and open-source front-end JavaScript library for building user interfaces based on components. ");
+        category2.setDescription(
+                "A free and open-source front-end JavaScript library for building user interfaces based on components. ");
         category2.setEnable(true);
 
         List<Category> categories = new ArrayList<>();
@@ -170,7 +172,8 @@ public class DbInitializationServiceImpl implements DbInitializationService {
 
         Tag tag2 = new Tag();
         tag2.setName("React");
-        tag2.setDescription("A free and open-source front-end JavaScript library for building user interfaces based on components.");
+        tag2.setDescription(
+                "A free and open-source front-end JavaScript library for building user interfaces based on components.");
 
         Tag tag3 = new Tag();
         tag3.setName("C#");
@@ -644,15 +647,17 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         article1.setTitle("Java Programming 101");
         Category java = categoryRepository.findByName("java").get();
         article1.setCategory(java);
-        ApplicationUser zachary =  userRepository.findByUsername("Zachary").get();
+        ApplicationUser zachary = userRepository.findByUsername("Zachary").get();
         article1.setAuthor(zachary);
-        article1.setSummary("The Java 101 series provides a self-guided introduction to Java programming, starting with the basics and covering all the core concepts you need to know to become a productive Java developer.");
-        article1.setContent("""
-                Java is a simple language. Java was initially modeled after C and C++, minus some potentially confusing features. Pointers, multiple implementation inheritance, and operator overloading are some C/C++ features that are not part of Java. A feature not mandated in C/C++, but essential to Java, is a garbage-collection facility that automatically reclaims objects and arrays.
+        article1.setSummary(
+                "The Java 101 series provides a self-guided introduction to Java programming, starting with the basics and covering all the core concepts you need to know to become a productive Java developer.");
+        article1.setContent(
+                """
+                        Java is a simple language. Java was initially modeled after C and C++, minus some potentially confusing features. Pointers, multiple implementation inheritance, and operator overloading are some C/C++ features that are not part of Java. A feature not mandated in C/C++, but essential to Java, is a garbage-collection facility that automatically reclaims objects and arrays.
 
-                Java is an object-oriented language. Java's object-oriented focus lets developers work on adapting Java to solve a problem, rather than forcing us to manipulate the problem to meet language constraints. This is different from a structured language like C. As an example, whereas Java lets you focus on savings account objects, C requires you to think separately about savings account state (such a balance) and behaviors (such as deposit and withdrawal).
+                        Java is an object-oriented language. Java's object-oriented focus lets developers work on adapting Java to solve a problem, rather than forcing us to manipulate the problem to meet language constraints. This is different from a structured language like C. As an example, whereas Java lets you focus on savings account objects, C requires you to think separately about savings account state (such a balance) and behaviors (such as deposit and withdrawal).
 
-                Java is a network-savvy language. Java's extensive network library makes it easy to cope with Transmission Control Protocol/Internet Protocol (TCP/IP) network protocols like HTTP (HyperText Transfer Protocol) and FTP (File Transfer Protocol), and simplifies the task of making network connections. Furthermore, Java programs can access objects across a TCP/IP network, via Uniform Resource Locators (URLs), with the same ease as you would have accessing them from the local file system.""");
+                        Java is a network-savvy language. Java's extensive network library makes it easy to cope with Transmission Control Protocol/Internet Protocol (TCP/IP) network protocols like HTTP (HyperText Transfer Protocol) and FTP (File Transfer Protocol), and simplifies the task of making network connections. Furthermore, Java programs can access objects across a TCP/IP network, via Uniform Resource Locators (URLs), with the same ease as you would have accessing them from the local file system.""");
         article1.setThumbnail("https://m.media-amazon.com/images/I/51igvtVluHL._AC_UF1000,1000_QL80_.jpg");
         article1.setPinned(true);
         article1.setAllowedComment(false);
@@ -668,10 +673,11 @@ public class DbInitializationServiceImpl implements DbInitializationService {
                 The new React site (react.dev) teaches modern React with function components and Hooks.
                 We’ve included diagrams, illustrations, challenges, and over 600 new interactive examples.
                 The previous React documentation site has now moved to legacy.reactjs.org.""");
-        article2.setContent("""
-                You’ve likely performed data fetching, subscriptions, or manually changing the DOM from React components before. We call these operations “side effects” (or “effects” for short) because they can affect other components and can’t be done during rendering.
+        article2.setContent(
+                """
+                        You’ve likely performed data fetching, subscriptions, or manually changing the DOM from React components before. We call these operations “side effects” (or “effects” for short) because they can affect other components and can’t be done during rendering.
 
-                The Effect Hook, useEffect, adds the ability to perform side effects from a function component. It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes, but unified into a single API. (We’ll show examples comparing useEffect to these methods in Using the Effect Hook.)""");
+                        The Effect Hook, useEffect, adds the ability to perform side effects from a function component. It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount in React classes, but unified into a single API. (We’ll show examples comparing useEffect to these methods in Using the Effect Hook.)""");
         article2.setThumbnail("https://m.media-amazon.com/images/I/51igvtVluHL._AC_UF1000,1000_QL80_.jpg");
         article2.setPinned(true);
         article2.setAllowedComment(false);
@@ -733,6 +739,5 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         comment5.setUser(userRepository.getReferenceById(2L));
         commentRepository.save(comment5);
     }
-
 
 }

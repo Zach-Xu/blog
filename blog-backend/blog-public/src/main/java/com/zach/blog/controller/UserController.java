@@ -22,8 +22,6 @@ import java.io.IOException;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
-
-    private final FileService fileService;
     private final ApplicationUserService userService;
 
     @Operation(summary = "Get Current User Info", description = "Retrieve the profile information of the currently authenticated user.")
@@ -37,7 +35,7 @@ public class UserController {
     @SystemLog(businessName = "Upload avatar image")
     @PostMapping("/avatar")
     public ResponseResult<?> uploadAvatarImage(@AuthenticationPrincipal ApplicationUser user, MultipartFile image) throws IOException {
-        fileService.UploadFile(user.getId(), image);
+        userService.updateAvatarImage(user, image);
         return ResponseResult.ok();
     }
 

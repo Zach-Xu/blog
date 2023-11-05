@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -78,13 +77,11 @@ public class SecurityConfig {
                     authRequests.requestMatchers("/api/tags/**").permitAll();
                     authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
                     authRequests.requestMatchers("/api/articles/**").hasRole("USER");
-                    authRequests.requestMatchers("/api/categories/**").hasRole("USER");
+                    authRequests.requestMatchers("/api/categories/**").hasAnyRole("ADMIN", "USER");
                     authRequests.requestMatchers("/api/users/**").authenticated();
                     authRequests.requestMatchers(HttpMethod.POST, "/api/comments").hasRole("USER");
                     authRequests.anyRequest().authenticated();
                 });
-
-
 
         http
                 .logout(logout -> logout.disable());

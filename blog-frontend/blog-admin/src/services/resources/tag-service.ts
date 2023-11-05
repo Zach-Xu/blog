@@ -1,6 +1,15 @@
 import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
 
 export const tagService = {
+
+    getAll: async () => {
+        const result = await resourceAxios.get<void, Tag[]>('/tags/all', {
+            headers: requireTokenHeader
+        })
+
+        return result
+    },
+
     getTags: async ({ pageSize = 5, pageNum = 0, name, description }: GetTags) => {
         const result = await resourceAxios.get<void, PageRespsone<Tag>>('/tags', {
             params: {

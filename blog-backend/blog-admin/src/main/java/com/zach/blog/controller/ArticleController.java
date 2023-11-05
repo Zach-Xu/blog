@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.ArticleResponse;
 import com.zach.blog.dto.request.UpdateArticleRequest;
 import com.zach.blog.dto.request.WriteArticleRequest;
@@ -10,11 +11,14 @@ import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Article;
 import com.zach.blog.service.ArticleService;
 import com.zach.blog.utils.BeanCopyUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,11 +27,18 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
 
+    @Validate
     @PostMapping
-    public ResponseResult<?> writeArticle(@AuthenticationPrincipal ApplicationUser user, WriteArticleRequest writeArticleRequest) {
+    public ResponseResult<?> writeArticle(@AuthenticationPrincipal ApplicationUser user, @Valid WriteArticleRequest writeArticleRequest, BindingResult bindingResult) throws IOException {
         articleService.createArticle(user, writeArticleRequest);
         return ResponseResult.ok();
     }
+
+//    @PostMapping("/{id}/thumbnail")
+//    public ResponseResult<?> uploadArticleImage(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, MultipartFile image) throws IOException {
+//        articleService.updateArticleImage(id, user, image);
+//        return ResponseResult.ok();
+//    }
 
     @GetMapping
     public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,

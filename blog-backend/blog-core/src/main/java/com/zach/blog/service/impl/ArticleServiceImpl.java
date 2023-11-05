@@ -3,7 +3,7 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.UpdateArticleRequest;
 import com.zach.blog.dto.request.WriteArticleRequest;
 import com.zach.blog.enums.PublishStatus;
-import com.zach.blog.exception.ArticleNotExistException;
+import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Article;
 import com.zach.blog.model.Category;
@@ -12,6 +12,7 @@ import com.zach.blog.repository.ArticleRepository;
 import com.zach.blog.repository.CategoryRepository;
 import com.zach.blog.repository.TagRepository;
 import com.zach.blog.service.ArticleService;
+import com.zach.blog.service.FileService;
 import com.zach.blog.utils.RedisUtils;
 import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zach.blog.constants.RedisKeyPrefix.ARTICLE_VIEW_COUNT_KEY;
+import static com.zach.blog.enums.code.ResourceNotFoundCode.ARTICLE_NOT_FOUND;
 import static com.zach.blog.repository.ArticleRepository.Specs.*;
 
 @Service
@@ -38,6 +42,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final RedisUtils redisUtils;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
+    private final FileService fileService;
 
     @Override
     public List<Article> getHotArticles() {
@@ -61,7 +66,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article getArticleDetail(Long categoryId) {
-        Article article = articleRepository.findById(categoryId).orElseThrow(ArticleNotExistException::new);
+        Article article = articleRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException(ARTICLE_NOT_FOUND));
         String viewCountStr = redisUtils.getMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId));
         if (Strings.hasText(viewCountStr)) {
             Long viewCount = Long.valueOf(viewCountStr);
@@ -75,18 +81,25 @@ public class ArticleServiceImpl implements ArticleService {
         redisUtils.increaseMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(articleId), 1);
     }
 
+    @Transactional
     @Override
-    public void createArticle(ApplicationUser user, WriteArticleRequest writeArticleRequest) {
+    public void createArticle(ApplicationUser user, WriteArticleRequest writeArticleRequest) throws IOException {
+
         Article article = new Article();
+
+        if (Objects.nonNull(writeArticleRequest.image())) {
+            String thumbnail = fileService.UploadFile(writeArticleRequest.image());
+            article.setThumbnail(thumbnail);
+        }
 
         article.setTitle(writeArticleRequest.title());
         article.setSummary(writeArticleRequest.summary());
         article.setContent(writeArticleRequest.content());
-        article.setThumbnail(writeArticleRequest.thumbnail());
+
         article.setPublishStatus(writeArticleRequest.publishStatus());
 
-        article.setPinned(false);
-        article.setAllowedComment(true);
+        article.setPinned(writeArticleRequest.pinned());
+        article.setAllowedComment(writeArticleRequest.allowedComment());
         article.setAuthor(user);
 
         Category category = categoryRepository.getReferenceById(writeArticleRequest.categoryId());
@@ -140,9 +153,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticle(Long id) {
-        // ToDo: refactor exception handling
-        Article article = articleRepository.findById(id).orElseThrow(SecurityException::new);
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ARTICLE_NOT_FOUND));
         article.setDeleted(true);
+        articleRepository.save(article);
+    }
+
+    @Transactional
+    @Override
+    public void updateArticleImage(Long articleId, ApplicationUser user, MultipartFile image) throws IOException {
+        Article article = articleRepository.findByIdAndAuthorId(articleId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(ARTICLE_NOT_FOUND));
+
+        String thumbnail = fileService.UploadFile(image);
+        article.setThumbnail(thumbnail);
+
         articleRepository.save(article);
     }
 

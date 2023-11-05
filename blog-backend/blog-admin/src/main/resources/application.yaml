@@ -10,6 +10,10 @@ spring:
     url: ${DB_CONNECTION_STRING}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
 
   jpa:
     show-sql: true

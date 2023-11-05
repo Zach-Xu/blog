@@ -4,6 +4,7 @@ import { menu } from "../data/menu";
 import Welcome from "../pages/dashboard/welcome";
 import Login from "../pages/auth/login";
 import TagPage from "../pages/dashboard/content/tag-page";
+import WriteArticlePage from "../pages/dashboard/content/write-article-page";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
@@ -37,6 +38,10 @@ export const useAppRouter = () => {
         {
             path: '*',
             element: <Login />
+        },
+        {
+            path: '/write',
+            element: <WriteArticlePage />
         },
         ...generateRouteObject(menus)
     ])

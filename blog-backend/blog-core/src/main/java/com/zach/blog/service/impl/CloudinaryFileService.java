@@ -26,18 +26,15 @@ import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 @RequiredArgsConstructor
 public class CloudinaryFileService implements FileService {
     private final Cloudinary cloudinary;
-    private final ApplicationUserRepository userRepository;
-    private final RedisUtils redisUtils;
-
     private static final String URL_PREFIX = "https://res.cloudinary.com/";
 
     @Value("${zach.blog.cloudinary.name}")
     private String cloudName;
 
     @Override
-    public void UploadFile(Long userId, MultipartFile file) throws IOException {
+    public String UploadFile(MultipartFile file) throws IOException {
 
-        if(Objects.isNull(file) || Objects.isNull(file.getOriginalFilename())){
+        if (Objects.isNull(file) || Objects.isNull(file.getOriginalFilename())) {
             throw new MissingParameterException("Image file is required");
         }
 
@@ -62,11 +59,6 @@ public class CloudinaryFileService implements FileService {
 
         // Generate image url based on the upload result
         String avatar = URL_PREFIX + this.cloudName + "/" + storedFile.getPreloadedFile();
-
-        // Update user
-        ApplicationUser user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
-        user.setAvatar(avatar);
-        user = userRepository.save(user);
-        redisUtils.set(USER_KEY + user.getId(), JsonUtils.stringify(user));
+        return avatar;
     }
 }

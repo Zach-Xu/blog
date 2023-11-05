@@ -9,7 +9,6 @@ import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.List;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,12 +53,12 @@ public class BeanCopyUtils {
         Set<String> emptyNames = new HashSet<String>();
         for (PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
+            if (srcValue == null)
+                emptyNames.add(pd.getName());
         }
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
     }
-
 
     public static <T> T copyBeanWithAssociationPropertyAsField(Object source, Class<T> type) {
         T target;

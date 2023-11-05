@@ -23,6 +23,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
     })
     List<Article> findAll();
 
+    Optional<Article> findByIdAndAuthorId(Long articleId, Long authorId);
+
     @Override
     @EntityGraph(attributePaths = {
             "category",

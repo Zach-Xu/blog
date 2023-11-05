@@ -4,6 +4,8 @@ import routerReducer from './slices/router-path-slice'
 import loadingReducer from './slices/loading-slice'
 import authReducer from './slices/auth-slice'
 import tagReducer from './slices/tag-slice'
+import articleReducer from './slices/article-slice'
+import errorMessageReducer from './slices/error-message-slice'
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +13,9 @@ export const store = configureStore({
         router: routerReducer,
         loading: loadingReducer,
         auth: authReducer,
-        tag: tagReducer
+        tag: tagReducer,
+        article: articleReducer,
+        errorMessage: errorMessageReducer
     }
 })
 

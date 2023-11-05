@@ -3,6 +3,7 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.CreateUserRequest;
 import com.zach.blog.dto.request.UpdateUserInfoRequest;
 import com.zach.blog.dto.request.UpdateUserRequest;
+import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.exception.SystemException;
 import com.zach.blog.exception.UserNotExistException;
 import com.zach.blog.model.Role;
@@ -10,7 +11,9 @@ import com.zach.blog.repository.RoleRepository;
 import com.zach.blog.service.ApplicationUserService;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.repository.ApplicationUserRepository;
+import com.zach.blog.service.FileService;
 import com.zach.blog.utils.BeanCopyUtils;
+import com.zach.blog.utils.JsonUtils;
 import com.zach.blog.utils.RedisUtils;
 import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +24,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
+import static com.zach.blog.enums.code.ResourceNotFoundCode.USER_NOT_FOUND;
 import static com.zach.blog.repository.ApplicationUserRepository.Specs.*;
 
 @Service
@@ -38,6 +44,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     private final PasswordEncoder passwordEncoder;
     private final RedisUtils redisUtils;
     private final RoleRepository roleRepository;
+    private final FileService fileService;
 
     @Override
     public void updateUserInfo(Long userId, UpdateUserInfoRequest updateUserInfoRequest) {
@@ -116,7 +123,18 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public ApplicationUser getUserById(Long id) {
-        // ToDo: refactor exception handing
-         return userRepository.findById(id).orElseThrow(SystemException::new);
+         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+    }
+
+    @Transactional
+    @Override
+    public void updateAvatarImage(ApplicationUser user, MultipartFile image) throws IOException {
+        String avatar = fileService.UploadFile(image);
+
+        // Update user
+        user = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        user.setAvatar(avatar);
+        user = userRepository.save(user);
+        redisUtils.set(USER_KEY + user.getId(), JsonUtils.stringify(user));
     }
 }

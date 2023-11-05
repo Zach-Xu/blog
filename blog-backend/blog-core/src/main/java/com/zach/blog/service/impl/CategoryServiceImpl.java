@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll(Sort.by("name").ascending());
+        return categoryRepository.findAll(isEnable(true), Sort.by("name").ascending());
     }
 
     @Override
@@ -45,10 +45,10 @@ public class CategoryServiceImpl implements CategoryService {
         Sort sort = Sort.by("name");
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
         Specification<Category> specs = Specification.where(null);
-        if(Strings.hasText(name)){
+        if (Strings.hasText(name)) {
             specs = specs.and(containsName(name));
         }
-        if(Objects.nonNull(enable)){
+        if (Objects.nonNull(enable)) {
             specs = specs.and(isEnable(enable));
         }
         return categoryRepository.findAll(specs, pageRequest);

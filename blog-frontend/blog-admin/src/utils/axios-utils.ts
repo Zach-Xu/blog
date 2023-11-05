@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig, RawAxiosRequestHeaders } from 'axios'
-import { errorCode } from './error-code'
+import { errorCode } from './error-utils'
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore'
 import { endLoading, onLoading } from '../redux/slices/loading-slice'
 import { toast } from 'react-toastify';
