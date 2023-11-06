@@ -72,6 +72,7 @@ const commonErrorInterceptor = (error: any) => {
     }
     store.dispatch(endLoading())
     toast.error(message)
+    return Promise.reject(new Error(message))
 }
 
 authAxios.interceptors.request.use(commonRequestInterceptor, commonErrorInterceptor)

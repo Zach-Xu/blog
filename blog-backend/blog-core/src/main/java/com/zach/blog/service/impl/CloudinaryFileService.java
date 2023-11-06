@@ -5,12 +5,9 @@ import com.cloudinary.StoredFile;
 import com.cloudinary.utils.ObjectUtils;
 import com.zach.blog.exception.MissingParameterException;
 import com.zach.blog.exception.UnsupportedFileTypeException;
-import com.zach.blog.exception.UserNotExistException;
-import com.zach.blog.model.ApplicationUser;
-import com.zach.blog.repository.ApplicationUserRepository;
+
 import com.zach.blog.service.FileService;
-import com.zach.blog.utils.JsonUtils;
-import com.zach.blog.utils.RedisUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,7 +40,8 @@ public class CloudinaryFileService implements FileService {
         }
 
         // Upload image to Cloudinary
-        Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+        Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                ObjectUtils.asMap("resource_type", "auto"));
         StoredFile storedFile = new StoredFile();
         storedFile.setPublicId((String) uploadResult.get("public_id"));
         Object version = uploadResult.get("version");

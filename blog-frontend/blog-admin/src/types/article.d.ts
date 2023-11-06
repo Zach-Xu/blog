@@ -4,8 +4,8 @@ interface WriteArticle {
     categoryId: number | undefined
     tagIds: number[] | undefined
     summary: string | undefined
-    pinned: boolean | undefined
-    allowedComment: boolean | undefined
+    pinned: boolean
+    allowedComment: boolean
 }
 
 interface WriteArticleRequest extends WriteArticle {

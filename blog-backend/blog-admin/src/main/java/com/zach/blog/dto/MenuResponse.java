@@ -1,11 +1,8 @@
 package com.zach.blog.dto;
 
-import com.zach.blog.enums.MenuStatus;
 import com.zach.blog.enums.MenuType;
 import com.zach.blog.model.Menu;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 import lombok.Getter;
 import lombok.Setter;
 

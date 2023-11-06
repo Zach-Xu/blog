@@ -86,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void createArticle(ApplicationUser user, WriteArticleRequest writeArticleRequest) throws IOException {
 
         Article article = new Article();
-
+        article.setViewCount(0L);
         if (Objects.nonNull(writeArticleRequest.image())) {
             String thumbnail = fileService.UploadFile(writeArticleRequest.image());
             article.setThumbnail(thumbnail);

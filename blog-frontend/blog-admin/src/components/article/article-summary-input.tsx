@@ -13,8 +13,8 @@ const ArticleSummaryInput = () => {
     const summaryError = useSelector((state: RootState) => state.errorMessage.article.summary)
 
     const handleSummaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(updateWriteArticle({ summary: e.target.value }))
         if (e.target.value.trim() !== '' && summaryError !== '') {
-            dispatch(updateWriteArticle({ summary: e.target.value }))
             dispatch(updateErrorMessage({ summary: '' }))
         }
     }

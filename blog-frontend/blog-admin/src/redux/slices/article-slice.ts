@@ -3,19 +3,22 @@ import { articleService } from "../../services/resources/article-service";
 
 interface ArticleState {
     articles: any
-    writeArticle: WriteArticle
+    writeArticle: WriteArticle & {
+        preview: boolean
+    }
 }
 
 const initialState: ArticleState = {
     articles: [],
     writeArticle: {
         title: '',
-        content: '**Write down your thoughts here!!!**',
+        content: '',
         categoryId: undefined,
         tagIds: [],
         summary: undefined,
-        pinned: undefined,
-        allowedComment: undefined,
+        pinned: true,
+        allowedComment: true,
+        preview: false
     }
 }
 
@@ -24,11 +27,13 @@ export const createArticle = createAsyncThunk('/articles/create', async (data: W
 })
 
 
+
+
 export const articleSlice = createSlice({
     name: 'article',
     initialState,
     reducers: {
-        updateWriteArticle: (state, action: PayloadAction<Partial<WriteArticleRequest>>) => {
+        updateWriteArticle: (state, action: PayloadAction<Partial<typeof initialState.writeArticle>>) => {
             state.writeArticle = {
                 ...state.writeArticle,
                 ...action.payload

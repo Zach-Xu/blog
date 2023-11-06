@@ -18,6 +18,7 @@ public record WriteArticleRequest(
         @NotNull(message = "Category must be specified")
         Long categoryId,
 
+        @NotNull(message = "At least one tag is required")
         @Size(min = 1, message = "At least one tag is required")
         List<Long> tagIds,
 

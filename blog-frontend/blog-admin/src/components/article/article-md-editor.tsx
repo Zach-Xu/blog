@@ -1,10 +1,10 @@
-import { Box, Button, Theme, useMediaQuery } from "@mui/material"
+import { Box, FormControl, FormHelperText, Theme, useMediaQuery } from "@mui/material"
 import MDEditor from "@uiw/react-md-editor"
 import { palette } from "../../theme/create-palette"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
 import { updateWriteArticle } from "../../redux/slices/article-slice"
-import { useState } from "react"
+import { updateErrorMessage } from "../../redux/slices/error-message-slice"
 
 const ArticleMarkdownEditor = () => {
 
@@ -12,54 +12,60 @@ const ArticleMarkdownEditor = () => {
 
     const content = useSelector((state: RootState) => state.article.writeArticle.content)
 
-    const [preview, setPreview] = useState(false)
+    const contentError = useSelector((state: RootState) => state.errorMessage.article.content)
+
+    const preview = useSelector((state: RootState) => state.article.writeArticle.preview)
+
 
     const dispatch = useDispatch()
 
     const handleContentChange = (val: string | undefined) => {
         dispatch(updateWriteArticle({ content: val }))
+        if (contentError !== '') {
+            dispatch(updateErrorMessage({ content: '' }))
+        }
     }
 
     return (
         <>
-            <MDEditor
-                value={content}
-                onChange={handleContentChange}
-                preview={mdUp ? 'live' : 'edit'}
-                height={mdUp ? 400 : 275}
-            />
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    border: `1px solid ${palette.color.grey[400]}`,
-                    p: 2,
-                    borderRadius: 1,
-                    ':hover': {
-                        border: `1px solid ${palette.color.blue[400]}`
-                    }
-                }}
+            <FormControl
+                error={!!contentError}
             >
-                <Button
-                    onClick={() => setPreview(preview => !preview)}
-                    disableRipple={true}
+                {
+                    contentError !== '' && <FormHelperText>{contentError}</FormHelperText>
+                }
+                <MDEditor
+                    style={{
+                        border: contentError === '' ? '' : '1px solid red'
+                    }}
+                    value={content}
+                    textareaProps={{
+                        placeholder: "**Write down your thoughts here!!!**"
+                    }}
+                    onChange={handleContentChange}
+                    preview={mdUp ? 'live' : 'edit'}
+                    height={mdUp ? 400 : 275}
+                />
+
+            </FormControl>
+            {
+                preview &&
+                <Box
                     sx={{
-                        bgcolor: 'transparent',
-                        color: palette.color.blue[400],
-                        transitionDuration: '0s',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        border: `1px solid ${palette.color.grey[400]}`,
+                        p: 2,
+                        borderRadius: 1,
                         ':hover': {
-                            color: palette.color.blue[600],
-                            bgcolor: 'transparent'
-                        },
-                        p: 0
+                            border: `1px solid ${palette.color.blue[400]}`
+                        }
                     }}
                 >
-                    Markdown Preview
-                </Button>
-                {
-                    preview && <MDEditor.Markdown source={content} style={{ whiteSpace: 'pre-wrap' }} />
-                }
-            </Box>
+                    <MDEditor.Markdown source={content} style={{ whiteSpace: 'pre-wrap' }} />
+                </Box>
+            }
+
         </>
     )
 }

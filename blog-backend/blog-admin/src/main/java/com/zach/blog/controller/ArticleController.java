@@ -34,12 +34,6 @@ public class ArticleController {
         return ResponseResult.ok();
     }
 
-//    @PostMapping("/{id}/thumbnail")
-//    public ResponseResult<?> uploadArticleImage(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, MultipartFile image) throws IOException {
-//        articleService.updateArticleImage(id, user, image);
-//        return ResponseResult.ok();
-//    }
-
     @GetMapping
     public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                          @RequestParam(required = false) String title, @RequestParam(required = false) String summary) {
@@ -52,20 +46,20 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseResult<?> getArticleDetails(@PathVariable Long id){
+    public ResponseResult<?> getArticleDetails(@PathVariable Long id) {
         Article article = articleService.getArticleDetail(id);
         ArticleDetailResponse articleDetailResponse = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
         return ResponseResult.ok(articleDetailResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseResult<?> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest updateArticleRequest){
+    public ResponseResult<?> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest updateArticleRequest) {
         articleService.updateArticle(id, updateArticleRequest);
         return ResponseResult.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult<?> deleteArticle(@PathVariable Long id){
+    public ResponseResult<?> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
         return ResponseResult.ok();
     }

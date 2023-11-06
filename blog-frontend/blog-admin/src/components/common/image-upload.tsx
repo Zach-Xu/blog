@@ -35,6 +35,9 @@ const ImageUpload = forwardRef<HTMLInputElement, {}>((_, ref) => {
 
 
     const removeImage = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ''
+        }
         setShowImg(false)
     }
 
@@ -48,7 +51,6 @@ const ImageUpload = forwardRef<HTMLInputElement, {}>((_, ref) => {
         setShowImg(true)
         if (e.target.files) {
             const uploadFile = e.target.files[0]
-            e.target.value = ''
 
             if (!validateImage(uploadFile)) {
                 return
