@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import Modal from "../common/modal"
 import TagModelContent from "./tag-modal-content"
-import Loading from "../common/loading"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../redux/store"
 import { updateTag } from "../../redux/slices/tag-slice"
@@ -16,7 +15,6 @@ const EditTagModal = ({ open, handleClose, tag }: Props) => {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [isLoading, setIsLoading] = useState(true)
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -37,7 +35,6 @@ const EditTagModal = ({ open, handleClose, tag }: Props) => {
         if (tag) {
             setName(tag.name)
             setDescription(tag.description)
-            setIsLoading(false)
         }
     }, [tag])
 
@@ -46,21 +43,15 @@ const EditTagModal = ({ open, handleClose, tag }: Props) => {
             open={open}
             handleClose={handleClose}
         >
-            {
-                isLoading ?
-                    <Loading />
-                    :
-                    <TagModelContent
-                        name={name}
-                        setName={setName}
-                        description={description}
-                        setDescription={setDescription}
-                        title='Edit Tag'
-                        handleClose={handleClose}
-                        handleSubmit={handleSubmit}
-                    />
-            }
-
+            <TagModelContent
+                name={name}
+                setName={setName}
+                description={description}
+                setDescription={setDescription}
+                title='Edit Tag'
+                handleClose={handleClose}
+                handleSubmit={handleSubmit}
+            />
         </Modal>
     )
 }

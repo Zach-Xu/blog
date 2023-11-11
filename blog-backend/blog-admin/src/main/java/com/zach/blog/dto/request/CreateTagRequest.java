@@ -1,8 +1,8 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record UpdateTagRequest(
+public record CreateTagRequest(
         @NotBlank(message = "Tag name must be provided")
         String name,
         @NotBlank(message = "Description must be provided")

@@ -2,6 +2,7 @@ package com.zach.blog.service;
 
 import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
+import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Category;
 import org.springframework.data.domain.Page;
 
@@ -14,9 +15,13 @@ public interface CategoryService {
 
     Page<Category> getCategories(Integer pageNum, Integer pageSize, String name, Boolean enable);
 
-    void createCategory(CreateCategoryRequest request);
+    Category createCategory(CreateCategoryRequest request, ApplicationUser user);
 
     void updateCategory(Long userId, Long id, UpdateCategoryRequest request);
 
     void deleteCategory(Long id);
+
+    void changeCategoryStatus(Long id, Boolean enable, ApplicationUser user);
+
+    List<Category> getParentCategories();
 }

@@ -1,4 +1,4 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
 import com.zach.blog.enums.AuditStatus;
 import lombok.Getter;

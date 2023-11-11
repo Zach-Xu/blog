@@ -17,6 +17,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
 
     Optional<Category> findByName(String name);
 
+    boolean existsByName(String name);
+
     @Query(value = "" +
             "SELECT c FROM Category c " +
             "WHERE c.id IN " +
@@ -24,6 +26,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
             "GROUP BY a.category.id " +
             "HAVING SUM(CASE WHEN a.publishStatus = :status THEN 1 ELSE 0 END) > 0)")
     List<Category> findCategoriesWithPublishedArticles(@Param("status") PublishStatus status);
+
+    List<Category> findAllByPid(Long parentId);
 
     interface Specs {
         static Specification<Category> containsName(String name) {

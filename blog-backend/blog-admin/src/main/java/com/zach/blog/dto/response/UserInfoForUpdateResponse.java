@@ -1,5 +1,6 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
+import com.zach.blog.dto.response.RoleNameResponse;
 import com.zach.blog.enums.Gender;
 import lombok.Getter;
 import lombok.Setter;

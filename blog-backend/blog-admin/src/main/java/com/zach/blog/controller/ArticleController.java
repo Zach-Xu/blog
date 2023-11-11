@@ -1,7 +1,7 @@
 package com.zach.blog.controller;
 
 import com.zach.blog.annotation.Validate;
-import com.zach.blog.dto.ArticleResponse;
+import com.zach.blog.dto.response.ArticleResponse;
 import com.zach.blog.dto.request.UpdateArticleRequest;
 import com.zach.blog.dto.request.WriteArticleRequest;
 import com.zach.blog.dto.response.ArticleDetailResponse;

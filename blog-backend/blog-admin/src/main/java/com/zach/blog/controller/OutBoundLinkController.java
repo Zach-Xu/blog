@@ -1,6 +1,6 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.LinkResponse;
+import com.zach.blog.dto.response.LinkResponse;
 import com.zach.blog.dto.request.CreateLinkRequest;
 import com.zach.blog.dto.request.UpdateLinkRequest;
 import com.zach.blog.dto.response.PageResponse;

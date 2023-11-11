@@ -1,4 +1,4 @@
-import { Box, Button, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, Typography, } from '@mui/material';
+import { Box, Button, Stack, SvgIcon, Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography, } from '@mui/material';
 import Scrollbar from 'simplebar-react';
 import CustomPagination from '../common/pagination';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -6,20 +6,20 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { useCallback, useState } from 'react';
-import { deleteTag, updatePageNum } from '../../redux/slices/tag-slice';
+import { updatePageNum } from '../../redux/slices/tag-slice';
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
-import EditTagModal from './edit-tag-modal';
+import { changeCategoryStatus, deleteCategory } from '../../redux/slices/category-slice';
+import EditCategoryModal from './edit-category-modal';
 
 
 interface Props {
-    tags: Tag[],
+    categories: Category[],
 };
 
+const CategoryTable = ({ categories }: Props) => {
 
-export const TagsTable = ({ tags }: Props) => {
-
-    const { totalPages, currentPageNum } = useSelector((state: RootState) => state.tag)
+    const { totalPages, currentPageNum } = useSelector((state: RootState) => state.category)
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -27,27 +27,31 @@ export const TagsTable = ({ tags }: Props) => {
         dispatch(updatePageNum(value - 1))
     }, [])
 
-    const [selectedTag, setSelectedTag] = useState<Tag>()
+    const [selectedCategory, setSelectedCategory] = useState<Category>()
 
     const { open, handleOpen, handleClose } = useOpenClose()
 
-    const editTagModal = useOpenClose()
+    const editCategoryModal = useOpenClose()
 
-    const deleteTagHandler = (tag: Tag) => {
-        setSelectedTag(tag)
+    const deleteTagHandler = (category: Category) => {
+        setSelectedCategory(category)
         handleOpen()
     }
 
-    const editTagHandler = (tag: Tag) => {
-        setSelectedTag(tag)
-        editTagModal.handleOpen()
+    const editCategoryHandler = (category: Category) => {
+        setSelectedCategory(category)
+        editCategoryModal.handleOpen()
+    }
+
+    const handleEnableChange = async (request: ChangeCategoryStatus) => {
+        dispatch(changeCategoryStatus(request))
     }
 
     const confirmDelete = useCallback(() => {
-        if (selectedTag) {
-            dispatch(deleteTag(selectedTag.id))
+        if (selectedCategory) {
+            dispatch(deleteCategory(selectedCategory.id))
         }
-    }, [selectedTag])
+    }, [selectedCategory])
 
     return (
         <Box
@@ -76,27 +80,40 @@ export const TagsTable = ({ tags }: Props) => {
                                         description
                                     </TableCell>
                                     <TableCell>
+                                        enable
+                                    </TableCell>
+                                    <TableCell>
                                         Operations
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {tags.map((tag) => {
+                                {categories.map((category) => {
                                     return (
                                         <TableRow
                                             hover
-                                            key={tag.id}
+                                            key={category.id}
                                         >
                                             <TableCell>
-                                                {tag.id}
+                                                {category.id}
                                             </TableCell>
                                             <TableCell>
                                                 <Typography variant="subtitle2">
-                                                    {tag.name}
+                                                    {category.name}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
-                                                {tag.description}
+                                                {category.description}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Switch
+                                                    checked={category.enable}
+                                                    onChange={() => handleEnableChange({
+                                                        id: category.id,
+                                                        enable: !category.enable
+                                                    })}
+                                                    inputProps={{ 'aria-label': 'controlled' }}
+                                                />
                                             </TableCell>
                                             <TableCell>
                                                 <Stack
@@ -116,7 +133,7 @@ export const TagsTable = ({ tags }: Props) => {
                                                                 bgcolor: 'white'
                                                             }
                                                         }}
-                                                        onClick={() => editTagHandler(tag)}
+                                                        onClick={() => editCategoryHandler(category)}
                                                     >
                                                         Edit
                                                     </Button>
@@ -130,7 +147,7 @@ export const TagsTable = ({ tags }: Props) => {
                                                                 bgcolor: 'white'
                                                             }
                                                         }}
-                                                        onClick={() => deleteTagHandler(tag)}
+                                                        onClick={() => deleteTagHandler(category)}
                                                     >
                                                         Delete
                                                     </Button>
@@ -142,14 +159,15 @@ export const TagsTable = ({ tags }: Props) => {
                             </TableBody>
                         </Table>
                         {
-                            selectedTag &&
+                            selectedCategory &&
                             <AlertDialog
-                                deleteMessage={`Are you sure to delete tag: ${selectedTag.name} ?`}
+                                deleteMessage={`Are you sure to delete category: ${selectedCategory.name} ?`}
                                 open={open}
                                 handleClose={handleClose}
                                 confirmAction={confirmDelete}
                             />
                         }
+
                     </Box>
                 </Scrollbar>
                 <CustomPagination
@@ -159,12 +177,16 @@ export const TagsTable = ({ tags }: Props) => {
                     onChangeHandler={onPageChangeHandler}
                 />
             </Stack>
-            <EditTagModal
-                open={editTagModal.open}
-                handleClose={editTagModal.handleClose}
-                tag={selectedTag}
+
+            <EditCategoryModal
+                open={editCategoryModal.open}
+                handleClose={editCategoryModal.handleClose}
+                item={selectedCategory}
             />
+
         </Box >
     );
 };
+
+export default CategoryTable
 

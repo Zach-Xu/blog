@@ -1,4 +1,4 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
 import com.zach.blog.enums.MenuType;
 import com.zach.blog.model.Menu;

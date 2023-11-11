@@ -4,28 +4,17 @@ import { Error, } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { useEffect, useState } from "react";
-
 
 interface Props {
     open: boolean
     handleClose(): void
     confirmAction(): void
-    tagName: string | undefined
+    deleteMessage: string
 }
 
-const AlertDialog = ({ open, handleClose, confirmAction, tagName }: Props) => {
-
-    const [name, setName] = useState('')
+const AlertDialog = ({ open, handleClose, confirmAction, deleteMessage }: Props) => {
 
     const { isLoading } = useSelector((state: RootState) => state.loading)
-
-    useEffect(() => {
-        if (tagName) {
-            setName(tagName)
-        }
-    }, [tagName])
-
 
     return (
 
@@ -68,7 +57,7 @@ const AlertDialog = ({ open, handleClose, confirmAction, tagName }: Props) => {
                 }}>
                     <Error sx={{ color: '#e5a33f' }} />
                     <DialogContentText id="alert-dialog-description">
-                        {`Are you sure to delete tag: ${name} ?`}
+                        {deleteMessage}
                     </DialogContentText>
                 </Stack>
             </DialogContent>

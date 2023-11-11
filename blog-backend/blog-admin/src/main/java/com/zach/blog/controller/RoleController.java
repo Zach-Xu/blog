@@ -1,9 +1,9 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.ChangeRoleStatusRequest;
-import com.zach.blog.dto.RoleNameResponse;
+import com.zach.blog.dto.request.ChangeRoleStatusRequest;
+import com.zach.blog.dto.response.RoleNameResponse;
 import com.zach.blog.dto.request.CreateRoleRequest;
-import com.zach.blog.dto.RoleResponse;
+import com.zach.blog.dto.response.RoleResponse;
 import com.zach.blog.dto.request.UpdateRoleRequest;
 import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;

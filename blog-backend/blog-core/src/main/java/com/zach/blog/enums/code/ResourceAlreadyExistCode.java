@@ -2,7 +2,8 @@ package com.zach.blog.enums.code;
 
 public enum ResourceAlreadyExistCode {
 
-    TAG_NAME_EXIST("Tag name already exist");
+    TAG_NAME_EXIST("Tag name already exist"),
+    CATEGORY_NAME_EXIST("Category name already exist");
     final int code = 400;
     final String message;
 

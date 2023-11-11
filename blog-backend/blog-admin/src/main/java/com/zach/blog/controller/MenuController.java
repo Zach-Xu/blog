@@ -1,6 +1,6 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.MenuResponse;
+import com.zach.blog.dto.response.MenuResponse;
 import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;

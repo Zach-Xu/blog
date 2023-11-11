@@ -1,8 +1,8 @@
 package com.zach.blog.controller;
 
-import com.zach.blog.dto.RoleNameResponse;
-import com.zach.blog.dto.UserInfoForUpdateResponse;
-import com.zach.blog.dto.UserManagementResponse;
+import com.zach.blog.dto.response.RoleNameResponse;
+import com.zach.blog.dto.response.UserInfoForUpdateResponse;
+import com.zach.blog.dto.response.UserManagementResponse;
 import com.zach.blog.dto.request.CreateUserRequest;
 import com.zach.blog.dto.request.UpdateUserRequest;
 import com.zach.blog.dto.response.PageResponse;

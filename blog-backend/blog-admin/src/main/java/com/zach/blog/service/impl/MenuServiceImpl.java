@@ -1,6 +1,6 @@
 package com.zach.blog.service.impl;
 
-import com.zach.blog.dto.MenuResponse;
+import com.zach.blog.dto.response.MenuResponse;
 import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.enums.MenuType;
 import com.zach.blog.exception.SystemException;

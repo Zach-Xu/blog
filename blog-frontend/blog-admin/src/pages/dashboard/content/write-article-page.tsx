@@ -1,5 +1,5 @@
 import { Box, Stack, Theme, useMediaQuery } from "@mui/material"
-import Layout from "../../../layouts/dashboard/layout"
+import DashboardLayout from "../../../layouts/dashboard/layout"
 import ImageUpload from "../../../components/common/image-upload";
 import CategoryDropDown from "../../../components/article/category-dropdown";
 import TagDropDown from "../../../components/article/tag-dropdown";
@@ -21,7 +21,7 @@ const WriteArticlePage = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     return (
-        <Layout>
+        <DashboardLayout>
             <Box sx={{
                 py: 2,
                 px: 4
@@ -64,7 +64,7 @@ const WriteArticlePage = () => {
                     <ArticleMarkdownEditor />
                 </Stack>
             </Box>
-        </Layout>
+        </DashboardLayout>
     )
 }
 

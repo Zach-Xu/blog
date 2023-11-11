@@ -2,7 +2,9 @@ package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
-import com.zach.blog.exception.SystemException;
+import com.zach.blog.exception.ResourceAlreadyExistException;
+import com.zach.blog.exception.ResourceNotFoundException;
+import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.service.CategoryService;
 import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.model.Category;
@@ -19,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static com.zach.blog.enums.code.ResourceAlreadyExistCode.CATEGORY_NAME_EXIST;
+import static com.zach.blog.enums.code.ResourceNotFoundCode.CATEGORY_NOT_FOUND;
 import static com.zach.blog.repository.CategoryRepository.Specs.containsName;
 import static com.zach.blog.repository.CategoryRepository.Specs.isEnable;
 
@@ -55,19 +59,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void createCategory(CreateCategoryRequest request) {
+    public Category createCategory(CreateCategoryRequest request, ApplicationUser user) {
         Category category = new Category();
+        if(categoryRepository.existsByName(request.name())){
+            throw new ResourceAlreadyExistException(CATEGORY_NAME_EXIST);
+        }
         category.setName(request.name());
         category.setDescription(request.description());
         category.setPid(request.parentId());
         category.setEnable(request.enable());
-        categoryRepository.save(category);
+        category.setCreatedBy(user.getId());
+        return categoryRepository.save(category);
     }
 
     @Override
     public void updateCategory(Long userId, Long id, UpdateCategoryRequest request) {
-        // ToDo: refactor exception handling
-        Category category = categoryRepository.findById(id).orElseThrow(SystemException::new);
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setUpdateBy(userId);
         category.setName(request.name());
         category.setDescription(request.description());
@@ -78,9 +85,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        // ToDo: refactor exception handling
-        Category category = categoryRepository.findById(id).orElseThrow(SystemException::new);
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setDeleted(true);
         categoryRepository.save(category);
+    }
+
+    @Override
+    public void changeCategoryStatus(Long id, Boolean enable, ApplicationUser user) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
+        category.setEnable(enable);
+        category.setUpdateBy(user.getId());
+        categoryRepository.save(category);
+    }
+
+    @Override
+    public List<Category> getParentCategories() {
+        // By default, parent categories have pid set to -1
+        return categoryRepository.findAllByPid(-1L);
     }
 }

@@ -46,7 +46,8 @@ export const tagSlice = createSlice({
         },
         updatePageNum: (state, action: PayloadAction<number>) => {
             state.currentPageNum = action.payload
-        }
+        },
+
     },
     extraReducers: (builder) => {
         builder

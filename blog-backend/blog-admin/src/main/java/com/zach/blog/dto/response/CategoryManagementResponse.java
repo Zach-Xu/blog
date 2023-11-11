@@ -1,4 +1,4 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,4 +10,5 @@ public class CategoryManagementResponse {
     private String name;
     private String description;
     private boolean enable;
+    private Long pid;
 }

@@ -1,9 +1,9 @@
 package com.zach.blog.controller;
 
 import com.zach.blog.annotation.Validate;
-import com.zach.blog.dto.CreateTagRequest;
-import com.zach.blog.dto.TagResponse;
-import com.zach.blog.dto.UpdateTagRequest;
+import com.zach.blog.dto.request.CreateTagRequest;
+import com.zach.blog.dto.response.TagResponse;
+import com.zach.blog.dto.request.UpdateTagRequest;
 import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;

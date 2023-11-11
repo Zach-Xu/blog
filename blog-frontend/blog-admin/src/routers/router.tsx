@@ -5,6 +5,7 @@ import Welcome from "../pages/dashboard/welcome";
 import Login from "../pages/auth/login";
 import TagPage from "../pages/dashboard/content/tag-page";
 import WriteArticlePage from "../pages/dashboard/content/write-article-page";
+import CategoryPage from "../pages/dashboard/content/category-page";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
@@ -12,7 +13,7 @@ const MapRouterToComponent: { [key: string]: JSX.Element } = {
     // 'system/role/index': <RoleList/>,
     // 'system/menu/index': <MenuList/>,
     // 'content/article/index': <ArticleList/>,
-    // 'content/category/index': <CategoryList/>,
+    'content/category/index': <CategoryPage />,
     // 'content/link/index': <LinkList/>,
     'content/tag/index': <TagPage />,
 }

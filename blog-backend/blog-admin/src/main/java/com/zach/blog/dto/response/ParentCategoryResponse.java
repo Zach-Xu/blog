@@ -1,12 +1,11 @@
-package com.zach.blog.dto;
+package com.zach.blog.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryResponse {
+public class ParentCategoryResponse {
     private Long id;
     private String name;
-    private String description;
 }

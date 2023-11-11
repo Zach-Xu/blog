@@ -1,51 +1,41 @@
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { useMediaQuery, Box, Container, Stack, Button, SvgIcon, Theme } from '@mui/material';
-import { useCallback, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { PlusIcon } from "@heroicons/react/20/solid"
+import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
+import Loading from "../../../components/common/loading"
+import DashboardLayout from "../../../layouts/dashboard/layout"
+import { useOpenClose } from "../../../hooks/use-open-close"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../../redux/store"
+import { useEffect } from "react"
+import { getCategories, getParentCategories } from "../../../redux/slices/category-slice"
+import CategoryTable from "../../../components/category/category-table"
+import AddCategoryModal from "../../../components/category/add-category-modal"
+import SearchCategory from "../../../components/category/search-category"
 
-import Loading from '../../../components/common/loading';
-import AddTagModal from '../../../components/tag/add-tag-modal';
-import { TagsTable } from '../../../components/tag/tag-table';
-import { useOpenClose } from '../../../hooks/use-open-close';
-import DashboardLayout from '../../../layouts/dashboard/layout'
-import { updateSearchName, getTags } from '../../../redux/slices/tag-slice';
-import { RootState, AppDispatch } from '../../../redux/store';
-import Search from '../../../components/common/search';
+const CategoryPage = () => {
 
-
-const TagPage = () => {
-
-    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
-
-    const { rows: tags, currentPageNum, name } = useSelector((state: RootState) => state.tag)
-
-    const { isLoading } = useSelector((state: RootState) => state.loading)
-
-    const dispatch = useDispatch<AppDispatch>()
-
-    const onKeyUpHandler = useCallback((event: React.KeyboardEvent) => {
-        if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
-            const searchName = event.target.value.trim()
-            dispatch(updateSearchName(searchName))
-            dispatch(getTags({
-                name: searchName
-            }))
-        }
-    }, [])
-
-    const clickHandler = useCallback((searchName: string) => {
-        dispatch(getTags({
-            name: searchName
-        }))
-    }, [])
+    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const { open, handleOpen, handleClose } = useOpenClose()
 
+
+    const { isLoading } = useSelector((state: RootState) => state.loading)
+    const { rows: categories, currentPageNum } = useSelector((state: RootState) => state.category)
+
+    const dispatch = useDispatch<AppDispatch>()
+
     useEffect(() => {
-        dispatch(getTags({
+        dispatch(getCategories({
             pageNum: currentPageNum
         }))
     }, [currentPageNum])
+
+    useEffect(() => {
+        const fetchParentCategories = async () => {
+            dispatch(getParentCategories())
+        }
+        fetchParentCategories()
+    }, [])
+
 
     return (
         <DashboardLayout>
@@ -77,14 +67,11 @@ const TagPage = () => {
                                     }
                             }
                         >
-                            <Search
-                                searchName={name}
-                                onKeyUpHandler={onKeyUpHandler}
-                                clickHandler={clickHandler}
-                                name='Tag name'
-                                placeholder='please input tag name'
-                            />
+                            <SearchCategory />
                             <Box
+                                sx={mdUp ? {
+                                    ml: 2
+                                } : {}}
                             >
                                 <Button
                                     startIcon={(
@@ -103,13 +90,12 @@ const TagPage = () => {
                             isLoading ?
                                 <Loading />
                                 :
-                                <TagsTable tags={tags} />
-
+                                <CategoryTable categories={categories} />
                         }
                     </Stack>
                 </Container>
             </Box>
-            <AddTagModal
+            <AddCategoryModal
                 open={open}
                 handleClose={handleClose}
             />
@@ -117,4 +103,4 @@ const TagPage = () => {
     )
 }
 
-export default TagPage
+export default CategoryPage

@@ -6,6 +6,7 @@ import authReducer from './slices/auth-slice'
 import tagReducer from './slices/tag-slice'
 import articleReducer from './slices/article-slice'
 import errorMessageReducer from './slices/error-message-slice'
+import categoryReducer from './slices/category-slice'
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
         auth: authReducer,
         tag: tagReducer,
         article: articleReducer,
-        errorMessage: errorMessageReducer
+        errorMessage: errorMessageReducer,
+        category: categoryReducer
     }
 })
 
