@@ -14,6 +14,7 @@ public enum HttpStatusCode {
     FORBIDDEN(403, "No permission to perform this action"),
     TOKEN_INVALID(401, "Invalid or expired token");
 
+
     final int code;
     final String message;
 

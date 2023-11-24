@@ -29,13 +29,15 @@ public class ArticleController {
 
     @Validate
     @PostMapping
-    public ResponseResult<?> writeArticle(@AuthenticationPrincipal ApplicationUser user, @Valid WriteArticleRequest writeArticleRequest, BindingResult bindingResult) throws IOException {
+    public ResponseResult<?> writeArticle(@AuthenticationPrincipal ApplicationUser user,
+                                          @Valid WriteArticleRequest writeArticleRequest, BindingResult bindingResult) throws IOException {
         articleService.createArticle(user, writeArticleRequest);
         return ResponseResult.ok();
     }
 
     @GetMapping
-    public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
+    public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum,
+                                         @RequestParam(defaultValue = "5") Integer pageSize,
                                          @RequestParam(required = false) String title, @RequestParam(required = false) String summary) {
         Page<Article> page = articleService.getArticles(pageNum, pageSize, title, summary);
         List<Article> articles = page.getContent();
@@ -52,10 +54,13 @@ public class ArticleController {
         return ResponseResult.ok(articleDetailResponse);
     }
 
+    @Validate
     @PutMapping("/{id}")
-    public ResponseResult<?> updateArticle(@PathVariable Long id, @RequestBody UpdateArticleRequest updateArticleRequest) {
-        articleService.updateArticle(id, updateArticleRequest);
-        return ResponseResult.ok();
+    public ResponseResult<?> updateArticle(@PathVariable Long id,
+                                           @Valid UpdateArticleRequest updateArticleRequest, BindingResult bindingResult) throws IOException {
+        Article article = articleService.updateArticle(id, updateArticleRequest);
+        ArticleResponse response = BeanCopyUtils.copyBean(article, ArticleResponse.class);
+        return ResponseResult.ok(response);
     }
 
     @DeleteMapping("/{id}")

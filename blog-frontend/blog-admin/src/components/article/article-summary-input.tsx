@@ -1,19 +1,23 @@
 import { FormLabel, InputAdornment, TextField } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { updateWriteArticle } from "../../redux/slices/article-slice"
 import { updateErrorMessage } from "../../redux/slices/error-message-slice"
 
-const ArticleSummaryInput = () => {
+interface Props {
+    summary: string | undefined
+    summaryChangeHandler(summary: string): void
+}
 
-    const summary = useSelector((state: RootState) => state.article.writeArticle.summary)
+const ArticleSummaryInput = ({ summary, summaryChangeHandler }: Props) => {
+
+
 
     const dispatch = useDispatch()
 
     const summaryError = useSelector((state: RootState) => state.errorMessage.article.summary)
 
     const handleSummaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateWriteArticle({ summary: e.target.value }))
+        summaryChangeHandler(e.target.value)
         if (e.target.value.trim() !== '' && summaryError !== '') {
             dispatch(updateErrorMessage({ summary: '' }))
         }

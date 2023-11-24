@@ -1,4 +1,4 @@
-import { Box, Chip, FormControl, FormHelperText, FormLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, Stack, useTheme } from "@mui/material"
+import { Box, Chip, FormControl, FormHelperText, FormLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, Stack, Theme, useMediaQuery, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import { tagService } from "../../services/resources/tag-service"
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateWriteArticle } from "../../redux/slices/article-slice";
 import { updateErrorMessage } from "../../redux/slices/error-message-slice";
+import { AnyAction } from "redux";
 
 
 const getTagName = (id: number, tags?: Tag[]): string => {
@@ -25,23 +26,24 @@ const getTagName = (id: number, tags?: Tag[]): string => {
 }
 
 interface Props {
-    mdUp: boolean
+    tagIds: number[]
+    tagsChangeHandler(tagIds: number[]): void
 }
 
-const TagDropDown = ({ mdUp }: Props) => {
+const TagDropDown = ({ tagIds, tagsChangeHandler }: Props) => {
+
+    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const theme = useTheme();
 
     const [tags, setTags] = useState<Tag[]>([])
-
-    const tagIds = useSelector((state: RootState) => state.article.writeArticle.tagIds)
 
     const tagIdError = useSelector((state: RootState) => state.errorMessage.article.tagIds)
 
     const dispatch = useDispatch()
 
     const handleChange = (e: SelectChangeEvent<typeof tagIds>) => {
-        dispatch(updateWriteArticle({ tagIds: e.target.value as number[] }))
+        tagsChangeHandler(e.target.value as number[])
         if (tagIdError !== '') {
             dispatch(updateErrorMessage({ tagIds: '' }))
         }

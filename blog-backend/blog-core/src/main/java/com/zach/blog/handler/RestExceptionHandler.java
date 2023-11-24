@@ -26,6 +26,12 @@ public class RestExceptionHandler {
         return ResponseResult.error(e.getCode(), e.getMessage());
     }
 
+    @ExceptionHandler({UnsupportedFileTypeException.class})
+    public  ResponseResult<?> unsupportedFileTypeException(RuntimeException e){
+        e.printStackTrace();
+        return ResponseResult.error(HttpStatusCode.UNSUPPORTED_FILE_TYPE);
+    }
+
     @ExceptionHandler({FailedToCopyBeanException.class, IllegalHttpStatusCodeException.class, SQLIntegrityConstraintViolationException.class, IllegalArgumentException.class})
     public ResponseResult<?> internalServerException(RuntimeException e) {
         e.printStackTrace();

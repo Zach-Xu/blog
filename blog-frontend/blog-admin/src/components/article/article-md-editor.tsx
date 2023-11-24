@@ -3,24 +3,24 @@ import MDEditor from "@uiw/react-md-editor"
 import { palette } from "../../theme/create-palette"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { updateWriteArticle } from "../../redux/slices/article-slice"
 import { updateErrorMessage } from "../../redux/slices/error-message-slice"
 
-const ArticleMarkdownEditor = () => {
+interface Props {
+    content: string
+    preview: boolean
+    contentChangeHandler(content: string | undefined): void
+}
+
+const ArticleMarkdownEditor = ({ content, preview, contentChangeHandler }: Props) => {
 
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
-    const content = useSelector((state: RootState) => state.article.writeArticle.content)
-
     const contentError = useSelector((state: RootState) => state.errorMessage.article.content)
-
-    const preview = useSelector((state: RootState) => state.article.writeArticle.preview)
-
 
     const dispatch = useDispatch()
 
-    const handleContentChange = (val: string | undefined) => {
-        dispatch(updateWriteArticle({ content: val }))
+    const handleContentChange = (value: string | undefined) => {
+        contentChangeHandler(value)
         if (contentError !== '') {
             dispatch(updateErrorMessage({ content: '' }))
         }

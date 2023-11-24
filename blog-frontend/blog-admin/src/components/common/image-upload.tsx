@@ -1,14 +1,16 @@
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button/Button';
-import { DragEvent, forwardRef, useRef, useState } from 'react'
+import { DragEvent, forwardRef, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
-import { Box, FormLabel, Stack } from '@mui/material';
+import { Box, FormLabel, Stack, SvgIcon } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CancelPresentationRoundedIcon from '@mui/icons-material/CancelPresentationRounded';
 import { IconButton } from '@mui/material';
 import { validateImage } from '../../utils/file-utils';
 import { palette } from '../../theme/create-palette';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -22,17 +24,38 @@ const VisuallyHiddenInput = styled('input')({
     width: 1
 })
 
+interface Props {
+    type: "WRITE" | "EDIT"
+}
 
-
-const ImageUpload = forwardRef<HTMLInputElement, {}>((_, ref) => {
+const ImageUpload = forwardRef<HTMLInputElement, Props>(({ type }, ref) => {
 
     const imgRef = useRef<HTMLImageElement>(null)
     const uploadIconRef = useRef<HTMLLabelElement>(null)
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const [isOver, setIsOver] = useState(false)
-    const [showImg, setShowImg] = useState(false)
+    const [showImg, setShowImg] = useState(type === "EDIT")
 
+    const thumbnail = useSelector((state: RootState) => state.article.editArticle.thumbnail)
+
+    const handleResetClick = () => {
+        if (imgRef.current && thumbnail) {
+            imgRef.current.src = thumbnail
+        }
+        setShowImg(true)
+    }
+
+    useEffect(() => {
+        if (type === "WRITE") {
+            return
+        }
+
+        if (imgRef.current && thumbnail) {
+            imgRef.current.src = thumbnail
+        }
+
+    }, [thumbnail])
 
     const removeImage = () => {
         if (fileInputRef.current) {
@@ -133,6 +156,33 @@ const ImageUpload = forwardRef<HTMLInputElement, {}>((_, ref) => {
                     }
                 }}
             >
+                {
+                    type === 'EDIT' &&
+                    <Button
+                        variant="outlined"
+                        color="info"
+                        startIcon={(
+                            <SvgIcon fontSize="small">
+                                <RestartAltOutlinedIcon />
+                            </SvgIcon>
+                        )}
+                        sx={{
+                            display: showImg ? 'none' : '',
+                            bgcolor: 'white',
+                            position: 'absolute',
+                            top: 10,
+                            right: 10,
+                            '&:hover': {
+                                bgcolor: 'white'
+                            }
+                        }}
+                        onClick={handleResetClick}
+                    >
+                        Reset
+                    </Button>
+                }
+
+
                 <IconButton
                     onClick={removeImage}
                     aria-label="delete"
@@ -145,10 +195,11 @@ const ImageUpload = forwardRef<HTMLInputElement, {}>((_, ref) => {
                             bgcolor: 'transparent',
                             cursor: 'pointer'
                         },
-                        color: palette.color.blue[400]
-                    }}>
-                    < CancelPresentationRoundedIcon
-                    />
+
+                    }}
+                    color='error'
+                >
+                    < ClearOutlinedIcon />
                 </IconButton>
 
                 <Box

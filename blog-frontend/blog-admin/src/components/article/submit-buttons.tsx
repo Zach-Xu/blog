@@ -2,81 +2,23 @@ import { Button, Stack, SvgIcon, Theme, useMediaQuery } from "@mui/material"
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import CheckIcon from '@mui/icons-material/Check';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { RefObject, useCallback } from "react";
-import { createArticle, updateWriteArticle } from "../../redux/slices/article-slice";
-import { updateErrorMessage } from "../../redux/slices/error-message-slice";
-import { errorMessageMap } from "../../utils/error-utils";
 
 interface Props {
-    fileInputRef: RefObject<HTMLInputElement | undefined>
+    clickHandler(status: PublishStatus): void
+    previewHandler(): void
 }
 
-const createRequestData = (status: PublishStatus, article: WriteArticle, fileList: FileList | null | undefined): WriteArticleRequest => {
-
-    const data: WriteArticleRequest = {
-        ...article,
-        publishStatus: status
-    }
-
-    if (fileList && fileList.length > 0) {
-        data.image = fileList[0]
-    } else {
-        delete data.image
-    }
-
-    return data
-}
-
-
-
-const SubmitButons = ({ fileInputRef }: Props) => {
+const SubmitButons = ({ clickHandler, previewHandler }: Props) => {
 
     const smUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'))
 
-    const article = useSelector((state: RootState) => state.article.writeArticle)
-
-    const dispatch = useDispatch<AppDispatch>()
-
-    const validateData = useCallback((article: WriteArticle): boolean => {
-        let valid = true
-        for (const [key, value] of Object.entries(article)) {
-
-            if (typeof value === 'boolean') {
-                continue
-            }
-            if (!value || (typeof value === 'string' && value.trim() === '') || (Array.isArray(value) && value.length === 0)) {
-                console.log('value thats not pass validation', key, value)
-                valid = false
-                dispatch(updateErrorMessage({ [key]: errorMessageMap[key] }))
-                break
-            }
-        }
-        return valid
-    }, [])
-
     const handlePublishClick = () => {
-        const data = createRequestData("PUBLISHED", article, fileInputRef.current?.files)
-        if (!validateData(data)) {
-            return
-        }
-        dispatch(createArticle(data)).unwrap().then()
+        clickHandler("PUBLISHED")
     }
 
-    const handleDraftClick = async () => {
-        const data = createRequestData("DRAFT", article, fileInputRef.current?.files)
-        if (!validateData(data)) {
-            return
-        }
-        dispatch(createArticle(data)).unwrap().then()
+    const handleDraftClick = () => {
+        clickHandler("DRAFT")
     }
-
-    const handlePreviewClick = () => {
-        dispatch(updateWriteArticle({ preview: !article.preview }))
-    }
-
-
 
     return (
         <Stack
@@ -138,7 +80,7 @@ const SubmitButons = ({ fileInputRef }: Props) => {
                         bgcolor: 'white'
                     }
                 }}
-                onClick={handlePreviewClick}
+                onClick={previewHandler}
             >
                 Preview
             </Button>

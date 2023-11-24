@@ -1,23 +1,24 @@
 import { Stack, FormLabel, TextField } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { updateWriteArticle } from "../../redux/slices/article-slice"
 import { updateErrorMessage } from "../../redux/slices/error-message-slice"
 
-const ArticleTitleInput = () => {
+interface Props {
+    title: string | undefined
+    titleChangeHandler(title: string): void
+}
+
+const ArticleTitleInput = ({ title, titleChangeHandler }: Props) => {
 
     const titleError = useSelector((state: RootState) => state.errorMessage.article.title)
-
-    const title = useSelector((state: RootState) => state.article.writeArticle.title)
 
     const dispatch = useDispatch()
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateWriteArticle({ title: e.target.value }))
+        titleChangeHandler(e.target.value)
         if (e.target.value.trim() !== '' && titleError !== '') {
             dispatch(updateErrorMessage({ title: '' }))
         }
-
     }
 
     return (

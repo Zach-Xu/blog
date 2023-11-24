@@ -27,9 +27,13 @@ public class ArticleDetailResponse {
 
     private LocalDateTime createdTime;
 
-    @JsonIncludeProperties({"id","name"})
+    private Boolean pinned;
+
+    private Boolean allowedComment;
+
+    @JsonIncludeProperties({ "id", "name" })
     private Category category;
 
-    @JsonIncludeProperties({"id","name"})
+    @JsonIncludeProperties({ "id", "name" })
     private List<Tag> tags;
 }

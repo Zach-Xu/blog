@@ -23,7 +23,7 @@ public interface ArticleService {
 
     Page<Article> getArticles(Integer pageNum, Integer pageSize, String title, String summary);
 
-    void updateArticle(Long id, UpdateArticleRequest updateArticleRequest);
+    Article updateArticle(Long id, UpdateArticleRequest updateArticleRequest) throws IOException;
 
     void deleteArticle(Long id);
 

@@ -6,13 +6,15 @@ import Login from "../pages/auth/login";
 import TagPage from "../pages/dashboard/content/tag-page";
 import WriteArticlePage from "../pages/dashboard/content/write-article-page";
 import CategoryPage from "../pages/dashboard/content/category-page";
+import ArticlePage from "../pages/dashboard/content/article-page";
+import EditArticlePage from "../pages/dashboard/content/edit-article-page";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
     // 'system/user/index': <UserList />,
     // 'system/role/index': <RoleList/>,
     // 'system/menu/index': <MenuList/>,
-    // 'content/article/index': <ArticleList/>,
+    'content/article/index': <ArticlePage />,
     'content/category/index': <CategoryPage />,
     // 'content/link/index': <LinkList/>,
     'content/tag/index': <TagPage />,
@@ -43,6 +45,10 @@ export const useAppRouter = () => {
         {
             path: '/write',
             element: <WriteArticlePage />
+        },
+        {
+            path: '/edit',
+            element: <EditArticlePage />
         },
         ...generateRouteObject(menus)
     ])

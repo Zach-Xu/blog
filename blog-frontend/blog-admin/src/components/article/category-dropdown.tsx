@@ -1,22 +1,22 @@
-import { FormControl, FormHelperText, FormLabel, MenuItem, Select, SelectChangeEvent, Stack } from "@mui/material"
+import { FormControl, FormHelperText, FormLabel, MenuItem, Select, SelectChangeEvent, Stack, Theme, useMediaQuery } from "@mui/material"
 import { useEffect, useState } from "react"
 import { categoryService } from "../../services/resources/category-service"
 import { MenuProps } from "../../utils/drop-down-utils"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { updateWriteArticle } from "../../redux/slices/article-slice"
 import { updateErrorMessage } from "../../redux/slices/error-message-slice"
 
 interface Props {
-    mdUp: boolean
+    categoryId: number | undefined
+    categoryChangeHandler(id: number): void
 }
 
 
-const CategoryDropDown = ({ mdUp }: Props) => {
+const CategoryDropDown = ({ categoryId, categoryChangeHandler }: Props) => {
+
+    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const [categories, setCategories] = useState<Category[]>()
-
-    const categoryId = useSelector((state: RootState) => state.article.writeArticle.categoryId)
 
     const categoryError = useSelector((state: RootState) => state.errorMessage.article.categoryId)
 
@@ -32,7 +32,8 @@ const CategoryDropDown = ({ mdUp }: Props) => {
     }, [])
 
     const handleChange = (e: SelectChangeEvent<number>) => {
-        dispatch(updateWriteArticle({ categoryId: e.target.value as number }))
+        categoryChangeHandler(e.target.value as number)
+
         if (categoryError !== '') {
             dispatch(updateErrorMessage({ categoryId: '' }))
         }
@@ -61,27 +62,30 @@ const CategoryDropDown = ({ mdUp }: Props) => {
                         flexGrow: 1
                     }}
                 >
-                    <Select
-                        MenuProps={MenuProps}
-                        value={categoryId || ''}
-                        onChange={handleChange}
-                        sx={{
-                            pl: 1,
-                            flexGrow: 1
-                        }}
-                    >
-                        {
-                            categories &&
-                            categories.map((category) => (
-                                <MenuItem
-                                    key={category.id}
-                                    value={category.id}
-                                >
-                                    {category.name}
-                                </MenuItem>
-                            ))
-                        }
-                    </Select>
+                    {
+                        categories &&
+                        <Select
+                            MenuProps={MenuProps}
+                            value={categoryId || ''}
+                            onChange={handleChange}
+                            sx={{
+                                pl: 1,
+                                flexGrow: 1
+                            }}
+                        >
+                            {
+                                categories.map((category) => (
+                                    <MenuItem
+                                        key={category.id}
+                                        value={category.id}
+                                    >
+                                        {category.name}
+                                    </MenuItem>
+                                ))
+                            }
+                        </Select>
+                    }
+
                     {
                         categoryError !== '' && <FormHelperText>{categoryError}</FormHelperText>
                     }

@@ -1,13 +1,16 @@
 import { Box, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, FormHelperText } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { updateWriteArticle } from "../../redux/slices/article-slice"
 import { updateErrorMessage } from "../../redux/slices/error-message-slice"
 
-const ArticleSettings = () => {
+interface Props {
+    allowedComment: boolean
+    pinned: boolean
+    allowedCommentChangeHandler(flag: boolean): void
+    pinnedChangeHandler(flag: boolean): void
+}
 
-    const allowedComment = useSelector((state: RootState) => state.article.writeArticle.allowedComment)
-    const pinned = useSelector((state: RootState) => state.article.writeArticle.pinned)
+const ArticleSettings = ({ allowedComment, pinned, allowedCommentChangeHandler, pinnedChangeHandler }: Props) => {
 
     const allowCommentError = useSelector((state: RootState) => state.errorMessage.article.allowedComment)
     const pinnedError = useSelector((state: RootState) => state.errorMessage.article.pinned)
@@ -15,14 +18,14 @@ const ArticleSettings = () => {
     const dispatch = useDispatch()
 
     const handleAllowCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateWriteArticle({ allowedComment: e.target.value === 'true' }))
+        allowedCommentChangeHandler(e.target.value === 'true')
         if (allowCommentError !== '') {
             dispatch(updateErrorMessage({ allowedComment: '' }))
         }
     }
 
     const handlePinnedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateWriteArticle({ pinned: e.target.value === 'true' }))
+        pinnedChangeHandler(e.target.value === 'true')
         if (pinnedError !== '') {
             dispatch(updateErrorMessage({ pinned: '' }))
         }

@@ -1,15 +1,14 @@
 import { Box, Stack, Theme, useMediaQuery } from "@mui/material"
 import DashboardLayout from "../../../layouts/dashboard/layout"
 import ImageUpload from "../../../components/common/image-upload";
-import CategoryDropDown from "../../../components/article/category-dropdown";
-import TagDropDown from "../../../components/article/tag-dropdown";
-import ArticleMarkdownEditor from "../../../components/article/article-md-editor";
-import ArticleSummaryInput from "../../../components/article/article-summary-input";
-import ArticleSettings from "../../../components/article/article-settings";
-import SubmitButons from "../../../components/article/submit-buttons";
 import { useRef } from "react";
-import ArticleTitleInput from "../../../components/article/article-title-input";
-
+import WriteTitleInput from "../../../components/article/write/write-title-input";
+import WriteCategoryDropDown from "../../../components/article/write/write-category-dropdown";
+import WriteTagDropDown from "../../../components/article/write/write-tag-dropdown";
+import WriteSummaryInput from "../../../components/article/write/write-summary-input";
+import WriteSettings from "../../../components/article/write/write-settings";
+import WriteContentEditor from "../../../components/article/write/write-content-editor";
+import WriteSubmitButtons from "../../../components/article/write/write-submit-buttons";
 
 
 const WriteArticlePage = () => {
@@ -33,7 +32,7 @@ const WriteArticlePage = () => {
                         gap: 2
                     }}
                 >
-                    <ArticleTitleInput />
+                    <WriteTitleInput />
                     <Stack
                         sx={{
                             display: 'flex',
@@ -42,12 +41,10 @@ const WriteArticlePage = () => {
                             flexGrow: 1
                         }}
                     >
-                        <CategoryDropDown mdUp={mdUp} />
-                        <TagDropDown mdUp={mdUp} />
+                        <WriteCategoryDropDown />
+                        <WriteTagDropDown />
                     </Stack>
-
-                    <ArticleSummaryInput />
-
+                    <WriteSummaryInput />
                     <Box
                         sx={{
                             display: 'flex',
@@ -57,11 +54,16 @@ const WriteArticlePage = () => {
                             gap: smUp ? 5 : 0,
                         }}
                     >
-                        <ArticleSettings />
-                        <ImageUpload ref={fileInputRef} />
+                        <WriteSettings />
+                        <ImageUpload
+                            ref={fileInputRef}
+                            type="WRITE"
+                        />
                     </Box>
-                    <SubmitButons fileInputRef={fileInputRef} />
-                    <ArticleMarkdownEditor />
+                    <WriteSubmitButtons
+                        fileInputRef={fileInputRef}
+                    />
+                    <WriteContentEditor />
                 </Stack>
             </Box>
         </DashboardLayout>

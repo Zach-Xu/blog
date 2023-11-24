@@ -128,16 +128,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticle(Long id, UpdateArticleRequest updateArticleRequest) {
-        // ToDo: refactor exception handling
-        Article article = articleRepository.findById(id).orElseThrow(SecurityException::new);
+    public Article updateArticle(Long id, UpdateArticleRequest updateArticleRequest) throws IOException {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ARTICLE_NOT_FOUND));
+
+        if (Objects.nonNull(updateArticleRequest.image())) {
+            String thumbnail = fileService.UploadFile(updateArticleRequest.image());
+            article.setThumbnail(thumbnail);
+        }
 
         article.setTitle(updateArticleRequest.title());
         article.setContent(updateArticleRequest.content());
         article.setSummary(updateArticleRequest.summary());
-        article.setThumbnail(updateArticleRequest.thumbnail());
         article.setPinned(updateArticleRequest.pinned());
-        article.setViewCount(updateArticleRequest.viewCount());
         article.setAllowedComment(updateArticleRequest.allowedComment());
         article.setPublishStatus(updateArticleRequest.publishStatus());
 
@@ -148,7 +150,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .collect(Collectors.toSet());
         article.setTags(tags);
 
-        articleRepository.save(article);
+        return articleRepository.save(article);
     }
 
     @Override

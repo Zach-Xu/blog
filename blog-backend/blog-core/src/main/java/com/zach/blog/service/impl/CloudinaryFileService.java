@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 
@@ -24,6 +23,7 @@ import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 public class CloudinaryFileService implements FileService {
     private final Cloudinary cloudinary;
     private static final String URL_PREFIX = "https://res.cloudinary.com/";
+    private static final Set<String> allowedFileTypes = new HashSet<>(Arrays.asList(".png",".jpg",".jpeg"));
 
     @Value("${zach.blog.cloudinary.name}")
     private String cloudName;
@@ -35,7 +35,7 @@ public class CloudinaryFileService implements FileService {
             throw new MissingParameterException("Image file is required");
         }
 
-        if (!file.getOriginalFilename().endsWith(".png")) {
+        if (allowedFileTypes.stream().noneMatch(extension -> file.getOriginalFilename().endsWith(extension))) {
             throw new UnsupportedFileTypeException();
         }
 

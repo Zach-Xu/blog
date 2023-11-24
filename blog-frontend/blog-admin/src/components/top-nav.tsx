@@ -9,6 +9,8 @@ import { RootState } from '../redux/store';
 import Path from './path';
 import { usePopover } from '../hooks/use-popover';
 import { AccountPopover } from './account-popover/account-popover';
+import { matchRoutes, useLocation } from 'react-router-dom';
+import BackButton from './common/back-button';
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -26,6 +28,11 @@ const TopNav = ({ onNavOpen }: Props) => {
     const { user } = useSelector((state: RootState) => state.auth)
 
     const accountPopover = usePopover();
+
+    const location = useLocation()
+
+    // display back button only when writing or editting an article
+    const match = matchRoutes([{ path: '/write' }, { path: '/edit' }], location)
 
     return (
         <>
@@ -51,7 +58,8 @@ const TopNav = ({ onNavOpen }: Props) => {
                     spacing={2}
                     sx={lgUp ? {
                         minHeight: TOP_NAV_HEIGHT,
-                        px: 5
+                        px: match ? 2 : 5,
+                        pr: 5
                     } : {
                         minHeight: TOP_NAV_HEIGHT,
                         px: 2
@@ -72,7 +80,13 @@ const TopNav = ({ onNavOpen }: Props) => {
                         justifyContent='space-between'
                         spacing={2}
                     >
-                        <Path path={path} />
+                        {
+                            match ?
+                                <BackButton />
+                                :
+                                <Path path={path} />
+                        }
+
                         <Avatar
                             onClick={accountPopover.handleOpen}
                             ref={accountPopover.anchorRef}
@@ -84,6 +98,8 @@ const TopNav = ({ onNavOpen }: Props) => {
                             src={user?.avatar || "/assets/avatars/avatar-anika-visser.png"}
                         />
                     </Stack>
+
+
                 </Stack>
             </Box>
             <AccountPopover
