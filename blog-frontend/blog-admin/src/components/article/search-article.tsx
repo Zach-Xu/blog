@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from "react-redux"
 
 import Search from "../common/search"
 import { AppDispatch, RootState } from "../../redux/store"
-import { useCallback } from "react"
-import { getArticles, updateSearch } from "../../redux/slices/article-slice"
+import { useCallback, useState } from "react"
+import { updateSearch } from "../../redux/slices/article-slice"
 import { Box, InputAdornment, OutlinedInput, Theme, Typography, useMediaQuery } from "@mui/material"
 
 
@@ -18,36 +18,30 @@ const SearchArticle = ({ }: Props) => {
     const title = useSelector((state: RootState) => state.article.search.title)
     const summary = useSelector((state: RootState) => state.article.search.summary)
 
+    const [localSummary, setLocalSummary] = useState(summary)
+
     const dispatch = useDispatch<AppDispatch>()
 
     const handleTitleKeyUp = useCallback((event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
             const searchTitle = event.target.value.trim()
             dispatch(updateSearch({ title: searchTitle }))
-            dispatch(getArticles({
-                title: searchTitle,
-                summary
-            }))
         }
-    }, [summary])
+    }, [])
 
     const handleSummaryKeyUp = useCallback((event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
             const searchSummary = event.target.value.trim()
             dispatch(updateSearch({ summary: searchSummary }))
-            dispatch(getArticles({
-                title,
-                summary: searchSummary
-            }))
         }
-    }, [title])
+    }, [])
 
     const handleClick = useCallback((searchName: string) => {
-        dispatch(getArticles({
+        dispatch(updateSearch({
             title: searchName,
-            summary
+            summary: localSummary
         }))
-    }, [summary])
+    }, [localSummary])
 
 
     return (
@@ -80,8 +74,8 @@ const SearchArticle = ({ }: Props) => {
                         <InputAdornment position="start">
                         </InputAdornment>
                     )}
-                    value={summary}
-                    onChange={(e) => dispatch(updateSearch({ summary: e.target.value }))}
+                    value={localSummary}
+                    onChange={(e) => setLocalSummary(e.target.value)}
                     sx={mdUp ? { maxWidth: 350 } : { maxWidth: 500 }}
                     onKeyUp={handleSummaryKeyUp}
                 />

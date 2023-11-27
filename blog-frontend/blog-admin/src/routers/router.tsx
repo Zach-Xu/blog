@@ -13,12 +13,13 @@ import DashboardLayout from "../layouts/dashboard/layout";
 import SystemManagement from "../pages/dashboard/system";
 import ContentManagement from "../pages/dashboard/content";
 import NotFound from "../pages/dashboard/not-found";
+import RolePage from "../pages/dashboard/system/role-page";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
     '/system': <SystemManagement />,
     // '/system/user': <UserList />,
-    // '/system/role': <RoleList/>,
+    '/system/role': <RolePage />,
     '/system/menu': <MenuPage />,
     '/content': <ContentManagement />,
     '/content/article': <ArticlePage />,

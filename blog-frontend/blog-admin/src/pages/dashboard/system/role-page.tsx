@@ -1,34 +1,13 @@
-import { PlusIcon } from '@heroicons/react/20/solid';
-import { useMediaQuery, Box, Container, Stack, Button, SvgIcon, Theme } from '@mui/material';
-import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { PlusIcon } from "@heroicons/react/20/solid"
+import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
+import { useOpenClose } from "../../../hooks/use-open-close"
+import AddCategoryModal from "../../../components/category/add-category-modal"
+import RoleTable from "../../../components/role/role-table"
+import SearchRole from "../../../components/role/search-role"
 
-import AddTagModal from '../../../components/tag/add-tag-modal';
-import { TagsTable } from '../../../components/tag/tag-table';
-import { useOpenClose } from '../../../hooks/use-open-close';
-import { updateSearchName } from '../../../redux/slices/tag-slice';
-import { RootState, AppDispatch } from '../../../redux/store';
-import Search from '../../../components/common/search';
+const RolePage = () => {
 
-
-const TagPage = () => {
-
-    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
-
-    const name = useSelector((state: RootState) => state.tag.name)
-
-    const dispatch = useDispatch<AppDispatch>()
-
-    const onKeyUpHandler = useCallback((event: React.KeyboardEvent) => {
-        if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
-            const searchName = event.target.value.trim()
-            dispatch(updateSearchName(searchName))
-        }
-    }, [])
-
-    const clickHandler = useCallback((searchName: string) => {
-        dispatch(updateSearchName(searchName))
-    }, [])
+    const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const { open, handleOpen, handleClose } = useOpenClose()
 
@@ -62,14 +41,11 @@ const TagPage = () => {
                                     }
                             }
                         >
-                            <Search
-                                searchName={name}
-                                onKeyUpHandler={onKeyUpHandler}
-                                clickHandler={clickHandler}
-                                name='Tag name'
-                                placeholder='please input tag name'
-                            />
+                            <SearchRole />
                             <Box
+                                sx={mdUp ? {
+                                    ml: 2
+                                } : {}}
                             >
                                 <Button
                                     startIcon={(
@@ -84,11 +60,13 @@ const TagPage = () => {
                                 </Button>
                             </Box>
                         </Stack>
-                        <TagsTable />
+
+                        <RoleTable />
+
                     </Stack>
                 </Container>
             </Box>
-            <AddTagModal
+            <AddCategoryModal
                 open={open}
                 handleClose={handleClose}
             />
@@ -96,4 +74,4 @@ const TagPage = () => {
     )
 }
 
-export default TagPage
+export default RolePage

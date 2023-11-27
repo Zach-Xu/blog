@@ -1,11 +1,6 @@
 import { PlusIcon } from "@heroicons/react/20/solid"
 import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
-import Loading from "../../../components/common/loading"
 import { useOpenClose } from "../../../hooks/use-open-close"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../../../redux/store"
-import { useEffect } from "react"
-import { getCategories, getParentCategories } from "../../../redux/slices/category-slice"
 import CategoryTable from "../../../components/category/category-table"
 import AddCategoryModal from "../../../components/category/add-category-modal"
 import SearchCategory from "../../../components/category/search-category"
@@ -15,8 +10,6 @@ const CategoryPage = () => {
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const { open, handleOpen, handleClose } = useOpenClose()
-
-
 
     return (
         <>

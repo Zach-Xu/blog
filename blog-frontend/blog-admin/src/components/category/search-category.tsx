@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import { updateSearchName, updateSearchStatus } from "../../redux/slices/category-slice"
+import { updateSearch } from "../../redux/slices/category-slice"
 import Search from "../common/search"
 import { AppDispatch, RootState } from "../../redux/store"
-import { useCallback } from "react"
-import { getCategories } from "../../redux/slices/category-slice"
+import { useCallback, useState } from "react"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
 
 
@@ -12,36 +11,36 @@ const SearchCategory = () => {
     const name = useSelector((state: RootState) => state.category.search.name)
     const enable = useSelector((state: RootState) => state.category.search.enable)
 
+    const [localEnable, setLocalEnable] = useState(enable)
+
     const dispatch = useDispatch<AppDispatch>()
 
     const handleKeyUp = useCallback((event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
             const searchName = event.target.value.trim()
-            dispatch(updateSearchName(searchName))
-            dispatch(getCategories({
+            dispatch(updateSearch({
                 name: searchName,
-                enable
+                enable: localEnable
             }))
         }
-    }, [enable])
+    }, [localEnable])
 
     const handleClick = useCallback((searchName: string) => {
-
-        dispatch(getCategories({
+        dispatch(updateSearch({
             name: searchName,
-            enable,
+            enable: localEnable
         }))
-    }, [enable])
+    }, [localEnable])
 
     const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateSearchStatus(e.target.value === 'true'))
+        setLocalEnable(e.target.value === 'true')
     }
 
     const handleLabelClick = (e: React.ChangeEvent<any>) => {
         const current = e.target.value === 'true'
-        const unselect = enable === current
+        const unselect = localEnable === current
         if (unselect) {
-            dispatch(updateSearchStatus(null))
+            setLocalEnable(null)
         }
     }
 
@@ -61,7 +60,7 @@ const SearchCategory = () => {
                     ml: 2
                 }}
                 name={'enable'}
-                value={enable}
+                value={localEnable}
                 onChange={handleRadioChange}
             >
                 <FormControlLabel value={true} control={<Radio />} onClick={handleLabelClick} label="Enable" />

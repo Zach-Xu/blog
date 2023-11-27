@@ -3,16 +3,13 @@ import Search from "../common/search"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useCallback, useState } from "react"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
-import { updateSearch } from "../../redux/slices/menu-slice"
+import { updateSearch } from "../../redux/slices/role-slice"
 
+const SearchRole = () => {
 
-const SearchMenu = () => {
-
-    const name = useSelector((state: RootState) => state.menu.search.name)
-    const enable = useSelector((state: RootState) => state.menu.search.enable)
-
+    const name = useSelector((state: RootState) => state.role.search.name)
+    const enable = useSelector((state: RootState) => state.role.search.enable)
     const [localEnable, setLocalEnable] = useState(enable)
-
     const dispatch = useDispatch<AppDispatch>()
 
     const handleKeyUp = useCallback((event: React.KeyboardEvent) => {
@@ -36,6 +33,7 @@ const SearchMenu = () => {
         setLocalEnable(e.target.value === 'true')
     }
 
+
     const handleLabelClick = (e: React.ChangeEvent<any>) => {
         const current = e.target.value === 'true'
         const unselect = localEnable === current
@@ -49,8 +47,8 @@ const SearchMenu = () => {
             searchName={name}
             onKeyUpHandler={handleKeyUp}
             clickHandler={handleClick}
-            name='Menu name'
-            placeholder='Menu name'
+            name='Role name'
+            placeholder='Role name'
         >
             <RadioGroup
                 unselectable="on"
@@ -70,4 +68,4 @@ const SearchMenu = () => {
     )
 }
 
-export default SearchMenu
+export default SearchRole

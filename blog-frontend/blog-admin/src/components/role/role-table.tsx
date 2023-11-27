@@ -9,10 +9,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { updatePageNum } from '../../redux/slices/tag-slice';
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
-import { changeCategoryStatus, deleteCategory, getCategories, getParentCategories } from '../../redux/slices/category-slice';
-import EditCategoryModal from './edit-category-modal';
+import { changeCategoryStatus } from '../../redux/slices/category-slice';
+import { getRoles } from '../../redux/slices/role-slice';
+import EditCategoryModal from '../category/edit-category-modal';
 
-const CategoryTable = () => {
+const RoleTable = () => {
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -20,20 +21,20 @@ const CategoryTable = () => {
         dispatch(updatePageNum(value - 1))
     }, [])
 
-    const [selectedCategory, setSelectedCategory] = useState<Category>()
+    const [selectedRole, setSelectedRole] = useState<Role>()
 
     const { open, handleOpen, handleClose } = useOpenClose()
 
-    const editCategoryModal = useOpenClose()
+    const editRoleModal = useOpenClose()
 
-    const deleteCategoryHandler = (category: Category) => {
-        setSelectedCategory(category)
+    const deleteRoleHandler = (role: Role) => {
+        setSelectedRole(role)
         handleOpen()
     }
 
-    const editCategoryHandler = (category: Category) => {
-        setSelectedCategory(category)
-        editCategoryModal.handleOpen()
+    const editRoleHandler = (role: Role) => {
+        setSelectedRole(role)
+        editRoleModal.handleOpen()
     }
 
     const handleEnableChange = async (request: ChangeStatusRequest) => {
@@ -41,29 +42,22 @@ const CategoryTable = () => {
     }
 
     const confirmDelete = useCallback(() => {
-        if (selectedCategory) {
-            dispatch(deleteCategory(selectedCategory.id))
+        if (selectedRole) {
+            // dispatch(deleteRole(selectedRole.id))
         }
-    }, [selectedCategory])
+    }, [selectedRole])
 
-    const categories = useSelector((state: RootState) => state.category.rows)
-    const currentPageNum = useSelector((state: RootState) => state.category.currentPageNum)
-    const totalPages = useSelector((state: RootState) => state.category.total)
-    const search = useSelector((state: RootState) => state.category.search)
+    const roles = useSelector((state: RootState) => state.role.rows)
+    const currentPageNum = useSelector((state: RootState) => state.role.currentPageNum)
+    const totalPages = useSelector((state: RootState) => state.role.totalPages)
+    const search = useSelector((state: RootState) => state.role.search)
 
     useEffect(() => {
-        dispatch(getCategories({
+        dispatch(getRoles({
             pageNum: currentPageNum,
             ...search
         }))
     }, [currentPageNum, search])
-
-    useEffect(() => {
-        const fetchParentCategories = async () => {
-            dispatch(getParentCategories())
-        }
-        fetchParentCategories()
-    }, [])
 
 
     return (
@@ -84,13 +78,13 @@ const CategoryTable = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>
-                                        id
+                                        Role name
                                     </TableCell>
                                     <TableCell>
-                                        Tag name
+                                        display Order
                                     </TableCell>
                                     <TableCell>
-                                        description
+                                        Created Time
                                     </TableCell>
                                     <TableCell>
                                         enable
@@ -102,29 +96,31 @@ const CategoryTable = () => {
                             </TableHead>
                             {
                                 <TableBody>
-                                    {categories.map((category) => {
+                                    {roles.map((role) => {
                                         return (
                                             <TableRow
                                                 hover
-                                                key={category.id}
+                                                key={role.id}
                                             >
                                                 <TableCell>
-                                                    {category.id}
+                                                    {role.roleName}
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Typography variant="subtitle2">
-                                                        {category.name}
+                                                    <Typography >
+                                                        {role.displayOrder}
                                                     </Typography>
                                                 </TableCell>
                                                 <TableCell>
-                                                    {category.description}
+                                                    <Typography variant="subtitle2">
+                                                        {new Date(role.createdTime).toLocaleString()}
+                                                    </Typography>
                                                 </TableCell>
                                                 <TableCell>
                                                     <Switch
-                                                        checked={category.enable}
+                                                        checked={role.enable}
                                                         onChange={() => handleEnableChange({
-                                                            id: category.id,
-                                                            enable: !category.enable
+                                                            id: role.id,
+                                                            enable: !role.enable
                                                         })}
                                                         inputProps={{ 'aria-label': 'controlled' }}
                                                     />
@@ -147,7 +143,7 @@ const CategoryTable = () => {
                                                                     bgcolor: 'white'
                                                                 }
                                                             }}
-                                                            onClick={() => editCategoryHandler(category)}
+                                                            onClick={() => editRoleHandler(role)}
                                                         >
                                                             Edit
                                                         </Button>
@@ -161,7 +157,7 @@ const CategoryTable = () => {
                                                                     bgcolor: 'white'
                                                                 }
                                                             }}
-                                                            onClick={() => deleteCategoryHandler(category)}
+                                                            onClick={() => deleteRoleHandler(role)}
                                                         >
                                                             Delete
                                                         </Button>
@@ -175,9 +171,9 @@ const CategoryTable = () => {
 
                         </Table>
                         {
-                            selectedCategory &&
+                            selectedRole &&
                             <AlertDialog
-                                deleteMessage={`Are you sure to delete category: ${selectedCategory.name} ?`}
+                                deleteMessage={`Are you sure to delete role: ${selectedRole.roleName} ?`}
                                 open={open}
                                 handleClose={handleClose}
                                 confirmAction={confirmDelete}
@@ -195,14 +191,14 @@ const CategoryTable = () => {
             </Stack>
 
             <EditCategoryModal
-                open={editCategoryModal.open}
-                handleClose={editCategoryModal.handleClose}
-                item={selectedCategory}
+                open={editRoleModal.open}
+                handleClose={editRoleModal.handleClose}
+                item={undefined}
             />
 
         </Box >
     );
 };
 
-export default CategoryTable
+export default RoleTable
 

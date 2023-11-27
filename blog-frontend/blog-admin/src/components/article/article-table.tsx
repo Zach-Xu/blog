@@ -19,7 +19,8 @@ interface Props {
 
 const ArticleTable = ({ articles }: Props) => {
 
-    const { totalPages, currentPageNum } = useSelector((state: RootState) => state.article)
+    const totalPages = useSelector((state: RootState) => state.article.totalPages)
+    const currentPageNum = useSelector((state: RootState) => state.article.currentPageNum)
 
     const dispatch = useDispatch<AppDispatch>()
 

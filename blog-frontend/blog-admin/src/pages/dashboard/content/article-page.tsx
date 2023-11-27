@@ -15,19 +15,18 @@ const ArticlePage = () => {
 
     const { isLoading } = useSelector((state: RootState) => state.loading)
     const { rows: articles, currentPageNum } = useSelector((state: RootState) => state.article)
+    const search = useSelector((state: RootState) => state.article.search)
 
     const navigate = useNavigate()
 
     const dispatch = useDispatch<AppDispatch>()
 
     useEffect(() => {
-        if (articles.length === 0) {
-            dispatch(getArticles({
-                pageNum: currentPageNum
-            }))
-        }
-    }, [currentPageNum])
-
+        dispatch(getArticles({
+            pageNum: currentPageNum,
+            ...search
+        }))
+    }, [currentPageNum, search])
 
     return (
         <Box

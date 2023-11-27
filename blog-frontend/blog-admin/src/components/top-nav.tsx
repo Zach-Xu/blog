@@ -23,8 +23,6 @@ const TopNav = ({ onNavOpen }: Props) => {
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
-    const { path } = useSelector((state: RootState) => state.router)
-
     const { user } = useSelector((state: RootState) => state.auth)
 
     const accountPopover = usePopover();
@@ -84,7 +82,7 @@ const TopNav = ({ onNavOpen }: Props) => {
                             match ?
                                 <BackButton />
                                 :
-                                <Path path={path} />
+                                <Path />
                         }
 
                         <Avatar

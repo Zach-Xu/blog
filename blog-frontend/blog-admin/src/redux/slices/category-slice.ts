@@ -57,12 +57,12 @@ export const categorySlice = createSlice({
     name: 'category',
     initialState,
     reducers: {
-        updateSearchName: (state, action: PayloadAction<string>) => {
-            state.search.name = action.payload
+        updateSearch: (state, action: PayloadAction<Partial<typeof initialState.search>>) => {
+            state.search = {
+                ...state.search,
+                ...action.payload
+            }
         },
-        updateSearchStatus: (state, action: PayloadAction<boolean | null>) => {
-            state.search.enable = action.payload
-        }
     },
     extraReducers: (builder) => {
 
@@ -138,4 +138,4 @@ export const categorySlice = createSlice({
 })
 
 export default categorySlice.reducer
-export const { updateSearchName, updateSearchStatus } = categorySlice.actions
+export const { updateSearch } = categorySlice.actions

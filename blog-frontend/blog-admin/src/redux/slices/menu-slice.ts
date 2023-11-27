@@ -60,12 +60,12 @@ export const menuSlice = createSlice({
             let { id } = action.payload
             state.selectedMenuId = id
         },
-        updateSearchName: (state, action: PayloadAction<string>) => {
-            state.search.name = action.payload
+        updateSearch: (state, action: PayloadAction<Partial<typeof initialState.search>>) => {
+            state.search = {
+                ...state.search,
+                ...action.payload
+            }
         },
-        updateSearchStatus: (state, action: PayloadAction<boolean | null>) => {
-            state.search.enable = action.payload
-        }
     },
     extraReducers: (builder) => {
         builder
@@ -94,5 +94,5 @@ export const menuSlice = createSlice({
     }
 })
 
-export const { updateSelectedMenu, updateSearchName, updateSearchStatus } = menuSlice.actions
+export const { updateSelectedMenu, updateSearch } = menuSlice.actions
 export default menuSlice.reducer

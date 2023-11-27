@@ -5,21 +5,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { useCallback, useState } from 'react';
-import { deleteTag, updatePageNum } from '../../redux/slices/tag-slice';
+import { useCallback, useEffect, useState } from 'react';
+import { deleteTag, getTags, updatePageNum } from '../../redux/slices/tag-slice';
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
 import EditTagModal from './edit-tag-modal';
 
+export const TagsTable = () => {
 
-interface Props {
-    tags: Tag[],
-};
-
-
-export const TagsTable = ({ tags }: Props) => {
-
-    const { totalPages, currentPageNum } = useSelector((state: RootState) => state.tag)
+    const tags = useSelector((state: RootState) => state.tag.rows)
+    const totalPages = useSelector((state: RootState) => state.tag.totalPages)
+    const currentPageNum = useSelector((state: RootState) => state.tag.currentPageNum)
+    const searchName = useSelector((state: RootState) => state.tag.name)
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -48,6 +45,13 @@ export const TagsTable = ({ tags }: Props) => {
             dispatch(deleteTag(selectedTag.id))
         }
     }, [selectedTag])
+
+    useEffect(() => {
+        dispatch(getTags({
+            pageNum: currentPageNum,
+            name: searchName
+        }))
+    }, [currentPageNum, searchName])
 
     return (
         <Box

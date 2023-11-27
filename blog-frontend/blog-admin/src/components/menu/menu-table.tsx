@@ -13,13 +13,17 @@ const MenuTable = () => {
 
     const dispatch = useDispatch<AppDispatch>()
 
+    const search = useSelector((state: RootState) => state.menu.search)
+
 
     useEffect(() => {
         const fetchMenusTree = async () => {
-            dispatch(getMenusInTree({}))
+            dispatch(getMenusInTree({
+                ...search
+            }))
         }
         fetchMenusTree()
-    }, [])
+    }, [search])
 
 
     return (

@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSelectedMenu } from '../../redux/slices/menu-slice';
 import { RootState } from '../../redux/store';
-import { updateRouterPath } from '../../redux/slices/router-path-slice';
 import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -34,9 +33,6 @@ const NestedMenu = ({ menu }: Props) => {
         dispatch(updateSelectedMenu({
             id: menu.id
         }))
-        dispatch(updateRouterPath({
-            path: menu.component
-        }))
 
         menu.routerPath && navigate(menu.routerPath)
     }
@@ -56,7 +52,7 @@ const NestedMenu = ({ menu }: Props) => {
                     <SendIcon />
                 </ListItemIcon> */}
                 <ListItemText primary={menu.name} />
-                {open ? <ExpandLess /> : <ExpandMore />}
+                {open ? <ExpandMore /> : <ExpandLess />}
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>

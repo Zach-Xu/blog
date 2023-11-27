@@ -81,7 +81,7 @@ const MenuRow = ({ menu, padding = 5 }: Props) => {
                             size="small"
                             onClick={() => setOpen(!open)}
                         >
-                            {open ? <ChevronRightIcon /> : <ExpandMoreIcon />}
+                            {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
                         </IconButton>
                         <Typography variant="subtitle2">
                             {menu.name}

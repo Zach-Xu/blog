@@ -1,19 +1,19 @@
 import { Stack, Typography } from '@mui/material'
-import { Fragment } from 'react'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 
-interface Props {
-    path: string[] | null
-}
 
-const Path = ({ path }: Props) => {
+const Path = () => {
 
-    if (!path) {
-        return (
-            <Typography variant='h6'>
-                Dashboard
-            </Typography>
-        )
-    }
+    const location = useLocation()
+
+    const path = useMemo(() => {
+        const parts = location.pathname.split('/')
+            .filter(part => part !== '')
+            .flatMap(part => ["/", part.charAt(0).toUpperCase() + part.slice(1)])
+        parts.unshift('Dashboard')
+        return parts
+    }, [location.pathname])
 
     return (
         <Stack
@@ -21,27 +21,14 @@ const Path = ({ path }: Props) => {
             direction="row"
             spacing={2}
         >
-            {path.map((path, idx) => {
-                if (idx === 0) {
-                    return (
-                        <Typography variant='h6' key={'dashboard'}>
-                            Dashboard
-                        </Typography>
-                    )
-                }
-                else {
-                    return (
-                        <Fragment key={path}>
-                            <Typography variant='h6'>
-                                /
-                            </Typography>
-                            <Typography variant='h6'>
-                                {path}
-                            </Typography>
-                        </Fragment>
-                    )
-                }
-            })}
+            {
+                path.map((part, idx) => (
+                    <Typography variant='h6' key={part + idx}>
+                        {part}
+                    </Typography>
+                ))
+            }
+
 
         </Stack>
     )
