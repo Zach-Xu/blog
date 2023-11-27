@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify'
 
 function App() {
   const { router } = useAppRouter()
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

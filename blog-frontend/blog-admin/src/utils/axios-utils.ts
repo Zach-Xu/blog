@@ -44,8 +44,6 @@ const commonResponseInterceptor = (res: AxiosResponse) => {
 
     store.dispatch(endLoading())
 
-    console.log('res', res)
-
     // The response status code is defaulting to 200 
     // because we wrap the code and error message in a custom object
     // Therefore we should manully check the code and handle the error

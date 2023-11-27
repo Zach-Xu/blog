@@ -5,15 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSelectedMenu } from '../../redux/slices/menu-slice';
 import { RootState } from '../../redux/store';
 import { updateRouterPath } from '../../redux/slices/router-path-slice';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     menu: Menu
-    subMenus: Menu[]
 }
 
-const NestedMenu = ({ menu, subMenus }: Props) => {
+const NestedMenu = ({ menu }: Props) => {
 
     const [open, setOpen] = useState(true)
+
+    const navigate = useNavigate()
 
     const dispatch = useDispatch()
 
@@ -28,13 +30,15 @@ const NestedMenu = ({ menu, subMenus }: Props) => {
         }
     }
 
-    const selectMenu = (menu: Menu) => {
+    const handleSubMenuClick = (menu: Menu) => {
         dispatch(updateSelectedMenu({
             id: menu.id
         }))
         dispatch(updateRouterPath({
             path: menu.component
         }))
+
+        menu.routerPath && navigate(menu.routerPath)
     }
 
     return (
@@ -57,10 +61,10 @@ const NestedMenu = ({ menu, subMenus }: Props) => {
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     {
-                        subMenus.map(sMenu => (
+                        menu.subMenus && menu.subMenus.map(sMenu => (
                             <ListItemButton
                                 key={sMenu.id}
-                                onClick={() => selectMenu(sMenu)}
+                                onClick={() => handleSubMenuClick(sMenu)}
                                 selected={selectedMenuId === sMenu.id}
                                 sx={{
                                     pl: 4,

@@ -1,7 +1,6 @@
 import { PlusIcon } from "@heroicons/react/20/solid"
 import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
 import Loading from "../../../components/common/loading"
-import DashboardLayout from "../../../layouts/dashboard/layout"
 import { useOpenClose } from "../../../hooks/use-open-close"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../redux/store"
@@ -18,27 +17,9 @@ const CategoryPage = () => {
     const { open, handleOpen, handleClose } = useOpenClose()
 
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
-    const { rows: categories, currentPageNum } = useSelector((state: RootState) => state.category)
-
-    const dispatch = useDispatch<AppDispatch>()
-
-    useEffect(() => {
-        dispatch(getCategories({
-            pageNum: currentPageNum
-        }))
-    }, [currentPageNum])
-
-    useEffect(() => {
-        const fetchParentCategories = async () => {
-            dispatch(getParentCategories())
-        }
-        fetchParentCategories()
-    }, [])
-
 
     return (
-        <DashboardLayout>
+        <>
             <Box
                 component='main'
                 sx={{
@@ -86,12 +67,9 @@ const CategoryPage = () => {
                                 </Button>
                             </Box>
                         </Stack>
-                        {
-                            isLoading ?
-                                <Loading />
-                                :
-                                <CategoryTable categories={categories} />
-                        }
+
+                        <CategoryTable />
+
                     </Stack>
                 </Container>
             </Box>
@@ -99,7 +77,7 @@ const CategoryPage = () => {
                 open={open}
                 handleClose={handleClose}
             />
-        </DashboardLayout>
+        </>
     )
 }
 

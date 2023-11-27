@@ -1,9 +1,9 @@
 package com.zach.blog.dto.response;
 
-import com.zach.blog.enums.MenuType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,5 +13,13 @@ public class MenuTreeViewResponse {
     private Long parentId;
     private Integer displayOrder;
     private String name;
-    private List<MenuTreeViewResponse> subMenus;
+    private String routerPath;
+    private String permission;
+    private String component;
+    private Boolean enable;
+    private List<MenuTreeViewResponse> subMenus = new ArrayList<>();
+
+    public void addSubMenu(MenuTreeViewResponse subMenu){
+        this.subMenus.add(subMenu);
+    }
 }

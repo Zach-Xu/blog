@@ -7,7 +7,6 @@ import Loading from '../../../components/common/loading';
 import AddTagModal from '../../../components/tag/add-tag-modal';
 import { TagsTable } from '../../../components/tag/tag-table';
 import { useOpenClose } from '../../../hooks/use-open-close';
-import DashboardLayout from '../../../layouts/dashboard/layout'
 import { updateSearchName, getTags } from '../../../redux/slices/tag-slice';
 import { RootState, AppDispatch } from '../../../redux/store';
 import Search from '../../../components/common/search';
@@ -48,7 +47,7 @@ const TagPage = () => {
     }, [currentPageNum])
 
     return (
-        <DashboardLayout>
+        <>
             <Box
                 component='main'
                 sx={{
@@ -113,7 +112,7 @@ const TagPage = () => {
                 open={open}
                 handleClose={handleClose}
             />
-        </DashboardLayout>
+        </>
     )
 }
 

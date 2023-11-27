@@ -5,9 +5,7 @@ import { toast } from "react-toastify";
 import { MenuProps, getStyles } from "../../utils/drop-down-utils";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { updateWriteArticle } from "../../redux/slices/article-slice";
 import { updateErrorMessage } from "../../redux/slices/error-message-slice";
-import { AnyAction } from "redux";
 
 
 const getTagName = (id: number, tags?: Tag[]): string => {
@@ -36,7 +34,7 @@ const TagDropDown = ({ tagIds, tagsChangeHandler }: Props) => {
 
     const theme = useTheme();
 
-    const [tags, setTags] = useState<Tag[]>([])
+    const [tags, setTags] = useState<Tag[]>()
 
     const tagIdError = useSelector((state: RootState) => state.errorMessage.article.tagIds)
 
@@ -47,7 +45,7 @@ const TagDropDown = ({ tagIds, tagsChangeHandler }: Props) => {
         if (tagIdError !== '') {
             dispatch(updateErrorMessage({ tagIds: '' }))
         }
-    };
+    }
 
     useEffect(() => {
         const fetchTags = async () => {
@@ -101,7 +99,7 @@ const TagDropDown = ({ tagIds, tagsChangeHandler }: Props) => {
                         MenuProps={MenuProps}
                     >
                         {
-                            tags.map((tag) => (
+                            tags && tags.map((tag) => (
                                 <MenuItem
                                     key={tag.id}
                                     value={tag.id}

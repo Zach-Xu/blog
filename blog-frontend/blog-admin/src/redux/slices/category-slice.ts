@@ -32,7 +32,7 @@ export const getCategories = createAsyncThunk('/categories', async (query: GetCa
     return result
 })
 
-export const changeCategoryStatus = createAsyncThunk('/category/status', async (request: ChangeCategoryStatus) => {
+export const changeCategoryStatus = createAsyncThunk('/category/status', async (request: ChangeStatusRequest) => {
     const result = await categoryService.changeCategoryStatus(request)
     return result
 })

@@ -41,7 +41,6 @@ export const tagSlice = createSlice({
     initialState,
     reducers: {
         updateSearchName: (state, action: PayloadAction<string>) => {
-            console.log('updating search name...')
             state.name = action.payload
         },
         updatePageNum: (state, action: PayloadAction<number>) => {

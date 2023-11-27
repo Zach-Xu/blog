@@ -5,21 +5,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { updatePageNum } from '../../redux/slices/tag-slice';
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
-import { changeCategoryStatus, deleteCategory } from '../../redux/slices/category-slice';
+import { changeCategoryStatus, deleteCategory, getCategories, getParentCategories } from '../../redux/slices/category-slice';
 import EditCategoryModal from './edit-category-modal';
 
-
-interface Props {
-    categories: Category[],
-};
-
-const CategoryTable = ({ categories }: Props) => {
-
-    const { totalPages, currentPageNum } = useSelector((state: RootState) => state.category)
+const CategoryTable = () => {
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -43,7 +36,7 @@ const CategoryTable = ({ categories }: Props) => {
         editCategoryModal.handleOpen()
     }
 
-    const handleEnableChange = async (request: ChangeCategoryStatus) => {
+    const handleEnableChange = async (request: ChangeStatusRequest) => {
         dispatch(changeCategoryStatus(request))
     }
 
@@ -52,6 +45,22 @@ const CategoryTable = ({ categories }: Props) => {
             dispatch(deleteCategory(selectedCategory.id))
         }
     }, [selectedCategory])
+
+    const { rows: categories, currentPageNum, totalPages } = useSelector((state: RootState) => state.category)
+
+    useEffect(() => {
+        dispatch(getCategories({
+            pageNum: currentPageNum
+        }))
+    }, [currentPageNum])
+
+    useEffect(() => {
+        const fetchParentCategories = async () => {
+            dispatch(getParentCategories())
+        }
+        fetchParentCategories()
+    }, [])
+
 
     return (
         <Box
@@ -87,76 +96,79 @@ const CategoryTable = ({ categories }: Props) => {
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
-                                {categories.map((category) => {
-                                    return (
-                                        <TableRow
-                                            hover
-                                            key={category.id}
-                                        >
-                                            <TableCell>
-                                                {category.id}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography variant="subtitle2">
-                                                    {category.name}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                {category.description}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Switch
-                                                    checked={category.enable}
-                                                    onChange={() => handleEnableChange({
-                                                        id: category.id,
-                                                        enable: !category.enable
-                                                    })}
-                                                    inputProps={{ 'aria-label': 'controlled' }}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <Stack
-                                                    spacing={2}
-                                                    direction='row'
-                                                >
-                                                    <Button
-                                                        variant="outlined"
-                                                        startIcon={(
-                                                            <SvgIcon fontSize="small">
-                                                                <PencilSquareIcon />
-                                                            </SvgIcon>
-                                                        )}
-                                                        sx={{
-                                                            bgcolor: 'white',
-                                                            '&:hover': {
-                                                                bgcolor: 'white'
-                                                            }
-                                                        }}
-                                                        onClick={() => editCategoryHandler(category)}
+                            {
+                                <TableBody>
+                                    {categories.map((category) => {
+                                        return (
+                                            <TableRow
+                                                hover
+                                                key={category.id}
+                                            >
+                                                <TableCell>
+                                                    {category.id}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography variant="subtitle2">
+                                                        {category.name}
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    {category.description}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Switch
+                                                        checked={category.enable}
+                                                        onChange={() => handleEnableChange({
+                                                            id: category.id,
+                                                            enable: !category.enable
+                                                        })}
+                                                        inputProps={{ 'aria-label': 'controlled' }}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Stack
+                                                        spacing={2}
+                                                        direction='row'
                                                     >
-                                                        Edit
-                                                    </Button>
-                                                    <Button
-                                                        variant="outlined"
-                                                        startIcon={<DeleteIcon />}
-                                                        color='error'
-                                                        sx={{
-                                                            bgcolor: 'white',
-                                                            '&:hover': {
-                                                                bgcolor: 'white'
-                                                            }
-                                                        }}
-                                                        onClick={() => deleteTagHandler(category)}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                </Stack>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
+                                                        <Button
+                                                            variant="outlined"
+                                                            startIcon={(
+                                                                <SvgIcon fontSize="small">
+                                                                    <PencilSquareIcon />
+                                                                </SvgIcon>
+                                                            )}
+                                                            sx={{
+                                                                bgcolor: 'white',
+                                                                '&:hover': {
+                                                                    bgcolor: 'white'
+                                                                }
+                                                            }}
+                                                            onClick={() => editCategoryHandler(category)}
+                                                        >
+                                                            Edit
+                                                        </Button>
+                                                        <Button
+                                                            variant="outlined"
+                                                            startIcon={<DeleteIcon />}
+                                                            color='error'
+                                                            sx={{
+                                                                bgcolor: 'white',
+                                                                '&:hover': {
+                                                                    bgcolor: 'white'
+                                                                }
+                                                            }}
+                                                            onClick={() => deleteTagHandler(category)}
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </Stack>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            }
+
                         </Table>
                         {
                             selectedCategory &&

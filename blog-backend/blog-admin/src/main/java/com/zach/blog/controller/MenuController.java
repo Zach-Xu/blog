@@ -1,13 +1,17 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.Validate;
+import com.zach.blog.dto.request.ChangeStatusRequest;
 import com.zach.blog.dto.response.MenuResponse;
 import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
 import com.zach.blog.service.MenuService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +42,8 @@ public class MenuController {
     }
 
     @GetMapping("/all/tree")
-    public ResponseResult<?> getAllMenusInTreeView(){
-        List<MenuTreeViewResponse> menusInTreeView = menuService.getMenusInTreeView();
+    public ResponseResult<?> getAllMenusInTreeView(@RequestParam(required = false) String name, @RequestParam(required = false) Boolean enable){
+        List<MenuTreeViewResponse> menusInTreeView = menuService.getMenusInTreeView(name, enable);
         return ResponseResult.ok(menusInTreeView);
     }
 
@@ -58,6 +62,13 @@ public class MenuController {
     @PutMapping("/{id}")
     public ResponseResult<?> updateMenu(@PathVariable Long id, @RequestBody Menu menu) {
         menuService.updateMenu(id, menu);
+        return ResponseResult.ok();
+    }
+
+    @Validate
+    @PutMapping("/{id}/status")
+    public ResponseResult<?> updateMenuStatus(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
+        menuService.changeMenuStatus(id, request.enable(), user.getId());
         return ResponseResult.ok();
     }
 

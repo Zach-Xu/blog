@@ -1,17 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import SideNav from '../../components/side-nav';
 import TopNav from '../../components/top-nav';
 import AuthGuard from '../../components/auth-guard';
 import { Box } from '@mui/material'
+import { Outlet } from 'react-router-dom';
 
-interface Props {
-    children: React.ReactNode
-}
 
 const SIDE_NAV_WIDTH = '280px';
 
-const Layout = ({ children }: Props) => {
+const Layout = () => {
     const [openNav, setOpenNav] = useState(false);
 
     const theme = useTheme()
@@ -45,7 +43,8 @@ const Layout = ({ children }: Props) => {
                     }}
 
                 >
-                    {children}
+                    {/* {children} */}
+                    <Outlet />
                 </Box>
             </Box>
         </AuthGuard>

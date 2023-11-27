@@ -16,14 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
-import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
-
 @Service
 @RequiredArgsConstructor
 public class CloudinaryFileService implements FileService {
     private final Cloudinary cloudinary;
     private static final String URL_PREFIX = "https://res.cloudinary.com/";
-    private static final Set<String> allowedFileTypes = new HashSet<>(Arrays.asList(".png",".jpg",".jpeg"));
+    private static final Set<String> allowedFileTypes = new HashSet<>(Arrays.asList(".png", ".jpg", ".jpeg"));
 
     @Value("${zach.blog.cloudinary.name}")
     private String cloudName;

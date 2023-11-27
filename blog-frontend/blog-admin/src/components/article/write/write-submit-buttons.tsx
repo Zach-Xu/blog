@@ -3,7 +3,7 @@ import SubmitButons from "../submit-buttons"
 import { useValidation } from "../../../hooks/use-validation"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../redux/store"
-import { createArticle, updateWriteArticle } from "../../../redux/slices/article-slice"
+import { createArticle, getArticles, updateWriteArticle } from "../../../redux/slices/article-slice"
 import { useNavigate } from "react-router-dom"
 
 
@@ -44,7 +44,9 @@ const WriteSubmitButtons = ({ fileInputRef }: Props) => {
         }
 
         dispatch(createArticle(data)).
-            unwrap().then(() => navigate('/article'))
+            unwrap().then(() => {
+                dispatch(getArticles({})).unwrap().then(() => navigate('/article'))
+            })
 
     }, [article, fileInputRef.current])
 

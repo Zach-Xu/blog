@@ -1,7 +1,6 @@
 import { PlusIcon } from "@heroicons/react/20/solid"
 import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
 import Loading from "../../../components/common/loading"
-import DashboardLayout from "../../../layouts/dashboard/layout"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../redux/store"
 import { useEffect } from "react"
@@ -31,64 +30,62 @@ const ArticlePage = () => {
 
 
     return (
-        <DashboardLayout>
-            <Box
-                component='main'
-                sx={{
-                    flexGrow: 1,
-                    py: 2
-                }}
-            >
-                <Container maxWidth="xl">
+        <Box
+            component='main'
+            sx={{
+                flexGrow: 1,
+                py: 2
+            }}
+        >
+            <Container maxWidth="xl">
+                <Stack
+                    spacing={3}
+                >
                     <Stack
-                        spacing={3}
-                    >
-                        <Stack
-                            sx={
-                                mdUp ?
-                                    {
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                        px: 2
-                                    } :
-                                    {
-                                        flexDirection: 'column',
-                                        justifyContent: 'center',
-                                        rowGap: 2,
-                                        px: 2
-                                    }
-                            }
-                        >
-                            <SearchArticle />
-                            <Box
-                                sx={mdUp ? {
-                                    ml: 2
-                                } : {}}
-                            >
-                                <Button
-                                    startIcon={(
-                                        <SvgIcon fontSize="small">
-                                            <PlusIcon />
-                                        </SvgIcon>
-                                    )}
-                                    variant="contained"
-                                    onClick={() => navigate('/write')}
-                                >
-                                    Add
-                                </Button>
-                            </Box>
-                        </Stack>
-                        {
-                            isLoading ?
-                                <Loading />
-                                :
-                                <ArticleTable articles={articles} />
+                        sx={
+                            mdUp ?
+                                {
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    px: 2
+                                } :
+                                {
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    rowGap: 2,
+                                    px: 2
+                                }
                         }
+                    >
+                        <SearchArticle />
+                        <Box
+                            sx={mdUp ? {
+                                ml: 2
+                            } : {}}
+                        >
+                            <Button
+                                startIcon={(
+                                    <SvgIcon fontSize="small">
+                                        <PlusIcon />
+                                    </SvgIcon>
+                                )}
+                                variant="contained"
+                                onClick={() => navigate('/write')}
+                            >
+                                Add
+                            </Button>
+                        </Box>
                     </Stack>
-                </Container>
-            </Box>
-        </DashboardLayout>
+                    {
+                        isLoading ?
+                            <Loading />
+                            :
+                            <ArticleTable articles={articles} />
+                    }
+                </Stack>
+            </Container>
+        </Box>
     )
 }
 

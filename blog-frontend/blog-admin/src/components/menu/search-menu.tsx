@@ -1,16 +1,15 @@
 import { useDispatch, useSelector } from "react-redux"
-import { updateSearchName, updateSearchStatus } from "../../redux/slices/category-slice"
 import Search from "../common/search"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useCallback } from "react"
-import { getCategories } from "../../redux/slices/category-slice"
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material"
+import { getMenusInTree, updateSearchName, updateSearchStatus } from "../../redux/slices/menu-slice"
 
 
-const SearchCategory = () => {
+const SearchMenu = () => {
 
-    const name = useSelector((state: RootState) => state.category.search.name)
-    const enable = useSelector((state: RootState) => state.category.search.enable)
+    const name = useSelector((state: RootState) => state.menu.search.name)
+    const enable = useSelector((state: RootState) => state.menu.search.enable)
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -18,7 +17,7 @@ const SearchCategory = () => {
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
             const searchName = event.target.value.trim()
             dispatch(updateSearchName(searchName))
-            dispatch(getCategories({
+            dispatch(getMenusInTree({
                 name: searchName,
                 enable
             }))
@@ -27,7 +26,7 @@ const SearchCategory = () => {
 
     const handleClick = useCallback((searchName: string) => {
 
-        dispatch(getCategories({
+        dispatch(getMenusInTree({
             name: searchName,
             enable,
         }))
@@ -50,8 +49,8 @@ const SearchCategory = () => {
             searchName={name}
             onKeyUpHandler={handleKeyUp}
             clickHandler={handleClick}
-            name='Category name'
-            placeholder='category name'
+            name='Menu name'
+            placeholder='Menu name'
         >
             <RadioGroup
                 unselectable="on"
@@ -71,4 +70,4 @@ const SearchCategory = () => {
     )
 }
 
-export default SearchCategory
+export default SearchMenu

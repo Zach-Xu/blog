@@ -35,7 +35,7 @@ const Login = () => {
             username: account,
             password
         }))
-            .unwrap().then(() => navigate('/tag'))
+            .unwrap().then(() => navigate('/'))
     }
 
     return (

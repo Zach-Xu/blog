@@ -2,7 +2,7 @@ package com.zach.blog.controller;
 
 import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.response.*;
-import com.zach.blog.dto.request.ChangeCategoryStatusRequest;
+import com.zach.blog.dto.request.ChangeStatusRequest;
 import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
 import com.zach.blog.model.ApplicationUser;
@@ -57,7 +57,7 @@ public class CategoryController {
 
     @Validate
     @PutMapping("/{id}/status")
-    public ResponseResult<?> updateCategoryStatus(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid ChangeCategoryStatusRequest request, BindingResult bindingResult) {
+    public ResponseResult<?> updateCategoryStatus(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
         categoryService.changeCategoryStatus(id, request.enable(), user);
         return ResponseResult.ok();
     }

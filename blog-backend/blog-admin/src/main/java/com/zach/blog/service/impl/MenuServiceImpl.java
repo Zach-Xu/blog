@@ -3,6 +3,7 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.response.MenuResponse;
 import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.enums.MenuType;
+import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.exception.SystemException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
@@ -11,13 +12,20 @@ import com.zach.blog.repository.MenuRepository;
 import com.zach.blog.repository.RoleRepository;
 import com.zach.blog.service.MenuService;
 import com.zach.blog.utils.BeanCopyUtils;
+import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.zach.blog.enums.code.ResourceNotFoundCode.MENU_NOT_FOUND;
+import static com.zach.blog.repository.MenuRepository.Specs.containsName;
+import static com.zach.blog.repository.MenuRepository.Specs.isEnable;
 
 @RequiredArgsConstructor
 @Service
@@ -77,6 +85,7 @@ public class MenuServiceImpl implements MenuService {
         menuRepository.save(menuToUpdate);
     }
 
+
     @Override
     public Menu getMenuById(Long id) {
         // ToDo: refactor exception handling
@@ -97,15 +106,46 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<MenuTreeViewResponse> getMenusInTreeView() {
+    public List<MenuTreeViewResponse> getMenusInTreeView(String name, Boolean enable) {
         Sort sort = Sort.by("displayOrder");
-        List<Menu> menus = menuRepository.findAll(sort);
 
-        Map<Long, List<Menu>> menuMap = menus.stream()
-                .collect(Collectors.groupingBy(Menu::getParentId));
+        Specification<Menu> specs = Specification.where(null);
+        if(Strings.hasText(name)){
+            specs = specs.and(containsName(name));
+        }
+        if(Objects.nonNull(enable)){
+            specs = specs.and(isEnable(enable));
+        }
 
-        // By default, root menus have parentId -1L
-        return convertToTree(-1L, menuMap);
+        List<Menu> menus = menuRepository.findAll(specs, sort);
+
+        if(!Strings.hasText(name) && Objects.isNull(enable)){
+            Map<Long, List<Menu>> menuMap = menus.stream()
+                    .collect(Collectors.groupingBy(Menu::getParentId));
+
+            // By default, root menus have parentId -1L
+            return convertToTree(-1L, menuMap);
+
+        }else{
+            // With query params, the result might not contain root menus
+            Map<Long, MenuTreeViewResponse> menuMap = menus.stream()
+                    .collect(Collectors.toMap(menu -> menu.getId(), menu -> BeanCopyUtils.copyBean(menu, MenuTreeViewResponse.class)));
+
+            // Build tree structure
+            menus.forEach(menu -> {
+                if(menuMap.containsKey(menu.getParentId())){
+                    MenuTreeViewResponse parent = menuMap.get(menu.getParentId());
+                    parent.addSubMenu(menuMap.get(menu.getId()));
+                }
+            });
+
+            // Find root menus
+            return menuMap.values().stream()
+                    .filter(menu -> !menuMap.containsKey(menu.getParentId()))
+                    .collect(Collectors.toList());
+
+        }
+
     }
 
     @Override
@@ -115,6 +155,14 @@ public class MenuServiceImpl implements MenuService {
                 .collect(Collectors.groupingBy(Menu::getParentId));
 
         return convertToTree(-1L, menuMap);
+    }
+
+    @Override
+    public void changeMenuStatus(Long id, Boolean enable, Long userId) {
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MENU_NOT_FOUND));
+        menu.setEnable(enable);
+        menu.setUpdatedBy(userId);
+        menuRepository.save(menu);
     }
 
     private List<MenuTreeViewResponse> convertToTree(Long rootMenuId, Map<Long, List<Menu>> map) {

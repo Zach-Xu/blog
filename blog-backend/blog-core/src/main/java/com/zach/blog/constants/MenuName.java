@@ -2,9 +2,9 @@ package com.zach.blog.constants;
 
 public class MenuName {
     public static final String SYSTEM_MANAGEMENT = "System management";
-    public static final String USER_MANAGEMENT = "User management";
-    public static final String ROLE_MANAGEMENT = "Role management";
-    public static final String MENU_MANAGEMENT = "Menu management";
+    public static final String USER_MANAGEMENT = "User";
+    public static final String ROLE_MANAGEMENT = "Role";
+    public static final String MENU_MANAGEMENT = "Menu";
     public static final String USER_QUERY = "Query user";
     public static final String USER_ADD = "Add user";
     public static final String USER_EDIT = "Edit user";
@@ -21,14 +21,15 @@ public class MenuName {
     public static final String MENU_ADD = "Add menu";
     public static final String MENU_EDIT = "Edit menu";
     public static final String MENU_DELETE = "Delete menu";
-    public static final String CONTENT_MANAGEMENT = "Content management";
-    public static final String CATEGORY_MANAGEMENT = "Category management";
+    public static final String CONTENT_MANAGEMENT = "Content Management";
+    public static final String CATEGORY_MANAGEMENT = "Category";
     public static final String CATEGORY_EXPORT = "Export category";
-    public static final String ARTICLE_MANAGEMENT = "Article management";
-    public static final String TAG_MANAGEMENT = "Tag management";
-    public static final String LINK_MANAGEMENT = "Link management";
+    public static final String ARTICLE_MANAGEMENT = "Article";
+    public static final String TAG_MANAGEMENT = "Tag";
+    public static final String LINK_MANAGEMENT = "Link";
     public static final String WRITE_ARTICLE = "Write article";
-    public static final String LINK_ADD ="Add link";
+    public static final String EDIT_ARTICLE = "Edit article";
+    public static final String LINK_ADD = "Add link";
     public static final String LINK_EDIT = "Edit link";
     public static final String LINK_DELETE = "Delete link";
     public static final String LINK_QUERY = "Query link";

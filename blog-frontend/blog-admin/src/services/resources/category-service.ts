@@ -22,7 +22,7 @@ export const categoryService = {
         return result
     },
 
-    changeCategoryStatus: async ({ id, enable }: ChangeCategoryStatus) => {
+    changeCategoryStatus: async ({ id, enable }: ChangeStatusRequest) => {
         const result = await resourceAxios.put<void, void>(`/categories/${id}/status`, {
             enable
         }, {

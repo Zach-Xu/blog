@@ -1,6 +1,5 @@
 package com.zach.blog.model;
 
-import com.zach.blog.enums.MenuStatus;
 import com.zach.blog.enums.MenuType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,12 +34,13 @@ public class Menu extends BaseEntity {
 
     private boolean visible;
 
-    @Enumerated(EnumType.ORDINAL)
-    private MenuStatus status;
+    private boolean enable;
 
     private String permission;
 
     private String icon;
+
+    private Long updatedBy;
 
     @Override
     public boolean equals(Object o) {

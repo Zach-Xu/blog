@@ -1,5 +1,4 @@
 import { Box, Stack, Theme, useMediaQuery } from "@mui/material"
-import DashboardLayout from "../../../layouts/dashboard/layout"
 import ImageUpload from "../../../components/common/image-upload";
 import { useEffect, useRef } from "react";
 import { articleService } from "../../../services/resources/article-service";
@@ -45,54 +44,52 @@ const EditArticlePage = () => {
         (!articleId || isNaN(+articleId)) ?
             <Navigate to={'/article'} />
             :
-            <DashboardLayout>
-                <Box sx={{
-                    py: 2,
-                    px: 4
-                }}>
+            <Box sx={{
+                py: 2,
+                px: 4
+            }}>
+                <Stack
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}
+                >
+                    <EditTitleInput />
                     <Stack
                         sx={{
                             display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2
+                            flexDirection: mdUp ? 'row' : 'column',
+                            gap: 2,
+                            flexGrow: 1
                         }}
                     >
-                        <EditTitleInput />
-                        <Stack
-                            sx={{
-                                display: 'flex',
-                                flexDirection: mdUp ? 'row' : 'column',
-                                gap: 2,
-                                flexGrow: 1
-                            }}
-                        >
-                            <EditCategoryDropDown />
-                            <EditTagDropDown />
-                        </Stack>
-                        <EditSummaryInput />
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: smUp ? 'row-reverse' : 'column',
-                                justifyContent: smUp ? 'space-between' : '',
-                                alignItems: smUp ? 'center' : '',
-                                gap: smUp ? 5 : 0,
-                            }}
-                        >
-                            <EditSettings />
-                            <ImageUpload
-                                ref={fileInputRef}
-                                type="EDIT"
-                            />
-                        </Box>
-                        <EditSubmitButtons
-                            fileInputRef={fileInputRef}
-                            id={+articleId}
-                        />
-                        <EditContentEditor />
+                        <EditCategoryDropDown />
+                        <EditTagDropDown />
                     </Stack>
-                </Box>
-            </DashboardLayout>
+                    <EditSummaryInput />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: smUp ? 'row-reverse' : 'column',
+                            justifyContent: smUp ? 'space-between' : '',
+                            alignItems: smUp ? 'center' : '',
+                            gap: smUp ? 5 : 0,
+                        }}
+                    >
+                        <EditSettings />
+                        <ImageUpload
+                            ref={fileInputRef}
+                            type="EDIT"
+                        />
+                    </Box>
+                    <EditSubmitButtons
+                        fileInputRef={fileInputRef}
+                        id={+articleId}
+                    />
+                    <EditContentEditor />
+                </Stack>
+            </Box>
     )
 }
 

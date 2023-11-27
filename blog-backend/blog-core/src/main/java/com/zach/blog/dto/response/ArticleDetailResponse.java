@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,5 +35,5 @@ public class ArticleDetailResponse {
     private Category category;
 
     @JsonIncludeProperties({ "id", "name" })
-    private List<Tag> tags;
+    private Set<Tag> tags;
 }

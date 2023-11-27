@@ -75,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void updateCategory(Long userId, Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
-        category.setUpdateBy(userId);
+        category.setUpdatedBy(userId);
         category.setName(request.name());
         category.setDescription(request.description());
         category.setEnable(request.enable());
@@ -94,7 +94,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void changeCategoryStatus(Long id, Boolean enable, ApplicationUser user) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setEnable(enable);
-        category.setUpdateBy(user.getId());
+        category.setUpdatedBy(user.getId());
         categoryRepository.save(category);
     }
 

@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material'
+import { Fragment } from 'react'
 
 interface Props {
     path: string[] | null
@@ -30,14 +31,14 @@ const Path = ({ path }: Props) => {
                 }
                 else {
                     return (
-                        <>
-                            <Typography variant='h6' key={'/'}>
+                        <Fragment key={path}>
+                            <Typography variant='h6'>
                                 /
                             </Typography>
-                            <Typography variant='h6' key={path}>
+                            <Typography variant='h6'>
                                 {path}
                             </Typography>
-                        </>
+                        </Fragment>
                     )
                 }
             })}

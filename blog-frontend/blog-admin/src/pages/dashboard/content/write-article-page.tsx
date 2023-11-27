@@ -1,5 +1,4 @@
 import { Box, Stack, Theme, useMediaQuery } from "@mui/material"
-import DashboardLayout from "../../../layouts/dashboard/layout"
 import ImageUpload from "../../../components/common/image-upload";
 import { useRef } from "react";
 import WriteTitleInput from "../../../components/article/write/write-title-input";
@@ -20,53 +19,51 @@ const WriteArticlePage = () => {
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     return (
-        <DashboardLayout>
-            <Box sx={{
-                py: 2,
-                px: 4
-            }}>
+        <Box sx={{
+            py: 2,
+            px: 4
+        }}>
+            <Stack
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2
+                }}
+            >
+                <WriteTitleInput />
                 <Stack
                     sx={{
                         display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2
+                        flexDirection: mdUp ? 'row' : 'column',
+                        gap: 2,
+                        flexGrow: 1
                     }}
                 >
-                    <WriteTitleInput />
-                    <Stack
-                        sx={{
-                            display: 'flex',
-                            flexDirection: mdUp ? 'row' : 'column',
-                            gap: 2,
-                            flexGrow: 1
-                        }}
-                    >
-                        <WriteCategoryDropDown />
-                        <WriteTagDropDown />
-                    </Stack>
-                    <WriteSummaryInput />
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: smUp ? 'row-reverse' : 'column',
-                            justifyContent: smUp ? 'space-between' : '',
-                            alignItems: smUp ? 'center' : '',
-                            gap: smUp ? 5 : 0,
-                        }}
-                    >
-                        <WriteSettings />
-                        <ImageUpload
-                            ref={fileInputRef}
-                            type="WRITE"
-                        />
-                    </Box>
-                    <WriteSubmitButtons
-                        fileInputRef={fileInputRef}
-                    />
-                    <WriteContentEditor />
+                    <WriteCategoryDropDown />
+                    <WriteTagDropDown />
                 </Stack>
-            </Box>
-        </DashboardLayout>
+                <WriteSummaryInput />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: smUp ? 'row-reverse' : 'column',
+                        justifyContent: smUp ? 'space-between' : '',
+                        alignItems: smUp ? 'center' : '',
+                        gap: smUp ? 5 : 0,
+                    }}
+                >
+                    <WriteSettings />
+                    <ImageUpload
+                        ref={fileInputRef}
+                        type="WRITE"
+                    />
+                </Box>
+                <WriteSubmitButtons
+                    fileInputRef={fileInputRef}
+                />
+                <WriteContentEditor />
+            </Stack>
+        </Box>
     )
 }
 

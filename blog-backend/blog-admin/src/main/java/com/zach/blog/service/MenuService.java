@@ -20,7 +20,9 @@ public interface MenuService {
 
     void deleteMenu(Long id);
 
-    List<MenuTreeViewResponse> getMenusInTreeView();
+    List<MenuTreeViewResponse> getMenusInTreeView(String name, Boolean enable);
 
     List<MenuTreeViewResponse> getRoleMenusInTreeView(Long roleId);
+
+    void changeMenuStatus(Long id, Boolean enable, Long userId);
 }

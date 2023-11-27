@@ -28,7 +28,3 @@ interface ParentCategory {
     name: string
 }
 
-interface ChangeCategoryStatus {
-    id: number
-    enable: boolean
-}

@@ -25,6 +25,6 @@ public class Category extends BaseEntity{
 
     private Long createdBy;
 
-    private Long updateBy;
+    private Long updatedBy;
 
 }
