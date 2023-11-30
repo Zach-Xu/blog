@@ -59,3 +59,14 @@ export const getAncestorIds = (menu: Menu, menus: Menu[]): number[] => {
     }
     return ids
 }
+
+export const checkAncestors = (menu: Menu, selected: number[], menus: Menu[], ids: number[]) => {
+    if (allSiblingsCheck(menu, selected, menus)) {
+        ids.push(menu.parentId)
+        const parent = getMenuById(menu.parentId, menus)
+        if (!parent) {
+            return
+        }
+        checkAncestors(parent, selected, menus, ids)
+    }
+}

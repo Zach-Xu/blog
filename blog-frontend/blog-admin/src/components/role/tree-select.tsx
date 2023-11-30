@@ -8,7 +8,7 @@ import { Checkbox, Typography } from '@mui/material';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { allSiblingsCheck, getAncestorIds, getTreeIds } from '../../utils/tree-utils';
+import { allSiblingsCheck, checkAncestors, getAncestorIds, getTreeIds } from '../../utils/tree-utils';
 
 declare module 'react' {
     interface CSSProperties {
@@ -142,9 +142,7 @@ const MenuTreeView = () => {
                         setSelected(() => {
                             const ids = treeIds.concat(selected.filter(id => !treeIds.includes(id)))
                             // if its siblings are all checked, check parent as well
-                            if (allSiblingsCheck(menu, selected, menus)) {
-                                ids.push(menu.parentId)
-                            }
+                            checkAncestors(menu, selected, menus, ids)
                             return ids
                         })
 
@@ -152,7 +150,7 @@ const MenuTreeView = () => {
                 }
 
                 return (
-                    <CustomTreeItem nodeId={menu.id + ""} label={menu.name} ContentProps={{
+                    <CustomTreeItem key={menu.id} nodeId={menu.id + ""} label={menu.name} ContentProps={{
                         checked,
                         checkedChangeHandler
                     }}  >
