@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom'
 import { verifyToken } from '../redux/slices/auth-slice'
 import { useEffect, useState } from 'react'
 import Loading from './common/loading'
-import { toast } from 'react-toastify'
 
 
 interface Props {

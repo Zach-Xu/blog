@@ -100,6 +100,7 @@ const Login = () => {
                                 fullWidth
                                 label="Password"
                                 name="password"
+                                autoComplete='off'
                                 onChange={e => setPassword(e.target.value)}
                                 type="password"
                                 value={password}

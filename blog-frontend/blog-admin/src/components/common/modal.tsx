@@ -27,21 +27,20 @@ export default function MyModal({ open, handleClose, children }: Props) {
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
     return (
-        <div>
-            <Modal
-                keepMounted
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+        <Modal
+            keepMounted
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+
+        >
+            <Box
+                width={lgUp ? 550 : 400}
+                sx={style}
             >
-                <Box
-                    width={lgUp ? 550 : 400}
-                    sx={style}
-                >
-                    {children}
-                </Box>
-            </Modal>
-        </div>
+                {children}
+            </Box>
+        </Modal>
     );
 }

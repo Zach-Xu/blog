@@ -9,8 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { updatePageNum } from '../../redux/slices/tag-slice';
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
-import { changeCategoryStatus } from '../../redux/slices/category-slice';
-import { getRoles } from '../../redux/slices/role-slice';
+import { changeRoleStatus, getRoles } from '../../redux/slices/role-slice';
 import EditCategoryModal from '../category/edit-category-modal';
 
 const RoleTable = () => {
@@ -38,7 +37,7 @@ const RoleTable = () => {
     }
 
     const handleEnableChange = async (request: ChangeStatusRequest) => {
-        dispatch(changeCategoryStatus(request))
+        dispatch(changeRoleStatus(request))
     }
 
     const confirmDelete = useCallback(() => {

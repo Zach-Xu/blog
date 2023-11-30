@@ -1,9 +1,9 @@
 import { PlusIcon } from "@heroicons/react/20/solid"
 import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
 import { useOpenClose } from "../../../hooks/use-open-close"
-import AddCategoryModal from "../../../components/category/add-category-modal"
 import RoleTable from "../../../components/role/role-table"
 import SearchRole from "../../../components/role/search-role"
+import AddRoleModal from "../../../components/role/add-role-modal"
 
 const RolePage = () => {
 
@@ -66,7 +66,7 @@ const RolePage = () => {
                     </Stack>
                 </Container>
             </Box>
-            <AddCategoryModal
+            <AddRoleModal
                 open={open}
                 handleClose={handleClose}
             />

@@ -6,9 +6,17 @@ export const roleService = {
             params: {
                 pageSize,
                 pageNum,
-                ...(name !== '' ? { name } : {}),
+                ...(name !== '' ? { roleName: name } : {}),
                 ...(enable !== null ? { enable } : {})
             },
+            headers: requireTokenHeader
+        })
+        return result
+    },
+    changeRoleStatus: async ({ id, enable }: ChangeStatusRequest) => {
+        const result = await resourceAxios.put<void, void>(`/roles/${id}/status`, {
+            enable
+        }, {
             headers: requireTokenHeader
         })
         return result

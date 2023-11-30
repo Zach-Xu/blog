@@ -25,6 +25,12 @@ export const getRoles = createAsyncThunk('/roles', async (query: GetRoles) => {
     return result
 })
 
+export const changeRoleStatus = createAsyncThunk('/role/status', async (request: ChangeStatusRequest) => {
+    const result = await roleService.changeRoleStatus(request)
+    return result
+})
+
+
 export const roleSlice = createSlice({
     name: 'role',
     initialState,
@@ -43,6 +49,33 @@ export const roleSlice = createSlice({
                 state.rows = rows
                 state.total = total
                 state.totalPages = totalPages
+            })
+            .addCase(changeRoleStatus.pending, (state, action) => {
+                const { id, enable } = action.meta.arg
+
+                state.rows = state.rows.map(role => {
+                    if (role.id !== id) {
+                        return role
+                    } else {
+                        return {
+                            ...role,
+                            enable
+                        }
+                    }
+                })
+            })
+            .addCase(changeRoleStatus.rejected, (state, action) => {
+                const { id, enable } = action.meta.arg
+                state.rows = state.rows.map(role => {
+                    if (role.id !== id) {
+                        return role
+                    } else {
+                        return {
+                            ...role,
+                            enable: !enable
+                        }
+                    }
+                })
             })
     }
 })

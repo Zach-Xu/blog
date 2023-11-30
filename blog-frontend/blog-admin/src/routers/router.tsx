@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
-import Welcome from "../pages/dashboard/welcome";
 import Login from "../pages/auth/login";
 import TagPage from "../pages/dashboard/content/tag-page";
 import WriteArticlePage from "../pages/dashboard/content/write-article-page";
@@ -14,6 +13,8 @@ import SystemManagement from "../pages/dashboard/system";
 import ContentManagement from "../pages/dashboard/content";
 import NotFound from "../pages/dashboard/not-found";
 import RolePage from "../pages/dashboard/system/role-page";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
@@ -32,17 +33,9 @@ const MapRouterToComponent: { [key: string]: JSX.Element } = {
 
 export const useAppRouter = () => {
 
-    const [menus, setMenus] = useState<Menu[]>()
+    const user = useSelector((state: RootState) => state.auth.user)
 
-    useEffect(() => {
-        const fetchUserMenus = async () => {
-            const reuslt = await menuService.getUserMenus()
-            setMenus(reuslt)
-        }
-        fetchUserMenus()
-    }, [])
-
-    const router = createBrowserRouter([
+    const [router, setRouter] = useState<ReturnType<typeof createBrowserRouter>>(createBrowserRouter([
         {
             path: '/login',
             element: <Login />
@@ -54,12 +47,60 @@ export const useAppRouter = () => {
                 {
                     path: '*',
                     element: <NotFound />
-                },
-                ...generateRouteObject(menus)
+                }
             ]
         }
+    ]))
 
-    ])
+    useEffect(() => {
+        const fetchUserMenus = async () => {
+            const reuslt = await menuService.getUserMenus()
+            // setMenus(reuslt)
+            setRouter(() => createBrowserRouter([
+                {
+                    path: '/login',
+                    element: <Login />
+                },
+                {
+                    path: '/',
+                    element: <DashboardLayout />,
+                    children: [
+                        {
+                            path: '*',
+                            element: <NotFound />
+                        },
+                        ...generateRouteObject(reuslt)
+                    ]
+                }
+
+            ]))
+        }
+        if (user) {
+            fetchUserMenus()
+        }
+
+    }, [user])
+
+
+
+    // const router = createBrowserRouter([
+    //     {
+    //         path: '/login',
+    //         element: <Login />
+    //     },
+    //     {
+    //         path: '/',
+    //         element: <DashboardLayout />,
+    //         children: [
+    //             {
+    //                 path: '*',
+    //                 element: <NotFound />
+    //             },
+    //             ...generateRouteObject(menus)
+    //         ]
+    //     }
+
+    // ])
 
     return { router }
 }

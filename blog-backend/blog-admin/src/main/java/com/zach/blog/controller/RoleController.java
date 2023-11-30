@@ -23,8 +23,9 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping
-    public ResponseResult<?> getRoles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
-                                         @RequestParam(required = false) String roleName, @RequestParam(required = false) Boolean enable){
+    public ResponseResult<?> getRoles(@RequestParam(defaultValue = "0") Integer pageNum,
+            @RequestParam(defaultValue = "5") Integer pageSize,
+            @RequestParam(required = false) String roleName, @RequestParam(required = false) Boolean enable) {
         Page<Role> page = roleService.getRoles(pageNum, pageSize, roleName, enable);
         int totalPages = page.getTotalPages();
         List<Role> roles = page.getContent();
@@ -34,36 +35,34 @@ public class RoleController {
     }
 
     @GetMapping("/all")
-    public ResponseResult<?> getAllActiveRoles(){
+    public ResponseResult<?> getAllActiveRoles() {
         List<Role> roles = roleService.getAllActiveRoles();
         List<RoleNameResponse> roleResponse = BeanCopyUtils.copyBeanList(roles, RoleNameResponse.class);
         return ResponseResult.ok(roleResponse);
     }
 
-    @PostMapping("/{id}")
-    public ResponseResult<?> updateRole(@PathVariable Long id, @RequestBody UpdateRoleRequest request){
+    @PutMapping("/{id}")
+    public ResponseResult<?> updateRole(@PathVariable Long id, @RequestBody UpdateRoleRequest request) {
         roleService.updateRole(id, request);
         return ResponseResult.ok();
     }
 
-    @PutMapping("/{id}")
-    public ResponseResult<?> changeRoleStatus(@PathVariable Long id, @RequestBody ChangeRoleStatusRequest request){
+    @PutMapping("/{id}/status")
+    public ResponseResult<?> changeRoleStatus(@PathVariable Long id, @RequestBody ChangeRoleStatusRequest request) {
         roleService.changeRoleStatus(id, request.enable());
         return ResponseResult.ok();
     }
 
     @PostMapping
-    public ResponseResult<?> createRole(@RequestBody CreateRoleRequest createRoleRequest){
+    public ResponseResult<?> createRole(@RequestBody CreateRoleRequest createRoleRequest) {
         roleService.createRole(createRoleRequest);
         return ResponseResult.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult<?> deleteRole(@PathVariable Long id){
+    public ResponseResult<?> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
         return ResponseResult.ok();
     }
-
-
 
 }

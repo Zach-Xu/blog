@@ -41,7 +41,7 @@ const updateMenus = (menus: Menu[], id: number, enable: boolean): Menu[] => {
                 ...menu,
                 enable
             }
-        } else if (!menu.subMenus) {
+        } else if (!menu.subMenus || menu.subMenus.length === 0) {
             return menu
         } else {
             return {
