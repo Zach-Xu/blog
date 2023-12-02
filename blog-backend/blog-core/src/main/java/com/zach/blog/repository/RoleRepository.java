@@ -17,7 +17,7 @@ public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificat
 
     Optional<Role> findByRoleName(String roleName);
 
-    List<Role> findAllByEnable(boolean enable, Sort sort);
+    List<Role> findAllByEnable(boolean enable);
 
     @Query(value = "" +
             "SELECT r from Role r " +

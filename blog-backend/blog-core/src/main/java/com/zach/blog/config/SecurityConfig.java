@@ -11,6 +11,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -74,13 +77,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequests -> {
                     authRequests.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
                     authRequests.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
-                    authRequests.requestMatchers("/api/tags/**").permitAll();
-                    authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
-                    authRequests.requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "USER");
-                    authRequests.requestMatchers("/api/categories/**").hasAnyRole("ADMIN", "USER");
-                    authRequests.requestMatchers("/api/menus/**").hasAnyRole("ADMIN", "USER");
-                    authRequests.requestMatchers("/api/users/**").authenticated();
-                    authRequests.requestMatchers(HttpMethod.POST, "/api/comments").hasAnyRole("ADMIN", "USER");
+//                    authRequests.requestMatchers("/api/tags/**").permitAll();
+//                    authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
+//                    authRequests.requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "USER");
+//                    authRequests.requestMatchers("/api/categories/**").hasAnyRole("ADMIN", "USER");
+//                    authRequests.requestMatchers("/api/menus/**").hasAnyRole("ADMIN", "USER");
+//                    authRequests.requestMatchers("/api/users/**").authenticated();
+//                    authRequests.requestMatchers(HttpMethod.POST, "/api/comments").hasAnyRole("ADMIN", "USER");
                     authRequests.anyRequest().authenticated();
                 });
 

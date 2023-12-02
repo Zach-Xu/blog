@@ -5,6 +5,7 @@ import com.zach.blog.dto.request.LoginRequest;
 import com.zach.blog.dto.request.RegisterRequest;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,14 +37,14 @@ public class AuthenticationController {
 
     @Operation(summary = "Token verification", description = "Verify user token.")
     @GetMapping("/token")
-    public ResponseResult<?> verifyToken(@AuthenticationPrincipal ApplicationUser user){
+    public ResponseResult<?> verifyToken(@AuthenticationPrincipal SessionUser user){
         return ResponseResult.ok(user);
     }
 
     @Operation(summary = "User Logout", description = "Log out the currently authenticated user.")
     @PostMapping("/logout")
-    public ResponseResult<?> logout(@AuthenticationPrincipal ApplicationUser user) {
-        authenticationService.logout(user);
+    public ResponseResult<?> logout(@AuthenticationPrincipal SessionUser user) {
+        authenticationService.logout(user.getId());
         return ResponseResult.ok();
     }
 }

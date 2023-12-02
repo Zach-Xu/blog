@@ -30,6 +30,10 @@ export const changeRoleStatus = createAsyncThunk('/role/status', async (request:
     return result
 })
 
+export const createRole = createAsyncThunk('/roles/create', async (request: CreateRoleRequest) => {
+
+})
+
 
 export const roleSlice = createSlice({
     name: 'role',

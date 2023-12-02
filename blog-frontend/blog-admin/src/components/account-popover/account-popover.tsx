@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { logout } from '../../redux/slices/auth-slice';
@@ -14,8 +13,6 @@ interface Props {
 
 export const AccountPopover = (props: Props) => {
     const { anchorEl, onClose, open } = props;
-
-    const navigate = useNavigate()
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -47,7 +44,7 @@ export const AccountPopover = (props: Props) => {
                 }}
             >
                 <Typography variant="overline">
-                    {user && user.roles.length > 0 && user.roles[0].roleName}
+                    {user && user.roleName}
                 </Typography>
                 <Typography
                     color="text.primary"

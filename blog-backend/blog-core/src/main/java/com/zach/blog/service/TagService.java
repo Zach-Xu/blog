@@ -10,11 +10,11 @@ public interface TagService {
 
     Page<Tag> getTags(Integer pageNum, Integer pageSize, String tagName, String description);
 
-    Tag createTag(ApplicationUser user, String name, String description);
+    Tag createTag(Long userId, String name, String description);
 
-    void deleteTag(ApplicationUser user, Long tagId);
+    void deleteTag(Long userId, Long tagId);
 
-    void updateTag(ApplicationUser user, Long tagId, String name, String description);
+    void updateTag(Long userId, Long tagId, String name, String description);
 
     List<Tag> getAllTags();
 }

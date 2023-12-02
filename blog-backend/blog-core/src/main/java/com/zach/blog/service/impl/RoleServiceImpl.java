@@ -2,6 +2,7 @@ package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.request.CreateRoleRequest;
 import com.zach.blog.dto.request.UpdateRoleRequest;
+import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.exception.SystemException;
 import com.zach.blog.model.Menu;
 import com.zach.blog.repository.MenuRepository;
@@ -12,7 +13,6 @@ import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.zach.blog.enums.code.ResourceNotFoundCode.ROLE_NOT_FOUND;
 import static com.zach.blog.repository.RoleRepository.Specs.containsRoleName;
 import static com.zach.blog.repository.RoleRepository.Specs.isEnable;
 
@@ -45,8 +46,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<Role> getRoles(Integer pageNum, Integer pageSize, String roleName, Boolean enable) {
-        Sort sort = Sort.by("displayOrder");
-        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize);
         Specification<Role> specs = Specification.where(null);
         if (Strings.hasText(roleName)) {
             specs = specs.and(containsRoleName(roleName));
@@ -61,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void changeRoleStatus(Long id, boolean enable) {
         // Todo: refactor exception handling
-        Role role = roleRepository.findById(id).orElseThrow(SystemException::new);
+        Role role = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND));
         role.setEnable(enable);
         roleRepository.save(role);
     }
@@ -70,12 +70,8 @@ public class RoleServiceImpl implements RoleService {
     public void createRole(CreateRoleRequest createRoleRequest) {
         Role role = new Role();
         String roleName = createRoleRequest.roleName();
-        if (!roleName.startsWith("ROLE_")) {
-            // Todo: refactor exception handling
-            throw new SystemException();
-        }
+
         role.setRoleName(roleName);
-        role.setDisplayOrder(createRoleRequest.displayOrder());
         role.setEnable(createRoleRequest.enable());
         role.setDescription(createRoleRequest.description());
 
@@ -93,7 +89,6 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleRepository.findById(id).orElseThrow(SystemException::new);
         role.setRoleName(request.roleName());
         role.setDescription(request.description());
-        role.setDisplayOrder(request.displayOrder());
         role.setEnable(request.enable());
 
         Set<Menu> menus = request.menuIds().stream()
@@ -114,8 +109,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getAllActiveRoles() {
-        Sort sort = Sort.by("displayOrder");
-        return roleRepository.findAllByEnable(true, sort);
+        return roleRepository.findAllByEnable(true);
     }
 
 }

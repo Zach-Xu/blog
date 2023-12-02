@@ -7,6 +7,7 @@ import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class MenuController {
     private final MenuService menuService;
 
     @GetMapping("/user-menu")
-    public ResponseResult<?> getCurrentUserMenus(@AuthenticationPrincipal ApplicationUser user) {
-        List<MenuResponse> menus = menuService.getUserMenus(user);
+    public ResponseResult<?> getCurrentUserMenus(@AuthenticationPrincipal SessionUser user) {
+        List<MenuResponse> menus = menuService.getUserMenus(user.getId());
         return ResponseResult.ok(menus);
     }
 
@@ -67,7 +68,7 @@ public class MenuController {
 
     @Validate
     @PutMapping("/{id}/status")
-    public ResponseResult<?> updateMenuStatus(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
+    public ResponseResult<?> updateMenuStatus(@PathVariable Long id, @AuthenticationPrincipal SessionUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
         menuService.changeMenuStatus(id, request.enable(), user.getId());
         return ResponseResult.ok();
     }

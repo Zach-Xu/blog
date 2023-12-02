@@ -59,7 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(CreateCategoryRequest request, ApplicationUser user) {
+    public Category createCategory(CreateCategoryRequest request, Long userId) {
         Category category = new Category();
         if(categoryRepository.existsByName(request.name())){
             throw new ResourceAlreadyExistException(CATEGORY_NAME_EXIST);
@@ -68,7 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setDescription(request.description());
         category.setPid(request.parentId());
         category.setEnable(request.enable());
-        category.setCreatedBy(user.getId());
+        category.setCreatedBy(userId);
         return categoryRepository.save(category);
     }
 
@@ -91,10 +91,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void changeCategoryStatus(Long id, Boolean enable, ApplicationUser user) {
+    public void changeCategoryStatus(Long id, Boolean enable, Long userId) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setEnable(enable);
-        category.setUpdatedBy(user.getId());
+        category.setUpdatedBy(userId);
         categoryRepository.save(category);
     }
 

@@ -7,6 +7,7 @@ import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.OutboundLink;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.OutboundLinkService;
 import com.zach.blog.utils.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class OutBoundLinkController {
     }
 
     @PutMapping("/{id}")
-    public ResponseResult<?> updateLink(@PathVariable Long id, @RequestBody UpdateLinkRequest request, @AuthenticationPrincipal ApplicationUser user) {
+    public ResponseResult<?> updateLink(@PathVariable Long id, @RequestBody UpdateLinkRequest request, @AuthenticationPrincipal SessionUser user) {
         linkService.updateLink(user.getId(), id, request);
         return ResponseResult.ok();
     }

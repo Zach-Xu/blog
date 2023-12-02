@@ -36,7 +36,6 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         }
 
         Role adminRole = new Role(RoleName.ROLE_ADMIN);
-        adminRole.setDisplayOrder(1);
         adminRole.addMenu(menuRepository.findByName(SYSTEM_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(CATEGORY_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(ROLE_MANAGEMENT).get());
@@ -45,7 +44,6 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         adminRole.addMenu(menuRepository.findByName(MENU_MANAGEMENT).get());
 
         Role auditorRole = new Role(RoleName.ROLE_LINK_AUDITOR);
-        auditorRole.setDisplayOrder(2);
         auditorRole.addMenu(menuRepository.findByName(CONTENT_MANAGEMENT).get());
         auditorRole.addMenu(menuRepository.findByName(LINK_MANAGEMENT).get());
         auditorRole.addMenu(menuRepository.findByName(LINK_ADD).get());
@@ -54,7 +52,6 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         auditorRole.addMenu(menuRepository.findByName(LINK_DELETE).get());
 
         Role userRole = new Role(RoleName.ROLE_USER);
-        userRole.setDisplayOrder(3);
         userRole.addMenu(menuRepository.findByName(WRITE_ARTICLE).get());
 
         List<Role> roleList = new ArrayList<>();

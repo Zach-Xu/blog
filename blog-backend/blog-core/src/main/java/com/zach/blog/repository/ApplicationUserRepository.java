@@ -13,8 +13,16 @@ import java.util.Optional;
 @Repository
 public interface ApplicationUserRepository extends JpaRepository<ApplicationUser, Long>, JpaSpecificationExecutor<ApplicationUser> {
 
-    @EntityGraph(attributePaths = "roles")
+
     Optional<ApplicationUser> findByUsername(String username);
+
+    @Query(value = "" +
+            "SELECT u FROM ApplicationUser u " +
+            "LEFT JOIN FETCH u.roles r " +
+            "LEFT JOIN FETCH r.menus m " +
+            "WHERE u.username = ?1 ")
+    Optional<ApplicationUser> findUserAndPermissionByUsername(String username);
+
 
     @Query(value = "" +
             "SELECT u FROM ApplicationUser u " +

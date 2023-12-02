@@ -6,6 +6,7 @@ public enum ResourceNotFoundCode {
     USER_NOT_FOUND("User does not exist"),
     ARTICLE_NOT_FOUND("Article does not exist"),
     CATEGORY_NOT_FOUND("Category does not exist"),
+    ROLE_NOT_FOUND("Role does not exist"),
     MENU_NOT_FOUND("Menu does not exist");
 
     final int code = 404;

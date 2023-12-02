@@ -8,7 +8,7 @@ import com.zach.blog.model.Menu;
 import java.util.List;
 
 public interface MenuService {
-    List<MenuResponse> getUserMenus(ApplicationUser user);
+    List<MenuResponse> getUserMenus(Long userId);
 
     List<Menu> getAllMenus();
 

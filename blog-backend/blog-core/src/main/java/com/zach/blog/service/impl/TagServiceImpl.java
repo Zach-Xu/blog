@@ -41,36 +41,35 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag createTag(ApplicationUser user, String name, String description) {
+    public Tag createTag(Long userId, String name, String description) {
         if( tagRepository.existsByNameIgnoreCase(name)){
             throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
         }
 
         Tag tag = new Tag();
-        // ToDo: DTO Validation
         tag.setName(name);
         tag.setDescription(description);
-        tag.setCreatedBy(user.getId());
+        tag.setCreatedBy(userId);
         return tagRepository.save(tag);
     }
 
     @Override
-    public void deleteTag(ApplicationUser user, Long tagId) {
+    public void deleteTag(Long userId, Long tagId) {
         Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new ResourceNotFoundException(TAG_NOT_FOUND));
         tag.setDeleted(true);
-        tag.setUpdateBy(user.getId());
+        tag.setUpdateBy(userId);
         tagRepository.save(tag);
     }
 
     @Override
-    public void updateTag(ApplicationUser user, Long tagId, String name, String description) {
+    public void updateTag(Long userId, Long tagId, String name, String description) {
         Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new ResourceNotFoundException(TAG_NOT_FOUND));
         if(tagRepository.existsByNameIgnoreCase(name)){
             throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
         }
         tag.setName(name);
         tag.setDescription(description);
-        tag.setUpdateBy(user.getId());
+        tag.setUpdateBy(userId);
         tagRepository.save(tag);
     }
 

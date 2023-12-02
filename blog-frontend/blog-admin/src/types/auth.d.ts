@@ -3,11 +3,14 @@ interface User {
     username: string
     avatar: string | undefined
     gender: string | undefined
-    roles: {
-        id: number
-        roleName: string
-    }[]
+    roleName: string
+    email: string
+    permissions: string[]
+
 }
+
+
+
 
 interface LoginRequest {
     username: string

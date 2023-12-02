@@ -7,6 +7,7 @@ import com.zach.blog.dto.request.UpdateTagRequest;
 import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.model.Tag;
 import com.zach.blog.service.TagService;
 import com.zach.blog.utils.BeanCopyUtils;
@@ -45,22 +46,22 @@ public class TagController {
 
     @Validate
     @PostMapping
-    public ResponseResult<?> createTag(@AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid CreateTagRequest createTagRequest, BindingResult bindingResult){
-        Tag tag = tagService.createTag(user, createTagRequest.name(), createTagRequest.description());
+    public ResponseResult<?> createTag(@AuthenticationPrincipal SessionUser user, @RequestBody @Valid CreateTagRequest createTagRequest, BindingResult bindingResult){
+        Tag tag = tagService.createTag(user.getId(), createTagRequest.name(), createTagRequest.description());
         TagResponse response = BeanCopyUtils.copyBean(tag, TagResponse.class);
         return ResponseResult.ok(response);
     }
 
     @Validate
     @PutMapping("/{id}")
-    public ResponseResult<?> updateTag(@AuthenticationPrincipal ApplicationUser user, @PathVariable("id") Long tagId, @RequestBody @Valid UpdateTagRequest updateTagRequest, BindingResult bindingResult){
-        tagService.updateTag(user, tagId, updateTagRequest.name(), updateTagRequest.description());
+    public ResponseResult<?> updateTag(@AuthenticationPrincipal SessionUser user, @PathVariable("id") Long tagId, @RequestBody @Valid UpdateTagRequest updateTagRequest, BindingResult bindingResult){
+        tagService.updateTag(user.getId(), tagId, updateTagRequest.name(), updateTagRequest.description());
         return ResponseResult.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult<?> deleteTag(@AuthenticationPrincipal ApplicationUser user, @PathVariable("id") Long tagId){
-        tagService.deleteTag(user, tagId);
+    public ResponseResult<?> deleteTag(@AuthenticationPrincipal SessionUser user, @PathVariable("id") Long tagId){
+        tagService.deleteTag(user.getId(), tagId);
         return ResponseResult.ok();
     }
 }

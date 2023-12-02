@@ -8,6 +8,7 @@ import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Article;
 import com.zach.blog.model.Category;
 import com.zach.blog.model.Tag;
+import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.repository.ArticleRepository;
 import com.zach.blog.repository.CategoryRepository;
 import com.zach.blog.repository.TagRepository;
@@ -43,6 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
     private final FileService fileService;
+    private final ApplicationUserRepository userRepository;
 
     @Override
     public List<Article> getHotArticles() {
@@ -83,7 +85,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Transactional
     @Override
-    public void createArticle(ApplicationUser user, WriteArticleRequest writeArticleRequest) throws IOException {
+    public void createArticle(Long userId, WriteArticleRequest writeArticleRequest) throws IOException {
 
         Article article = new Article();
         article.setViewCount(0L);
@@ -100,7 +102,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         article.setPinned(writeArticleRequest.pinned());
         article.setAllowedComment(writeArticleRequest.allowedComment());
-        article.setAuthor(user);
+        article.setAuthor(userRepository.getReferenceById(userId));
 
         Category category = categoryRepository.getReferenceById(writeArticleRequest.categoryId());
         article.setCategory(category);

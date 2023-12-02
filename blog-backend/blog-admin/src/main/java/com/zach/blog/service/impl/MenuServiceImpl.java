@@ -8,6 +8,7 @@ import com.zach.blog.exception.SystemException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
 import com.zach.blog.model.Role;
+import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.repository.MenuRepository;
 import com.zach.blog.repository.RoleRepository;
 import com.zach.blog.service.MenuService;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.zach.blog.enums.code.ResourceNotFoundCode.MENU_NOT_FOUND;
+import static com.zach.blog.enums.code.ResourceNotFoundCode.USER_NOT_FOUND;
 import static com.zach.blog.repository.MenuRepository.Specs.containsName;
 import static com.zach.blog.repository.MenuRepository.Specs.isEnable;
 
@@ -32,9 +34,11 @@ import static com.zach.blog.repository.MenuRepository.Specs.isEnable;
 public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
     private final RoleRepository roleRepository;
+    private final ApplicationUserRepository userRepository;
 
     @Override
-    public List<MenuResponse> getUserMenus(ApplicationUser user) {
+    public List<MenuResponse> getUserMenus(Long userId) {
+        ApplicationUser user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         List<Long> roleIds = user.getRoles().stream().map(Role::getId).toList();
 
         // Because of uni-directional association, menus can only be fetched via role

@@ -7,11 +7,13 @@ import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Category;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.CategoryService;
 import com.zach.blog.utils.BeanCopyUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ public class CategoryController {
         return ResponseResult.ok(categories);
     }
 
+    @PreAuthorize("hasAuthority('content:category:list')")
     @GetMapping
     public ResponseResult<?> getCategories(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                            @RequestParam(required = false) String name, @RequestParam(required = false) Boolean enable) {
@@ -49,22 +52,22 @@ public class CategoryController {
 
     @Validate
     @PostMapping
-    public ResponseResult<?> createCategory(@AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid CreateCategoryRequest request, BindingResult bindingResult) {
-        Category category = categoryService.createCategory(request, user);
+    public ResponseResult<?> createCategory(@AuthenticationPrincipal SessionUser user, @RequestBody @Valid CreateCategoryRequest request, BindingResult bindingResult) {
+        Category category = categoryService.createCategory(request, user.getId());
         CategoryManagementResponse response = BeanCopyUtils.copyBean(category, CategoryManagementResponse.class);
         return ResponseResult.ok(response);
     }
 
     @Validate
     @PutMapping("/{id}/status")
-    public ResponseResult<?> updateCategoryStatus(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
-        categoryService.changeCategoryStatus(id, request.enable(), user);
+    public ResponseResult<?> updateCategoryStatus(@PathVariable Long id, @AuthenticationPrincipal SessionUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
+        categoryService.changeCategoryStatus(id, request.enable(), user.getId());
         return ResponseResult.ok();
     }
 
     @Validate
     @PutMapping("/{id}")
-    public ResponseResult<?> updateCategory(@PathVariable Long id, @AuthenticationPrincipal ApplicationUser user, @RequestBody @Valid UpdateCategoryRequest request, BindingResult bindingResult) {
+    public ResponseResult<?> updateCategory(@PathVariable Long id, @AuthenticationPrincipal SessionUser user, @RequestBody @Valid UpdateCategoryRequest request, BindingResult bindingResult) {
         categoryService.updateCategory(user.getId(), id, request);
         return ResponseResult.ok();
     }

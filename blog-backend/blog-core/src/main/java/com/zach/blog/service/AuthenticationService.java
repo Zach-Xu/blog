@@ -8,5 +8,5 @@ public interface AuthenticationService {
 
     AuthResponse login(String username, String password);
 
-    void logout(ApplicationUser user);
+    void logout(Long userId);
 }

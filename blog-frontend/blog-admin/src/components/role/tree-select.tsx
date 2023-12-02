@@ -2,13 +2,13 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, TreeItemContentProps, TreeItemProps, useTreeItem } from '@mui/x-tree-view/TreeItem';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { menuService } from '../../services/resources/menu-service';
 import { Checkbox, Typography } from '@mui/material';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { allSiblingsCheck, checkAncestors, getAncestorIds, getTreeIds } from '../../utils/tree-utils';
+import { checkAncestors, getAncestorIds, getTreeIds } from '../../utils/tree-utils';
 
 declare module 'react' {
     interface CSSProperties {
@@ -115,7 +115,7 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 
 const MenuTreeView = () => {
 
-    const [menus, setMenus] = useState<Menu[]>([])
+    const [menus, setMenus] = useState<Menu[]>()
 
     const [selected, setSelected] = useState<number[]>([])
 
@@ -150,7 +150,7 @@ const MenuTreeView = () => {
                 }
 
                 return (
-                    <CustomTreeItem key={menu.id} nodeId={menu.id + ""} label={menu.name} ContentProps={{
+                    <CustomTreeItem key={menu.id} nodeId={menu.name} label={menu.name} ContentProps={{
                         checked,
                         checkedChangeHandler
                     }}  >
@@ -164,19 +164,26 @@ const MenuTreeView = () => {
         )
     }
 
+    const defaultExpanded = useMemo(() => menus?.map(menu => menu.name) || [], [menus])
+    console.log('de', defaultExpanded)
+
     return (
         <Box sx={{ minHeight: 270, flexGrow: 1, maxWidth: 300 }}>
-            <TreeView
-                aria-label="icon expansion"
-                defaultCollapseIcon={<ExpandMoreIcon />}
-                defaultExpandIcon={<ChevronRightIcon />}
-                sx={{ overflowX: 'hidden' }}
-            >
-                {
-                    recursiveRenderTree(menus)
-                }
+            {
+                menus &&
+                <TreeView
+                    aria-label="icon expansion"
+                    defaultCollapseIcon={<ExpandMoreIcon />}
+                    defaultExpandIcon={<ChevronRightIcon />}
+                    sx={{ overflowX: 'hidden' }}
+                    defaultExpanded={defaultExpanded}
+                >
+                    {
+                        recursiveRenderTree(menus)
+                    }
+                </TreeView>
+            }
 
-            </TreeView>
         </Box>
     )
 }

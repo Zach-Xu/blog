@@ -9,6 +9,7 @@ import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Article;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.ArticleService;
 import com.zach.blog.utils.BeanCopyUtils;
 import jakarta.validation.Valid;
@@ -29,9 +30,9 @@ public class ArticleController {
 
     @Validate
     @PostMapping
-    public ResponseResult<?> writeArticle(@AuthenticationPrincipal ApplicationUser user,
+    public ResponseResult<?> writeArticle(@AuthenticationPrincipal SessionUser user,
                                           @Valid WriteArticleRequest writeArticleRequest, BindingResult bindingResult) throws IOException {
-        articleService.createArticle(user, writeArticleRequest);
+        articleService.createArticle(user.getId(), writeArticleRequest);
         return ResponseResult.ok();
     }
 

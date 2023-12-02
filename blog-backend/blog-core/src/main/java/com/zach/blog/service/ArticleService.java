@@ -19,7 +19,7 @@ public interface ArticleService {
 
     void updateViewCount(Long articleId);
 
-    void createArticle(ApplicationUser user, WriteArticleRequest writeArticleRequest) throws IOException;
+    void createArticle(Long userId, WriteArticleRequest writeArticleRequest) throws IOException;
 
     Page<Article> getArticles(Integer pageNum, Integer pageSize, String title, String summary);
 

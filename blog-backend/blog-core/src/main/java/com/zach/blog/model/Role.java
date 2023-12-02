@@ -18,13 +18,10 @@ import java.util.Set;
 @Getter
 @SQLDelete(sql = "UPDATE blog_role SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Role extends BaseEntity implements GrantedAuthority {
+    public class Role extends BaseEntity {
 
     @Column(name = "role_name")
     private String roleName;
-
-    @Column(name = "display_order")
-    private Integer displayOrder;
 
     private String description;
     private boolean enable;
@@ -79,9 +76,4 @@ public class Role extends BaseEntity implements GrantedAuthority {
         return Objects.hash(roleName);
     }
 
-
-    @Override
-    public String getAuthority() {
-        return this.roleName.toString();
-    }
 }

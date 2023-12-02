@@ -10,3 +10,12 @@ interface GetRoles extends PageRequest {
     name?: string
     enable?: boolean | null
 }
+
+interface CreateRoleRequest {
+    roleName: string
+    enable: boolean
+    menuIds: number[]
+    description: string
+}
+
+interface 

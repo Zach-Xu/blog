@@ -42,7 +42,7 @@ export const authSlice = createSlice({
                 const user = action.payload
                 state.user = user
             })
-            .addCase(logout.fulfilled, (state, action) => {
+            .addCase(logout.fulfilled, (state, _) => {
                 state.user = null
                 localStorage.removeItem('tk')
             })

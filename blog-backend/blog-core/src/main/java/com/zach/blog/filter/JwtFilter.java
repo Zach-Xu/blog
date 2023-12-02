@@ -5,6 +5,7 @@ import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.enums.code.HttpStatusCode;
 import com.zach.blog.exception.RequireLoginException;
 import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.utils.JsonUtils;
 import com.zach.blog.utils.JwtUtils;
 import com.zach.blog.utils.RedisUtils;
@@ -16,13 +17,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 
@@ -51,13 +55,17 @@ public class JwtFilter extends OncePerRequestFilter {
             if (jwtUtils.validateJwtToken(jwt)) {
                 Long userId = jwtUtils.extractUserId(jwt);
 
-                ApplicationUser user = redisUtils.get(USER_KEY + userId, ApplicationUser.class);
+                SessionUser sessionUser = redisUtils.get(USER_KEY + userId, SessionUser.class);
 
-                if (Objects.isNull(user)) {
+                // User is authenticated if no exception thrown
+                if (Objects.isNull(sessionUser)) {
                     throw new RequireLoginException();
                 }
-                // user is authenticated if no exception thrown
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getRoles());
+
+                List<SimpleGrantedAuthority> authorities = sessionUser.getPermissions().stream()
+                        .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(sessionUser, null, authorities);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else{

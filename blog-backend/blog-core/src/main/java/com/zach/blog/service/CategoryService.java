@@ -15,13 +15,13 @@ public interface CategoryService {
 
     Page<Category> getCategories(Integer pageNum, Integer pageSize, String name, Boolean enable);
 
-    Category createCategory(CreateCategoryRequest request, ApplicationUser user);
+    Category createCategory(CreateCategoryRequest request, Long userId);
 
     void updateCategory(Long userId, Long id, UpdateCategoryRequest request);
 
     void deleteCategory(Long id);
 
-    void changeCategoryStatus(Long id, Boolean enable, ApplicationUser user);
+    void changeCategoryStatus(Long id, Boolean enable, Long userId);
 
     List<Category> getParentCategories();
 }

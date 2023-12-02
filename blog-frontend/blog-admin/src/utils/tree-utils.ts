@@ -49,7 +49,8 @@ export const allSiblingsCheck = (menu: Menu, selected: number[], menus: Menu[]):
     return check
 }
 
-export const getAncestorIds = (menu: Menu, menus: Menu[]): number[] => {
+export const getAncestorIds = (menu: Menu, menus: Menu[] | undefined): number[] => {
+    if (!menus) return []
     let ids: number[] = []
     const parent = getMenuById(menu.parentId, menus)
     if (parent) {
@@ -60,7 +61,9 @@ export const getAncestorIds = (menu: Menu, menus: Menu[]): number[] => {
     return ids
 }
 
-export const checkAncestors = (menu: Menu, selected: number[], menus: Menu[], ids: number[]) => {
+export const checkAncestors = (menu: Menu, selected: number[], menus: Menu[] | undefined, ids: number[]) => {
+    if (!menus) return
+
     if (allSiblingsCheck(menu, selected, menus)) {
         ids.push(menu.parentId)
         const parent = getMenuById(menu.parentId, menus)

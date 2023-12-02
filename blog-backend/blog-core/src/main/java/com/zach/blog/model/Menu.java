@@ -4,6 +4,7 @@ import com.zach.blog.enums.MenuType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 @Table(name = "blog_menu")
 @Getter
 @Setter
-public class Menu extends BaseEntity {
+public class Menu extends BaseEntity implements GrantedAuthority {
 
     @Column(name = "menu_name")
     private String name;
@@ -53,5 +54,10 @@ public class Menu extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(name, parentId, menuType);
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.permission;
     }
 }

@@ -2,18 +2,18 @@ import { Stack, Typography, OutlinedInput, InputAdornment, Button, useMediaQuery
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
-import { MenuProps } from "../../utils/drop-down-utils"
 import MenuTreeView from "./tree-select"
+
 
 interface Props {
     title: string
     // category: CreateCategory
     // setCategory: React.Dispatch<CreateCategory>
-    // handleClose(): void
-    // handleSubmit: (event: React.FormEvent) => void
+    handleClose(): void
+    handleSubmit: (event: React.FormEvent) => void
 }
 
-const RoleModalContent = ({ title }: Props) => {
+const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
 
     // const { name, description, enable, pid } = category
 
@@ -73,40 +73,6 @@ const RoleModalContent = ({ title }: Props) => {
                     onChange={handleChange}
                 />
             </Stack>
-
-            {/* <Stack
-                sx={{
-                    width: '100%',
-                    flexDirection: lgUp ? 'row' : 'column',
-                    alignItems: lgUp ? 'center' : '',
-                    pt: 2,
-                    pl: 2
-                }}
-
-            >
-                <Typography variant="subtitle2"
-                    sx={{
-                        width: 100,
-                        mb: lgUp ? '' : 1
-                    }}>
-                    Display Order
-                </Typography>
-
-                <TextField
-                    required
-                    fullWidth
-                    rows={2}
-                    multiline
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                            </InputAdornment>
-                        ),
-                    }}
-                    name={'description'}
-
-                />
-            </Stack> */}
 
             <Stack
                 sx={{
@@ -182,7 +148,7 @@ const RoleModalContent = ({ title }: Props) => {
                 sx={{
                     width: '100%',
                     flexDirection: lgUp ? 'row' : 'column',
-                    alignItems: lgUp ? 'end' : '',
+                    alignItems: lgUp ? 'start' : '',
                     pt: 2,
                     pl: 2
                 }}
@@ -237,7 +203,7 @@ const RoleModalContent = ({ title }: Props) => {
                             bgcolor: 'white'
                         }
                     }}
-                // onClick={handleClose}
+                    onClick={handleClose}
                 >
                     Cancel
                 </Button>
