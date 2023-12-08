@@ -9,8 +9,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { updatePageNum } from '../../redux/slices/tag-slice';
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
-import { changeRoleStatus, getRoles } from '../../redux/slices/role-slice';
-import EditCategoryModal from '../category/edit-category-modal';
+import { changeRoleStatus, deleteRole, getRoles } from '../../redux/slices/role-slice';
+import EditRoleModal from './edit-role-modal';
 
 const RoleTable = () => {
 
@@ -42,7 +42,8 @@ const RoleTable = () => {
 
     const confirmDelete = useCallback(() => {
         if (selectedRole) {
-            // dispatch(deleteRole(selectedRole.id))
+            dispatch(deleteRole(selectedRole.id))
+            handleClose()
         }
     }, [selectedRole])
 
@@ -80,7 +81,7 @@ const RoleTable = () => {
                                         Role name
                                     </TableCell>
                                     <TableCell>
-                                        display Order
+                                        Description
                                     </TableCell>
                                     <TableCell>
                                         Created Time
@@ -106,7 +107,7 @@ const RoleTable = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     <Typography >
-                                                        {role.displayOrder}
+                                                        {role.description}
                                                     </Typography>
                                                 </TableCell>
                                                 <TableCell>
@@ -189,10 +190,10 @@ const RoleTable = () => {
                 />
             </Stack>
 
-            <EditCategoryModal
+            <EditRoleModal
                 open={editRoleModal.open}
                 handleClose={editRoleModal.handleClose}
-                item={undefined}
+                roleId={selectedRole?.id}
             />
 
         </Box >

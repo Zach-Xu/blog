@@ -2,7 +2,7 @@ import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
 
 export const menuService = {
     getAll: async () => {
-        const result = await resourceAxios.get<void, Menu[]>('/menus/all/tree', {
+        const result = await resourceAxios.get<void, Menu[]>('/menus/all', {
             headers: requireTokenHeader
         })
         return result

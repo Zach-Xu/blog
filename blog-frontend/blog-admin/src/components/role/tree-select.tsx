@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, TreeItemContentProps, TreeItemProps, useTreeItem } from '@mui/x-tree-view/TreeItem';
-import { useEffect, useMemo, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { menuService } from '../../services/resources/menu-service';
 import { Checkbox, Typography } from '@mui/material';
 import clsx from 'clsx';
@@ -113,11 +113,20 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(
 });
 
 
-const MenuTreeView = () => {
+interface Props {
+    menuIds: number[] | undefined
+}
+
+const MenuTreeView = forwardRef<number[], Props>(({ menuIds }, ref) => {
+
 
     const [menus, setMenus] = useState<Menu[]>()
 
     const [selected, setSelected] = useState<number[]>([])
+
+    useImperativeHandle(ref, () => {
+        return selected
+    })
 
     useEffect(() => {
         const fetchMenus = async () => {
@@ -126,6 +135,13 @@ const MenuTreeView = () => {
         }
         fetchMenus()
     }, [])
+
+    useEffect(() => {
+        if (menuIds) {
+            setSelected(menuIds)
+        }
+    }, [menuIds])
+
 
     const recursiveRenderTree = (menuTree: Menu[]) => {
 
@@ -165,7 +181,6 @@ const MenuTreeView = () => {
     }
 
     const defaultExpanded = useMemo(() => menus?.map(menu => menu.name) || [], [menus])
-    console.log('de', defaultExpanded)
 
     return (
         <Box sx={{ minHeight: 270, flexGrow: 1, maxWidth: 300 }}>
@@ -186,6 +201,6 @@ const MenuTreeView = () => {
 
         </Box>
     )
-}
+})
 
 export default MenuTreeView

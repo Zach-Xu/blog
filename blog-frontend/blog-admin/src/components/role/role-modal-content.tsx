@@ -1,32 +1,38 @@
-import { Stack, Typography, OutlinedInput, InputAdornment, Button, useMediaQuery, Theme, TextField, Radio, FormHelperText, FormControlLabel, RadioGroup, Select, MenuItem, SelectChangeEvent, Box } from "@mui/material"
+import { Stack, Typography, OutlinedInput, InputAdornment, Button, useMediaQuery, Theme, TextField, Radio, FormControlLabel, RadioGroup, Box } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
 import MenuTreeView from "./tree-select"
+import { useEffect, useRef, useState } from "react"
+import Loading from "../common/loading"
 
 
 interface Props {
     title: string
-    // category: CreateCategory
-    // setCategory: React.Dispatch<CreateCategory>
+    role?: CreateRoleRequest | EditRole
     handleClose(): void
-    handleSubmit: (event: React.FormEvent) => void
+    handleSubmit: (event: React.FormEvent, role: CreateRoleRequest) => void
 }
 
-const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
+const RoleModalContent = ({ title, role, handleClose, handleSubmit }: Props) => {
 
-    // const { name, description, enable, pid } = category
+    const selectedIdsRef = useRef<number[]>([])
+
+    const [localName, setLocalName] = useState<string>('')
+    const [localDescription, setLocalDescription] = useState<string>('')
+    const [localEnable, setLocalEnable] = useState<boolean>(true)
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
+    useEffect(() => {
+        if (role) {
+            setLocalName(role.roleName)
+            setLocalDescription(role.description)
+            setLocalEnable(role.enable)
+        }
+    }, [role])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | SelectChangeEvent) => {
-        // setCategory({
-        //     ...category,
-        //     [e.target.name]: e.target.value
-        // })
-    }
+    const isLoading = useSelector((state: RootState) => state.loading.isLoading)
 
     return (
         <Box
@@ -34,7 +40,14 @@ const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
             sx={{
                 flexDirection: 'column'
             }}
-            onSubmit={() => { }}
+            onSubmit={e => handleSubmit(e,
+                {
+                    roleName: localName,
+                    description: localDescription,
+                    enable: localEnable,
+                    menuIds: selectedIdsRef.current
+                }
+            )}
         >
             <Typography
                 variant="h6"
@@ -69,8 +82,8 @@ const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
                         </InputAdornment>
                     )}
                     name={'name'}
-                    value={name}
-                    onChange={handleChange}
+                    value={localName}
+                    onChange={e => setLocalName(e.target.value)}
                 />
             </Stack>
 
@@ -104,7 +117,8 @@ const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
                         ),
                     }}
                     name={'description'}
-
+                    value={localDescription}
+                    onChange={e => setLocalDescription(e.target.value)}
                 />
             </Stack>
 
@@ -131,13 +145,10 @@ const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
                         flexDirection: 'row'
                     }}
                     name={'enable'}
-                // value={enable}
-                // onChange={e => {
-                //     setCategory({
-                //         ...category,
-                //         enable: e.target.value === 'true'
-                //     })
-                // }}
+                    value={localEnable}
+                    onChange={e => {
+                        setLocalEnable(e.target.value === 'true')
+                    }}
                 >
                     <FormControlLabel value={true} control={<Radio />} label="Enable" />
                     <FormControlLabel value={false} control={<Radio />} label="Disable" />
@@ -168,7 +179,7 @@ const RoleModalContent = ({ title, handleClose, handleSubmit }: Props) => {
                         flexDirection: 'column'
                     }}
                 >
-                    <MenuTreeView />
+                    <MenuTreeView menuIds={role ? role.menuIds : []} ref={selectedIdsRef} />
 
                 </Stack>
 

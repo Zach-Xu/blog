@@ -18,7 +18,7 @@ const CategoryModalContent = ({ title, category, setCategory, handleClose, handl
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
+    const isLoading = useSelector((state: RootState) => state.loading.isLoading)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | SelectChangeEvent) => {
         setCategory({

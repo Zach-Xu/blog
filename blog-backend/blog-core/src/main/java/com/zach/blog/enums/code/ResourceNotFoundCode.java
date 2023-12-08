@@ -1,7 +1,9 @@
 package com.zach.blog.enums.code;
 
 public enum ResourceNotFoundCode {
-
+    LINK_NOT_FOUND("Link does not exist"),
+    TO_COMMENT_NOT_FOUND("The comment you try to reply does not exist."),
+    ROOT_COMMENT_NOT_FOUND("Root comment does not exist"),
     TAG_NOT_FOUND("Tag does not exist"),
     USER_NOT_FOUND("User does not exist"),
     ARTICLE_NOT_FOUND("Article does not exist"),
@@ -12,7 +14,7 @@ public enum ResourceNotFoundCode {
     final int code = 404;
     final String message;
 
-    ResourceNotFoundCode( String errorMessage) {
+    ResourceNotFoundCode(String errorMessage) {
         this.message = errorMessage;
     }
 

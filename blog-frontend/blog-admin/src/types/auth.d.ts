@@ -10,8 +10,6 @@ interface User {
 }
 
 
-
-
 interface LoginRequest {
     username: string
     password: string

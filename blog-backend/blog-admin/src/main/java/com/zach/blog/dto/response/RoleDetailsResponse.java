@@ -3,14 +3,14 @@ package com.zach.blog.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
-public class RoleResponse {
+public class RoleDetailsResponse {
     private Long id;
     private String roleName;
-    private boolean enable;
     private String description;
-    private LocalDateTime createdTime;
+    private List<Long> menuIds;
+    private Boolean enable;
 }

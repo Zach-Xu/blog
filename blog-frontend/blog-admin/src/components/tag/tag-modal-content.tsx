@@ -17,7 +17,7 @@ const TagModelContent = ({ title, handleClose, handleSubmit, name, description, 
 
     const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'))
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
+    const isLoading = useSelector((state: RootState) => state.loading.isLoading)
 
     return (
         <Stack

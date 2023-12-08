@@ -13,7 +13,7 @@ const ArticlePage = () => {
 
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
+    const isLoading = useSelector((state: RootState) => state.loading.isLoading)
     const { rows: articles, currentPageNum } = useSelector((state: RootState) => state.article)
     const search = useSelector((state: RootState) => state.article.search)
 
@@ -70,7 +70,7 @@ const ArticlePage = () => {
                                     </SvgIcon>
                                 )}
                                 variant="contained"
-                                onClick={() => navigate('/write')}
+                                onClick={() => navigate('/content/article/write')}
                             >
                                 Add
                             </Button>

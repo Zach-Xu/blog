@@ -15,11 +15,12 @@ import NotFound from "../pages/dashboard/not-found";
 import RolePage from "../pages/dashboard/system/role-page";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import UserPage from "../pages/dashboard/system/user-page";
 
 
 const MapRouterToComponent: { [key: string]: JSX.Element } = {
     '/system': <SystemManagement />,
-    // '/system/user': <UserList />,
+    '/system/user': <UserPage />,
     '/system/role': <RolePage />,
     '/system/menu': <MenuPage />,
     '/content': <ContentManagement />,
@@ -55,7 +56,6 @@ export const useAppRouter = () => {
     useEffect(() => {
         const fetchUserMenus = async () => {
             const reuslt = await menuService.getUserMenus()
-            // setMenus(reuslt)
             setRouter(() => createBrowserRouter([
                 {
                     path: '/login',

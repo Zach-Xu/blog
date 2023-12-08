@@ -15,7 +15,7 @@ const Login = () => {
     const [account, setAccount] = useState('')
     const [password, setPassword] = useState('')
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
+    const isLoading = useSelector((state: RootState) => state.loading.isLoading)
 
     const handleMethodChange = useCallback(
         (_: any, value: React.SetStateAction<string>) => {

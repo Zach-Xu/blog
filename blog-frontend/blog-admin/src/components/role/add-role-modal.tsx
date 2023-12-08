@@ -1,10 +1,9 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import Modal from "../common/modal"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../redux/store"
-import { createTag } from "../../redux/slices/tag-slice"
 import RoleModalContent from "./role-modal-content"
-import Box from "@mui/material/Box"
+import { createRole } from "../../redux/slices/role-slice"
 
 interface Props {
     open: boolean
@@ -13,14 +12,13 @@ interface Props {
 
 const AddRoleModal = ({ open, handleClose }: Props) => {
 
-    // const [name, setName] = useState('')
-    // const [description, setDescription] = useState('')
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const handleSubmit = useCallback((event: React.FormEvent) => {
+    const handleSubmit = useCallback((event: React.FormEvent, role: CreateRoleRequest) => {
         event.preventDefault()
-
+        dispatch(createRole(role)).unwrap()
+            .then(() => handleClose())
     }, [])
 
     return (

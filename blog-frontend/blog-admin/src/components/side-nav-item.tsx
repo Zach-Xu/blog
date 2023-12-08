@@ -26,10 +26,12 @@ const SideNavItem = () => {
             >
                 {
                     menus.map(m => (
-                        !m.subMenus ?
-                            <SingleLevelMenu key={m.id} menu={m} />
+                        !m.visible ? <></>
                             :
-                            <NestedMenu key={m.id} menu={m} />
+                            !(m.subMenus && m.subMenus.length > 0) ?
+                                <SingleLevelMenu key={m.id} menu={m} />
+                                :
+                                <NestedMenu key={m.id} menu={m} />
                     ))
                 }
 

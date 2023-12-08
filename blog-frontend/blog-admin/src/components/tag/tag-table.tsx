@@ -43,6 +43,7 @@ export const TagsTable = () => {
     const confirmDelete = useCallback(() => {
         if (selectedTag) {
             dispatch(deleteTag(selectedTag.id))
+            handleClose()
         }
     }, [selectedTag])
 

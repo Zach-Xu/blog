@@ -9,9 +9,11 @@ interface Props {
     clickHandler: (searchName: string) => void
     children?: React.ReactNode
     searchName: string
+    sm_screen_maxWdith?: number
+    lg_screen_maxWdith?: number
 }
 
-const Search = ({ name, placeholder, onKeyUpHandler, clickHandler, searchName, children }: Props) => {
+const Search = ({ name, placeholder, onKeyUpHandler, clickHandler, searchName, children, lg_screen_maxWdith = 350, sm_screen_maxWdith = 500 }: Props) => {
 
     const [value, setValue] = useState(searchName)
 
@@ -41,7 +43,7 @@ const Search = ({ name, placeholder, onKeyUpHandler, clickHandler, searchName, c
                 )}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                sx={mdUp ? { maxWidth: 350 } : { maxWidth: 500 }}
+                sx={mdUp ? { maxWidth: lg_screen_maxWdith } : { maxWidth: sm_screen_maxWdith }}
                 onKeyUp={onKeyUpHandler}
             />
             {

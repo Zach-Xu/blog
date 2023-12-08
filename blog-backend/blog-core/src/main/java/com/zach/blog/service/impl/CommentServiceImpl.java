@@ -3,6 +3,7 @@ package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.request.CommentRequest;
 import com.zach.blog.enums.CommentType;
+import com.zach.blog.enums.code.ResourceNotFoundCode;
 import com.zach.blog.exception.*;
 import com.zach.blog.dto.response.CommentQueryResult;
 import com.zach.blog.model.ApplicationUser;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+
+import static com.zach.blog.enums.code.ResourceNotFoundCode.*;
 
 
 @Service
@@ -81,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         if (!articleRepository.existsById(commentRequest.articleId())) {
-            throw new ArticleNotExistException();
+            throw new ResourceNotFoundException(ARTICLE_NOT_FOUND);
         }
         validateComment(commentRequest);
     }
@@ -93,10 +96,10 @@ public class CommentServiceImpl implements CommentService {
             }
 
             if (!commentRepository.existsById(commentRequest.rootCommentId())) {
-                throw new RootCommentNotExistException();
+                throw new ResourceNotFoundException(ROOT_COMMENT_NOT_FOUND);
             }
             if (!commentRepository.existsById(commentRequest.toCommentId())) {
-                throw new ToCommentNotExistException();
+                throw new ResourceNotFoundException(TO_COMMENT_NOT_FOUND);
             }
         }
         if (!Strings.hasText(commentRequest.content())) {

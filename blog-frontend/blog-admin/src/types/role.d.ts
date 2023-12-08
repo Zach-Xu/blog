@@ -1,7 +1,7 @@
 interface Role {
     id: number
     roleName: string
-    displayOrder: number
+    description: string
     enable: boolean
     createdTime: string
 }
@@ -18,4 +18,9 @@ interface CreateRoleRequest {
     description: string
 }
 
-interface 
+interface UpdateRoleRequest extends CreateRoleRequest {
+    id: number
+}
+
+type EditRole = UpdateRoleRequest
+

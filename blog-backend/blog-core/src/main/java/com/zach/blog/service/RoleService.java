@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-
 public interface RoleService {
 
     Role findOrCreateRole(String roleName);
@@ -16,11 +15,13 @@ public interface RoleService {
 
     void changeRoleStatus(Long id, boolean enable);
 
-    void createRole(CreateRoleRequest createRoleRequest);
+    Role createRole(CreateRoleRequest createRoleRequest);
 
     void updateRole(Long id, UpdateRoleRequest request);
 
     void deleteRole(Long id);
 
     List<Role> getAllActiveRoles();
+
+    Role getRoleDetails(Long roleId);
 }

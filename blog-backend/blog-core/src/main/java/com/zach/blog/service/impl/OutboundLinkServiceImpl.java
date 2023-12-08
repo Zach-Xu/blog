@@ -3,7 +3,8 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.CreateLinkRequest;
 import com.zach.blog.dto.request.UpdateLinkRequest;
 import com.zach.blog.enums.AuditStatus;
-import com.zach.blog.exception.SystemException;
+import com.zach.blog.exception.BusinessException;
+import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.OutboundLink;
 import com.zach.blog.repository.OutboundLinkRepository;
 import com.zach.blog.service.OutboundLinkService;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static com.zach.blog.enums.code.ResourceNotFoundCode.LINK_NOT_FOUND;
 import static com.zach.blog.repository.OutboundLinkRepository.Specs.containsName;
 import static com.zach.blog.repository.OutboundLinkRepository.Specs.isEnable;
 
@@ -60,14 +62,12 @@ public class OutboundLinkServiceImpl implements OutboundLinkService {
 
     @Override
     public OutboundLink getLinkById(Long id) {
-        // ToDo: refactor exception handling
-        return linkRepository.findById(id).orElseThrow(SystemException::new);
+        return linkRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(LINK_NOT_FOUND));
     }
 
     @Override
     public void updateLink(Long userId, Long id, UpdateLinkRequest request) {
-        // ToDo: refactor exception
-        OutboundLink link = linkRepository.findById(id).orElseThrow(SystemException::new);
+        OutboundLink link = linkRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(LINK_NOT_FOUND));
         link.setUpdatedBy(userId);
         link.setName(request.name());
         link.setDescription(request.description());
@@ -79,8 +79,7 @@ public class OutboundLinkServiceImpl implements OutboundLinkService {
 
     @Override
     public void deleteLink(Long id) {
-        // ToDo: refactor exception
-        OutboundLink link = linkRepository.findById(id).orElseThrow(SystemException::new);
+        OutboundLink link = linkRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(LINK_NOT_FOUND));
         link.setDeleted(true);
         linkRepository.save(link);
     }

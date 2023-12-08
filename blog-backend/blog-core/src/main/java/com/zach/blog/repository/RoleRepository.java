@@ -26,6 +26,12 @@ public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificat
             "ORDER BY m.displayOrder ASC")
     Optional<Role> findRoleAndRootMenusById(Long roleId);
 
+    @Query(value = "" +
+            "SELECT r from Role r " +
+            "LEFT JOIN FETCH r.menus " +
+            "WHERE r.id = ?1")
+    Optional<Role> findRoleWithMenus(Long roleId);
+
     interface Specs {
         static Specification<Role> containsRoleName(String roleName) {
             return (root, query, builder) -> {

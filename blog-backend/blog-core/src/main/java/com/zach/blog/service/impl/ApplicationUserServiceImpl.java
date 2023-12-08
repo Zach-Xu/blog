@@ -3,9 +3,8 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.CreateUserRequest;
 import com.zach.blog.dto.request.UpdateUserInfoRequest;
 import com.zach.blog.dto.request.UpdateUserRequest;
+import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
-import com.zach.blog.exception.SystemException;
-import com.zach.blog.exception.UserNotExistException;
 import com.zach.blog.model.Role;
 import com.zach.blog.repository.RoleRepository;
 import com.zach.blog.service.ApplicationUserService;
@@ -32,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
+import static com.zach.blog.enums.code.ResourceAlreadyExistCode.EMAIL_EXIST;
 import static com.zach.blog.enums.code.ResourceNotFoundCode.USER_NOT_FOUND;
 import static com.zach.blog.repository.ApplicationUserRepository.Specs.*;
 
@@ -48,7 +48,8 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public void updateUserInfo(Long userId, UpdateUserInfoRequest updateUserInfoRequest) {
-        ApplicationUser user = userRepository.findById(userId).orElseThrow(UserNotExistException::new);
+        ApplicationUser user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         BeanCopyUtils.copyPropertiesIgnoreNull(updateUserInfoRequest, user);
         if (Strings.hasText(updateUserInfoRequest.password())) {
             user.setPassword(passwordEncoder.encode(updateUserInfoRequest.password()));
@@ -59,24 +60,25 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     }
 
     @Override
-    public Page<ApplicationUser> getUsers(Integer pageNum, Integer pageSize, String username, String email, Boolean enable) {
+    public Page<ApplicationUser> getUsers(Integer pageNum, Integer pageSize, String username, String email,
+            Boolean enable) {
         Sort sort = Sort.by("username");
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
         Specification<ApplicationUser> specs = Specification.where(null);
-        if(Strings.hasText(username)){
+        if (Strings.hasText(username)) {
             specs = specs.and(containsUsername(username));
         }
-        if(Strings.hasText(email)){
+        if (Strings.hasText(email)) {
             specs = specs.and(containsEmail(email));
         }
-        if(Objects.nonNull(enable)){
+        if (Objects.nonNull(enable)) {
             specs = specs.and(isEnable(enable));
         }
         return userRepository.findAll(specs, pageRequest);
     }
 
     @Override
-    public void createUser(CreateUserRequest request) {
+    public ApplicationUser createUser(CreateUserRequest request) {
         ApplicationUser user = new ApplicationUser();
         user.setUsername(request.username());
         user.setNickname(request.nickname());
@@ -90,7 +92,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
                 .map(id -> roleRepository.getReferenceById(id))
                 .collect(Collectors.toSet());
         user.setRoles(roles);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -106,8 +108,8 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         ApplicationUser user = userRepository.findById(id).orElseThrow(SecurityException::new);
         user.setNickname(request.nickname());
         user.setPhoneNumber(request.phoneNumber());
-        if(userRepository.existsByEmail(request.email())){
-            throw new SystemException();
+        if (userRepository.existsByEmail(request.email())) {
+            throw new ResourceAlreadyExistException(EMAIL_EXIST);
         }
         user.setEmail(request.email());
         user.setGender(request.gender());
@@ -123,7 +125,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public ApplicationUser getUserById(Long id) {
-         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 
     @Transactional
@@ -136,5 +138,14 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         user.setAvatar(avatar);
         user = userRepository.save(user);
         redisUtils.set(USER_KEY + user.getId(), JsonUtils.stringify(user));
+    }
+
+    @Override
+    public void changeUserStatus(Long id, Boolean enable, Long userId) {
+        ApplicationUser user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        user.setEnable(enable);
+        user.setUpdatedBy(userId);
+        userRepository.save(user);
     }
 }

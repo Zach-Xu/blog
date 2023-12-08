@@ -30,7 +30,7 @@ const TopNav = ({ onNavOpen }: Props) => {
     const location = useLocation()
 
     // display back button only when writing or editting an article
-    const match = matchRoutes([{ path: '/write' }, { path: '/edit' }], location)
+    const match = matchRoutes([{ path: '/content/article/write' }, { path: '/content/article/edit' }], location)
 
     return (
         <>

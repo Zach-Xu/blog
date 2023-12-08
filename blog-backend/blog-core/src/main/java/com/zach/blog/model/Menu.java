@@ -48,12 +48,12 @@ public class Menu extends BaseEntity implements GrantedAuthority {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Menu menu = (Menu) o;
-        return Objects.equals(name, menu.name) && Objects.equals(parentId, menu.parentId) && menuType == menu.menuType;
+        return Objects.equals(name, menu.name) && Objects.equals(parentId, menu.parentId) && Objects.equals(routerPath, menu.routerPath) && Objects.equals(component, menu.component) && menuType == menu.menuType && Objects.equals(permission, menu.permission);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, parentId, menuType);
+        return Objects.hash(name, parentId, routerPath, component, menuType, permission);
     }
 
     @Override

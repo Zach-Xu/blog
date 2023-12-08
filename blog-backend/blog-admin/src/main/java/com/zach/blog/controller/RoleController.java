@@ -1,20 +1,23 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.request.ChangeRoleStatusRequest;
-import com.zach.blog.dto.response.RoleNameResponse;
+import com.zach.blog.dto.response.*;
 import com.zach.blog.dto.request.CreateRoleRequest;
-import com.zach.blog.dto.response.RoleResponse;
 import com.zach.blog.dto.request.UpdateRoleRequest;
-import com.zach.blog.dto.response.PageResponse;
-import com.zach.blog.dto.response.ResponseResult;
+import com.zach.blog.model.Menu;
 import com.zach.blog.model.Role;
 import com.zach.blog.service.RoleService;
 import com.zach.blog.utils.BeanCopyUtils;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,6 +44,15 @@ public class RoleController {
         return ResponseResult.ok(roleResponse);
     }
 
+    @GetMapping("/{id}")
+    public ResponseResult<?> getRoleDetails(@PathVariable Long id){
+        Role role = roleService.getRoleDetails(id);
+        RoleDetailsResponse response = BeanCopyUtils.copyBean(role, RoleDetailsResponse.class);
+        List<Long> menuIds = role.getMenus().stream().map(Menu::getId).collect(Collectors.toList());
+        response.setMenuIds(menuIds);
+        return ResponseResult.ok(response);
+    }
+
     @PutMapping("/{id}")
     public ResponseResult<?> updateRole(@PathVariable Long id, @RequestBody UpdateRoleRequest request) {
         roleService.updateRole(id, request);
@@ -53,10 +65,13 @@ public class RoleController {
         return ResponseResult.ok();
     }
 
+    @Validate
     @PostMapping
-    public ResponseResult<?> createRole(@RequestBody CreateRoleRequest createRoleRequest) {
-        roleService.createRole(createRoleRequest);
-        return ResponseResult.ok();
+    public ResponseResult<?> createRole(@Valid @RequestBody CreateRoleRequest createRoleRequest,
+            BindingResult bindingResult) {
+        Role role = roleService.createRole(createRoleRequest);
+        RoleResponse response = BeanCopyUtils.copyBean(role, RoleResponse.class);
+        return ResponseResult.ok(response);
     }
 
     @DeleteMapping("/{id}")

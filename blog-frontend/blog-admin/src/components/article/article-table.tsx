@@ -40,12 +40,13 @@ const ArticleTable = ({ articles }: Props) => {
     const navigate = useNavigate()
 
     const handleEditArticle = (id: number) => {
-        navigate(`/edit?id=${id}`)
+        navigate(`/content/article/edit?id=${id}`)
     }
 
     const confirmDelete = useCallback(() => {
         if (selectedArticle) {
             dispatch(deleteArticle(selectedArticle.id))
+            handleClose()
         }
     }, [selectedArticle])
 

@@ -13,6 +13,14 @@ export const roleService = {
         })
         return result
     },
+
+    getRoleDetails: async (roleId: number) => {
+        const result = await resourceAxios.get<void, EditRole>(`/roles/${roleId}`, {
+            headers: requireTokenHeader
+        })
+        return result
+    },
+
     changeRoleStatus: async ({ id, enable }: ChangeStatusRequest) => {
         const result = await resourceAxios.put<void, void>(`/roles/${id}/status`, {
             enable
@@ -20,5 +28,28 @@ export const roleService = {
             headers: requireTokenHeader
         })
         return result
+    },
+
+    createRole: async (request: CreateRoleRequest) => {
+        const result = await resourceAxios.post<void, Role>('/roles', request, {
+            headers: requireTokenHeader
+        })
+        return result
+    },
+
+    updateRole: async (request: UpdateRoleRequest) => {
+        const { id: roleId } = request
+        const result = await resourceAxios.put<void, void>(`/roles/${roleId}`, {
+            ...request
+        }, {
+            headers: requireTokenHeader
+        })
+        return result
+    },
+
+    deleteRole: async (roleId: number) => {
+        await resourceAxios.delete<void, void>(`/roles/${roleId}`, {
+            headers: requireTokenHeader
+        })
     }
 }

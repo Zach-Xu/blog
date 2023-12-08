@@ -3,8 +3,10 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.response.MenuResponse;
 import com.zach.blog.dto.response.MenuTreeViewResponse;
 import com.zach.blog.enums.MenuType;
+import com.zach.blog.enums.code.BusinessErrorCode;
+import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
-import com.zach.blog.exception.SystemException;
+import com.zach.blog.exception.BusinessException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
 import com.zach.blog.model.Role;
@@ -22,10 +24,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.zach.blog.enums.code.ResourceNotFoundCode.MENU_NOT_FOUND;
-import static com.zach.blog.enums.code.ResourceNotFoundCode.USER_NOT_FOUND;
+import static com.zach.blog.enums.code.BusinessErrorCode.INVALID_MENU_PARENT_ID;
+import static com.zach.blog.enums.code.BusinessErrorCode.SUB_MENUS_EXIST;
+import static com.zach.blog.enums.code.ResourceAlreadyExistCode.MENU_NAME_EXIST;
+import static com.zach.blog.enums.code.ResourceNotFoundCode.*;
 import static com.zach.blog.repository.MenuRepository.Specs.containsName;
 import static com.zach.blog.repository.MenuRepository.Specs.isEnable;
 
@@ -38,12 +41,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuResponse> getUserMenus(Long userId) {
-        ApplicationUser user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        ApplicationUser user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         List<Long> roleIds = user.getRoles().stream().map(Role::getId).toList();
 
         // Because of uni-directional association, menus can only be fetched via role
         List<Role> roles = roleIds.stream()
-                .map(id -> roleRepository.findRoleAndRootMenusById(id).orElseThrow(SystemException::new))
+                .map(id -> roleRepository.findRoleAndRootMenusById(id).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND)))
                 .toList();
 
         List<Menu> rootMenus = roles.stream()
@@ -70,8 +74,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void createMenu(Menu menu) {
         if (menuRepository.findByName(menu.getName()).isPresent()) {
-            // ToDo: refactor exception handling
-            throw new SystemException();
+            throw new ResourceAlreadyExistException(MENU_NAME_EXIST);
         }
         menuRepository.save(menu);
     }
@@ -80,31 +83,27 @@ public class MenuServiceImpl implements MenuService {
     public void updateMenu(Long id, Menu menu) {
         // Menu can not be its own parent
         if (Objects.equals(menu.getParentId(), id)) {
-            throw new SystemException();
+            throw new BusinessException(INVALID_MENU_PARENT_ID);
         }
-        // ToDo: refactor exception handling
-        Menu menuToUpdate = menuRepository.findById(id).orElseThrow(SystemException::new);
+        Menu menuToUpdate = menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MENU_NOT_FOUND));
 
         BeanUtils.copyProperties(menu, menuToUpdate);
         menuRepository.save(menuToUpdate);
     }
 
-
     @Override
     public Menu getMenuById(Long id) {
-        // ToDo: refactor exception handling
-        return menuRepository.findById(id).orElseThrow(SystemException::new);
+        return menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MENU_NOT_FOUND));
     }
 
     @Override
     public void deleteMenu(Long id) {
         // The menu about to delete should not have any sub menus
         if (menuRepository.existsByParentId(id)) {
-            // ToDo: refactor exception handling
-            throw new SystemException();
+            throw new BusinessException(SUB_MENUS_EXIST);
         }
 
-        Menu menu = menuRepository.findById(id).orElseThrow(SystemException::new);
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MENU_NOT_FOUND));
         menu.setDeleted(true);
         menuRepository.save(menu);
     }
@@ -114,30 +113,31 @@ public class MenuServiceImpl implements MenuService {
         Sort sort = Sort.by("displayOrder");
 
         Specification<Menu> specs = Specification.where(null);
-        if(Strings.hasText(name)){
+        if (Strings.hasText(name)) {
             specs = specs.and(containsName(name));
         }
-        if(Objects.nonNull(enable)){
+        if (Objects.nonNull(enable)) {
             specs = specs.and(isEnable(enable));
         }
 
         List<Menu> menus = menuRepository.findAll(specs, sort);
 
-        if(!Strings.hasText(name) && Objects.isNull(enable)){
+        if (!Strings.hasText(name) && Objects.isNull(enable)) {
             Map<Long, List<Menu>> menuMap = menus.stream()
                     .collect(Collectors.groupingBy(Menu::getParentId));
 
             // By default, root menus have parentId -1L
             return convertToTree(-1L, menuMap);
 
-        }else{
+        } else {
             // With query params, the result might not contain root menus
             Map<Long, MenuTreeViewResponse> menuMap = menus.stream()
-                    .collect(Collectors.toMap(menu -> menu.getId(), menu -> BeanCopyUtils.copyBean(menu, MenuTreeViewResponse.class)));
+                    .collect(Collectors.toMap(menu -> menu.getId(),
+                            menu -> BeanCopyUtils.copyBean(menu, MenuTreeViewResponse.class)));
 
             // Build tree structure
             menus.forEach(menu -> {
-                if(menuMap.containsKey(menu.getParentId())){
+                if (menuMap.containsKey(menu.getParentId())) {
                     MenuTreeViewResponse parent = menuMap.get(menu.getParentId());
                     parent.addSubMenu(menuMap.get(menu.getId()));
                 }
@@ -154,7 +154,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuTreeViewResponse> getRoleMenusInTreeView(Long roleId) {
-        Role role = roleRepository.findById(roleId).orElseThrow(SystemException::new);
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND));
         Map<Long, List<Menu>> menuMap = role.getMenus().stream()
                 .collect(Collectors.groupingBy(Menu::getParentId));
 
@@ -177,8 +177,7 @@ public class MenuServiceImpl implements MenuService {
         List<MenuTreeViewResponse> menuTree = BeanCopyUtils.copyBeanList(subMenus, MenuTreeViewResponse.class);
         if (subMenus.size() != 0) {
             menuTree.forEach(
-                    menu -> menu.setSubMenus(convertToTree(menu.getId(), map))
-            );
+                    menu -> menu.setSubMenus(convertToTree(menu.getId(), map)));
         }
         return menuTree;
     }

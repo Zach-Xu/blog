@@ -24,19 +24,17 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificat
             "ORDER BY m.displayOrder ASC")
     List<Menu> findSubMenusByTypes(Long rootMenuId, List<MenuType> menuTypes);
 
-    List<Menu> findAllByParentId(Long parentId, Sort sort);
-
     boolean existsByParentId(Long id);
 
     interface Specs {
-        static Specification<Menu> containsName(String name){
+        static Specification<Menu> containsName(String name) {
             return (root, query, builder) -> {
                 String nameLowerCase = name.toLowerCase();
-                return builder.like(builder.lower(root.get("name")), "%"+nameLowerCase+"%");
+                return builder.like(builder.lower(root.get("name")), "%" + nameLowerCase + "%");
             };
         }
 
-        static Specification<Menu> isEnable(boolean enable){
+        static Specification<Menu> isEnable(boolean enable) {
             return (root, query, builder) -> builder.equal(root.get("enable"), enable);
         }
     }

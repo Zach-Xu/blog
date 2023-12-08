@@ -14,7 +14,7 @@ interface Props {
 
 const AlertDialog = ({ open, handleClose, confirmAction, deleteMessage }: Props) => {
 
-    const { isLoading } = useSelector((state: RootState) => state.loading)
+    const isLoading = useSelector((state: RootState) => state.loading.isLoading)
 
     return (
 

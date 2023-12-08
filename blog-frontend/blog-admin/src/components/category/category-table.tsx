@@ -43,12 +43,13 @@ const CategoryTable = () => {
     const confirmDelete = useCallback(() => {
         if (selectedCategory) {
             dispatch(deleteCategory(selectedCategory.id))
+            handleClose()
         }
     }, [selectedCategory])
 
     const categories = useSelector((state: RootState) => state.category.rows)
     const currentPageNum = useSelector((state: RootState) => state.category.currentPageNum)
-    const totalPages = useSelector((state: RootState) => state.category.total)
+    const totalPages = useSelector((state: RootState) => state.category.totalPages)
     const search = useSelector((state: RootState) => state.category.search)
 
     useEffect(() => {

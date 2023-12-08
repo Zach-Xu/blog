@@ -31,7 +31,7 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public ResponseResult<?> getMenuById(@PathVariable Long id){
+    public ResponseResult<?> getMenuById(@PathVariable Long id) {
         Menu menu = menuService.getMenuById(id);
         return ResponseResult.ok(menu);
     }
@@ -43,13 +43,14 @@ public class MenuController {
     }
 
     @GetMapping("/all/tree")
-    public ResponseResult<?> getAllMenusInTreeView(@RequestParam(required = false) String name, @RequestParam(required = false) Boolean enable){
+    public ResponseResult<?> getAllMenusInTreeView(@RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean enable) {
         List<MenuTreeViewResponse> menusInTreeView = menuService.getMenusInTreeView(name, enable);
         return ResponseResult.ok(menusInTreeView);
     }
 
     @GetMapping("/tree")
-    public ResponseResult<?> getRoleMenusInTreeView(@RequestParam Long roleId){
+    public ResponseResult<?> getRoleMenusInTreeView(@RequestParam Long roleId) {
         List<MenuTreeViewResponse> roleMenusInTreeView = menuService.getRoleMenusInTreeView(roleId);
         return ResponseResult.ok(roleMenusInTreeView);
     }
@@ -68,13 +69,14 @@ public class MenuController {
 
     @Validate
     @PutMapping("/{id}/status")
-    public ResponseResult<?> updateMenuStatus(@PathVariable Long id, @AuthenticationPrincipal SessionUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
+    public ResponseResult<?> updateMenuStatus(@PathVariable Long id, @AuthenticationPrincipal SessionUser user,
+            @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
         menuService.changeMenuStatus(id, request.enable(), user.getId());
         return ResponseResult.ok();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult<?> deleteMenu(@PathVariable Long id){
+    public ResponseResult<?> deleteMenu(@PathVariable Long id) {
         menuService.deleteMenu(id);
         return ResponseResult.ok();
     }

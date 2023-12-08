@@ -1,7 +1,17 @@
 package com.zach.blog.enums;
 
 public enum RoleName {
-    ROLE_ADMIN,
-    ROLE_USER,
-    ROLE_LINK_AUDITOR
+
+    ADMIN("Admin"),
+    USER("Regular user"),
+    LINK_AUDITOR("Link auditor"),
+    VIEWER("Viewer");
+    final String name;
+    RoleName(String name) {
+        this.name = name;
+    }
+
+    String getName(){
+        return this.name;
+    }
 }

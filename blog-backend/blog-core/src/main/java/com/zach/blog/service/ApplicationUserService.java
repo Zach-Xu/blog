@@ -4,6 +4,9 @@ import com.zach.blog.dto.request.CreateUserRequest;
 import com.zach.blog.dto.request.UpdateUserInfoRequest;
 import com.zach.blog.dto.request.UpdateUserRequest;
 import com.zach.blog.model.ApplicationUser;
+
+import jakarta.validation.constraints.NotNull;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +17,7 @@ public interface ApplicationUserService {
 
     Page<ApplicationUser> getUsers(Integer pageNum, Integer pageSize, String username, String email, Boolean enable);
 
-    void createUser(CreateUserRequest request);
+    ApplicationUser createUser(CreateUserRequest request);
 
     void deleteUser(Long id);
 
@@ -23,4 +26,6 @@ public interface ApplicationUserService {
     ApplicationUser getUserById(Long id);
 
     void updateAvatarImage(ApplicationUser user, MultipartFile image) throws IOException;
+
+    void changeUserStatus(Long id, Boolean enable, Long userId);
 }

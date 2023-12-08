@@ -35,7 +35,8 @@ public class DbInitializationServiceImpl implements DbInitializationService {
             return;
         }
 
-        Role adminRole = new Role(RoleName.ROLE_ADMIN);
+        Role adminRole = new Role(RoleName.ADMIN);
+        adminRole.setDescription("Top-level role, has all permissions");
         adminRole.addMenu(menuRepository.findByName(SYSTEM_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(CATEGORY_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(ROLE_MANAGEMENT).get());
@@ -43,7 +44,8 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         adminRole.addMenu(menuRepository.findByName(CONTENT_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(MENU_MANAGEMENT).get());
 
-        Role auditorRole = new Role(RoleName.ROLE_LINK_AUDITOR);
+        Role auditorRole = new Role(RoleName.LINK_AUDITOR);
+        auditorRole.setDescription("Role that has access to link");
         auditorRole.addMenu(menuRepository.findByName(CONTENT_MANAGEMENT).get());
         auditorRole.addMenu(menuRepository.findByName(LINK_MANAGEMENT).get());
         auditorRole.addMenu(menuRepository.findByName(LINK_ADD).get());
@@ -51,8 +53,9 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         auditorRole.addMenu(menuRepository.findByName(LINK_QUERY).get());
         auditorRole.addMenu(menuRepository.findByName(LINK_DELETE).get());
 
-        Role userRole = new Role(RoleName.ROLE_USER);
+        Role userRole = new Role(RoleName.USER);
         userRole.addMenu(menuRepository.findByName(WRITE_ARTICLE).get());
+        userRole.setDescription("Regular user, can only write article");
 
         List<Role> roleList = new ArrayList<>();
         roleList.add(adminRole);
@@ -69,7 +72,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         }
 
         ApplicationUser user1 = new ApplicationUser();
-        Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN.toString()).get();
+        Role adminRole = roleRepository.findByRoleName(RoleName.ADMIN.name()).get();
         user1.addRole(adminRole);
         user1.setUsername("Zachary");
         user1.setNickname("NotNow");
@@ -635,13 +638,13 @@ public class DbInitializationServiceImpl implements DbInitializationService {
 
         Menu menu32 = new Menu();
         menu32.setName(EDIT_ARTICLE);
-        menu32.setParentId(menu23.getId());
+        menu32.setParentId(-1L);
         menu32.setDisplayOrder(0);
         menu32.setRouterPath("/content/article/edit");
         menu32.setComponent("edit");
         menu32.setFrame(false);
         menu32.setMenuType(MenuType.MENU);
-        menu32.setVisible(true);
+        menu32.setVisible(false);
         menu32.setEnable(true);
         menu32.setPermission("content:article:edit");
         menu32.setIcon("build");

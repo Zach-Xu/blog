@@ -4,7 +4,6 @@ import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
 import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
-import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.service.CategoryService;
 import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.model.Category;
@@ -61,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category createCategory(CreateCategoryRequest request, Long userId) {
         Category category = new Category();
-        if(categoryRepository.existsByName(request.name())){
+        if (categoryRepository.existsByName(request.name())) {
             throw new ResourceAlreadyExistException(CATEGORY_NAME_EXIST);
         }
         category.setName(request.name());
@@ -74,7 +73,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateCategory(Long userId, Long id, UpdateCategoryRequest request) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setUpdatedBy(userId);
         category.setName(request.name());
         category.setDescription(request.description());
@@ -85,14 +85,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setDeleted(true);
         categoryRepository.save(category);
     }
 
     @Override
     public void changeCategoryStatus(Long id, Boolean enable, Long userId) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(CATEGORY_NOT_FOUND));
         category.setEnable(enable);
         category.setUpdatedBy(userId);
         categoryRepository.save(category);

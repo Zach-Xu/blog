@@ -3,7 +3,6 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.CreateRoleRequest;
 import com.zach.blog.dto.request.UpdateRoleRequest;
 import com.zach.blog.exception.ResourceNotFoundException;
-import com.zach.blog.exception.SystemException;
 import com.zach.blog.model.Menu;
 import com.zach.blog.repository.MenuRepository;
 import com.zach.blog.repository.RoleRepository;
@@ -60,14 +59,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void changeRoleStatus(Long id, boolean enable) {
-        // Todo: refactor exception handling
         Role role = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND));
         role.setEnable(enable);
         roleRepository.save(role);
     }
 
     @Override
-    public void createRole(CreateRoleRequest createRoleRequest) {
+    public Role createRole(CreateRoleRequest createRoleRequest) {
         Role role = new Role();
         String roleName = createRoleRequest.roleName();
 
@@ -79,20 +77,18 @@ public class RoleServiceImpl implements RoleService {
                 .map(id -> menuRepository.getReferenceById(id))
                 .collect(Collectors.toSet());
         role.setMenus(menus);
-        // Todo: refactor spring security config to allow RBAC
-        roleRepository.save(role);
+        return roleRepository.save(role);
     }
 
     @Override
     public void updateRole(Long id, UpdateRoleRequest request) {
-        // ToDo: refactor exception handling
-        Role role = roleRepository.findById(id).orElseThrow(SystemException::new);
+        Role role = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND));
         role.setRoleName(request.roleName());
         role.setDescription(request.description());
         role.setEnable(request.enable());
 
         Set<Menu> menus = request.menuIds().stream()
-                .map(menuId -> menuRepository.getReferenceById(id))
+                .map(menuId -> menuRepository.getReferenceById(menuId))
                 .collect(Collectors.toSet());
         role.setMenus(menus);
 
@@ -101,8 +97,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRole(Long id) {
-        // ToDo: refactor exception handling
-        Role role = roleRepository.findById(id).orElseThrow(SystemException::new);
+        Role role = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND));
         role.setDeleted(true);
         roleRepository.save(role);
     }
@@ -110,6 +105,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getAllActiveRoles() {
         return roleRepository.findAllByEnable(true);
+    }
+
+    @Override
+    public Role getRoleDetails(Long roleId) {
+        return roleRepository.findRoleWithMenus(roleId).orElseThrow(() -> new ResourceNotFoundException(ROLE_NOT_FOUND));
     }
 
 }

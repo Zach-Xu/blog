@@ -31,9 +31,19 @@ export const changeRoleStatus = createAsyncThunk('/role/status', async (request:
 })
 
 export const createRole = createAsyncThunk('/roles/create', async (request: CreateRoleRequest) => {
-
+    const result = await roleService.createRole(request)
+    return result
 })
 
+export const updateRole = createAsyncThunk('/roles/update', async (request: UpdateRoleRequest) => {
+    await roleService.updateRole(request)
+    return request
+})
+
+export const deleteRole = createAsyncThunk('/roles/delete', async (roleId: number) => {
+    await roleService.deleteRole(roleId)
+    return roleId
+})
 
 export const roleSlice = createSlice({
     name: 'role',
@@ -80,6 +90,37 @@ export const roleSlice = createSlice({
                         }
                     }
                 })
+            })
+            .addCase(createRole.fulfilled, (state, action) => {
+                const role = action.payload
+                if (state.rows.length >= 5) {
+                    state.rows.pop()
+                    state.total++
+                    state.totalPages = Math.ceil(state.total / 5)
+                }
+                state.rows.unshift(role)
+            })
+            .addCase(updateRole.fulfilled, (state, action) => {
+                const updatedRole = action.payload
+                state.rows = state.rows.map(role => {
+                    if (role.id !== updatedRole.id) {
+                        return role
+                    } else {
+                        return {
+                            ...role,
+                            ...updatedRole
+                        }
+                    }
+                })
+            })
+            .addCase(deleteRole.fulfilled, (state, action) => {
+                const { rows, currentPageNum } = state
+                state.rows = rows.filter(tag => tag.id != action.payload)
+                if (state.rows.length === 0 && currentPageNum > 0) {
+                    state.currentPageNum--
+                }
+                state.total--
+                state.totalPages = Math.ceil(state.total / 5)
             })
     }
 })

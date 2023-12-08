@@ -29,5 +29,7 @@ public class MenuResponse {
 
     private String icon;
 
+    private boolean visible;
+
     private List<Menu> subMenus;
 }

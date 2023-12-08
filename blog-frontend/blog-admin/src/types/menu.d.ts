@@ -4,6 +4,7 @@ interface Menu {
     enable: boolean
     parentId: number
     displayOrder: number
+    visible: boolean
     routerPath: string | undefined
     component: null | string
     permission: null | string

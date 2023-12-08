@@ -2,7 +2,7 @@ package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.response.AuthResponse;
 import com.zach.blog.enums.RoleName;
-import com.zach.blog.exception.UsernameAlreadyTakenException;
+import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Role;
 import com.zach.blog.model.SessionUser;
@@ -15,20 +15,18 @@ import com.zach.blog.utils.JwtUtils;
 import com.zach.blog.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
-import org.hibernate.Session;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
+import static com.zach.blog.enums.code.ResourceAlreadyExistCode.USER_NAME_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthResponse register(String username, String password) {
 
         userRepository.findByUsername(username).ifPresent(u -> {
-            throw new UsernameAlreadyTakenException();
+            throw new ResourceAlreadyExistException(USER_NAME_EXIST);
         });
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -53,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ApplicationUser user = new ApplicationUser();
         user.setUsername(username);
         user.setPassword(encodedPassword);
-        Role role = roleService.findOrCreateRole(RoleName.ROLE_USER.toString());
+        Role role = roleService.findOrCreateRole(RoleName.VIEWER.name());
         user.addRole(role);
 
         // Persist new user
