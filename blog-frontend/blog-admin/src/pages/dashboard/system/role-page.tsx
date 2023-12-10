@@ -4,12 +4,22 @@ import { useOpenClose } from "../../../hooks/use-open-close"
 import RoleTable from "../../../components/role/role-table"
 import SearchRole from "../../../components/role/search-role"
 import AddRoleModal from "../../../components/role/add-role-modal"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../../redux/store"
+import { getMenusInTree } from "../../../redux/slices/role-slice"
 
 const RolePage = () => {
 
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const { open, handleOpen, handleClose } = useOpenClose()
+
+    const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        dispatch(getMenusInTree())
+    }, [])
 
     return (
         <>

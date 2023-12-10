@@ -53,8 +53,9 @@ public class RoleController {
         return ResponseResult.ok(response);
     }
 
+    @Validate
     @PutMapping("/{id}")
-    public ResponseResult<?> updateRole(@PathVariable Long id, @RequestBody UpdateRoleRequest request) {
+    public ResponseResult<?> updateRole(@PathVariable Long id, @Valid @RequestBody UpdateRoleRequest request, BindingResult bindingResult) {
         roleService.updateRole(id, request);
         return ResponseResult.ok();
     }

@@ -1,12 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { userService } from "../../services/resources/user-service";
+import { roleService } from "../../services/resources/role-service";
 
 interface UserState extends PageRespsone<UserRow> {
     currentPageNum: number
     search: {
         username: string
         email: string
-    }
+    },
+    roles: RoleNameResponse[]
 }
 
 const initialState: UserState = {
@@ -18,6 +20,7 @@ const initialState: UserState = {
         username: '',
         email: ''
     },
+    roles: []
 }
 
 
@@ -41,9 +44,14 @@ export const createUser = createAsyncThunk('/users/create', async (data: CreateU
     return result
 })
 
-export const updateUser = createAsyncThunk('/users/update', async (data: UpdateCategory) => {
+export const updateUser = createAsyncThunk('/users/update', async (data: UpdateUserRequest) => {
     await userService.updateUser(data)
     return data
+})
+
+export const getAllActiveRoles = createAsyncThunk('/users/roles', async () => {
+    const result = await roleService.getAllActiveRoles()
+    return result
 })
 
 
@@ -124,6 +132,9 @@ export const userSlice = createSlice({
                 }
                 state.total--
                 state.totalPages = Math.ceil(state.total / 5)
+            })
+            .addCase(getAllActiveRoles.fulfilled, (state, action) => {
+                state.roles = action.payload
             })
     }
 })

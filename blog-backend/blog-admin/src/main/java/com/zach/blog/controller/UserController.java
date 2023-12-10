@@ -10,6 +10,7 @@ import com.zach.blog.dto.request.UpdateUserRequest;
 import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.Role;
 import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.ApplicationUserService;
 import com.zach.blog.utils.BeanCopyUtils;
@@ -22,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -46,9 +48,8 @@ public class UserController {
     public ResponseResult<?> getUser(@PathVariable Long id) {
         ApplicationUser user = userService.getUserById(id);
         UserInfoForUpdateResponse response = BeanCopyUtils.copyBean(user, UserInfoForUpdateResponse.class);
-        List<RoleNameResponse> roles = BeanCopyUtils.copyBeanList(user.getRoles().stream().toList(),
-                RoleNameResponse.class);
-        response.setRoles(roles);
+        List<Long> roleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toList());
+        response.setRoleIds(roleIds);
         return ResponseResult.ok(response);
     }
 

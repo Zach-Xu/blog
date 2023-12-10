@@ -1,7 +1,6 @@
 import { Box, Chip, FormControl, FormHelperText, FormLabel, MenuItem, OutlinedInput, Select, SelectChangeEvent, Stack, Theme, useMediaQuery, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import { tagService } from "../../services/resources/tag-service"
-import { toast } from "react-toastify";
 import { MenuProps, getStyles } from "../../utils/drop-down-utils";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -18,7 +17,7 @@ const getTagName = (id: number, tags?: Tag[]): string => {
     if (tag) {
         return tag.name
     } else {
-        toast.error('System error, please contact admin')
+        console.error('System error, please contact admin')
         return ''
     }
 }
@@ -32,7 +31,7 @@ const TagDropDown = ({ tagIds, tagsChangeHandler }: Props) => {
 
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
-    const theme = useTheme();
+    const theme = useTheme()
 
     const [tags, setTags] = useState<Tag[]>()
 

@@ -6,6 +6,11 @@ interface Role {
     createdTime: string
 }
 
+interface RoleNameResponse {
+    id: number
+    roleName: string
+}
+
 interface GetRoles extends PageRequest {
     name?: string
     enable?: boolean | null

@@ -1,12 +1,14 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { roleService } from "../../services/resources/role-service";
+import { menuService } from "../../services/resources/menu-service";
 
 interface RoleState extends PageRespsone<Role> {
     currentPageNum: number
     search: {
         enable: boolean | null
         name: string
-    }
+    },
+    menus: Menu[]
 }
 
 const initialState: RoleState = {
@@ -17,7 +19,8 @@ const initialState: RoleState = {
     search: {
         enable: null,
         name: ''
-    }
+    },
+    menus: []
 }
 
 export const getRoles = createAsyncThunk('/roles', async (query: GetRoles) => {
@@ -43,6 +46,11 @@ export const updateRole = createAsyncThunk('/roles/update', async (request: Upda
 export const deleteRole = createAsyncThunk('/roles/delete', async (roleId: number) => {
     await roleService.deleteRole(roleId)
     return roleId
+})
+
+export const getMenusInTree = createAsyncThunk('/roles/menus', async () => {
+    const result = menuService.getMenusInTree({})
+    return result
 })
 
 export const roleSlice = createSlice({
@@ -121,6 +129,9 @@ export const roleSlice = createSlice({
                 }
                 state.total--
                 state.totalPages = Math.ceil(state.total / 5)
+            })
+            .addCase(getMenusInTree.fulfilled, (state, action) => {
+                state.menus = action.payload
             })
     }
 })

@@ -25,3 +25,4 @@ export const getStyles = (name: number, items: number[] | undefined, theme: Them
             fontWeight: theme.typography.fontWeightRegular
         }
 )
+

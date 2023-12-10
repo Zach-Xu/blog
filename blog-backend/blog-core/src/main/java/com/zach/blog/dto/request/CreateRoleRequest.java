@@ -7,13 +7,18 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateRoleRequest(
-        @NotBlank(message = "Role name must be provided") String roleName,
+        @NotBlank(message = "Role name must be provided")
+        String roleName,
 
-        @NotBlank(message = "Description must be provided") String description,
+        @NotBlank(message = "Description must be provided")
+        String description,
 
-        @NotNull(message = "Whether to enable this role must be specified") Boolean enable,
+        @NotNull(message = "Whether to enable this role must be specified")
+        Boolean enable,
 
-        @NotNull(message = "At least one menu is required") @Size(min = 1, message = "At least one menu is required") List<Long> menuIds
+        @NotNull(message = "At least one menu is required")
+        @Size(min = 1, message = "At least one menu is required")
+        List<Long> menuIds
 
 ) {
 }

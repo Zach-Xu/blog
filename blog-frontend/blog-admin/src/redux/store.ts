@@ -7,6 +7,7 @@ import articleReducer from './slices/article-slice'
 import errorMessageReducer from './slices/error-message-slice'
 import categoryReducer from './slices/category-slice'
 import roleReducer from './slices/role-slice'
+import userReducer from './slices/user-slice'
 
 export const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
         article: articleReducer,
         errorMessage: errorMessageReducer,
         category: categoryReducer,
-        role: roleReducer
+        role: roleReducer,
+        user: userReducer
     }
 })
 

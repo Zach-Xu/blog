@@ -1,16 +1,25 @@
 import { PlusIcon } from "@heroicons/react/20/solid"
 import { Box, Container, Stack, Button, SvgIcon, useMediaQuery, Theme } from "@mui/material"
 import { useOpenClose } from "../../../hooks/use-open-close"
-import RoleTable from "../../../components/role/role-table"
-import SearchRole from "../../../components/role/search-role"
-import AddRoleModal from "../../../components/role/add-role-modal"
 import SearchUser from "../../../components/user/search-user"
+import UserTable from "../../../components/user/user-table"
+import AddUserModal from "../../../components/user/add-user-modal"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "../../../redux/store"
+import { getAllActiveRoles } from "../../../redux/slices/user-slice"
 
 const UserPage = () => {
 
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const { open, handleOpen, handleClose } = useOpenClose()
+
+    const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        dispatch(getAllActiveRoles())
+    }, [])
 
     return (
         <>
@@ -62,12 +71,12 @@ const UserPage = () => {
                             </Box>
                         </Stack>
 
-                        <RoleTable />
+                        <UserTable />
 
                     </Stack>
                 </Container>
             </Box>
-            <AddRoleModal
+            <AddUserModal
                 open={open}
                 handleClose={handleClose}
             />

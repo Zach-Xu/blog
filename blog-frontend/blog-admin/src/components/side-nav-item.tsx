@@ -2,7 +2,7 @@
 import SingleLevelMenu from './menu/single-level-menu';
 import NestedMenu from './menu/nested-menu';
 import { List } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { menuService } from '../services/resources/menu-service';
 
 const SideNavItem = () => {
@@ -26,7 +26,7 @@ const SideNavItem = () => {
             >
                 {
                     menus.map(m => (
-                        !m.visible ? <></>
+                        !m.visible ? <Fragment key={m.id} ></Fragment>
                             :
                             !(m.subMenus && m.subMenus.length > 0) ?
                                 <SingleLevelMenu key={m.id} menu={m} />

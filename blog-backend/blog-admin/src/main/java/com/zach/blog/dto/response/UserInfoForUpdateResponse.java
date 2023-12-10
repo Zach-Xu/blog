@@ -11,10 +11,11 @@ import java.util.List;
 @Setter
 public class UserInfoForUpdateResponse {
     private Long id;
+    private String username;
     private String nickname;
     private String phoneNumber;
     private String email;
     private Gender gender;
     private boolean enable;
-    private List<RoleNameResponse> roles;
+    private List<Long> roleIds;
 }

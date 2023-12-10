@@ -160,7 +160,7 @@ const CategoryModalContent = ({ title, category, setCategory, handleClose, handl
                     sx={{
                         width: 100,
                         mb: lgUp ? '' : 1,
-                        transform: 'translateY(-50%)'
+                        transform: lgUp ? 'translateY(-50%)' : ''
                     }}>
                     Parent
                 </Typography>

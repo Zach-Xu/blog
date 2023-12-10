@@ -14,6 +14,13 @@ export const roleService = {
         return result
     },
 
+    getAllActiveRoles: async () => {
+        const result = await resourceAxios.get<void, RoleNameResponse[]>('/roles/all', {
+            headers: requireTokenHeader
+        })
+        return result
+    },
+
     getRoleDetails: async (roleId: number) => {
         const result = await resourceAxios.get<void, EditRole>(`/roles/${roleId}`, {
             headers: requireTokenHeader

@@ -3,6 +3,8 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.CreateUserRequest;
 import com.zach.blog.dto.request.UpdateUserInfoRequest;
 import com.zach.blog.dto.request.UpdateUserRequest;
+import com.zach.blog.enums.code.BusinessErrorCode;
+import com.zach.blog.exception.BusinessException;
 import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.Role;
@@ -31,6 +33,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
+import static com.zach.blog.enums.code.BusinessErrorCode.PASSWORD_TOO_SHORT;
 import static com.zach.blog.enums.code.ResourceAlreadyExistCode.EMAIL_EXIST;
 import static com.zach.blog.enums.code.ResourceNotFoundCode.USER_NOT_FOUND;
 import static com.zach.blog.repository.ApplicationUserRepository.Specs.*;
@@ -61,7 +64,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public Page<ApplicationUser> getUsers(Integer pageNum, Integer pageSize, String username, String email,
-            Boolean enable) {
+                                          Boolean enable) {
         Sort sort = Sort.by("username");
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
         Specification<ApplicationUser> specs = Specification.where(null);
@@ -97,20 +100,29 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Override
     public void deleteUser(Long id) {
-        // ToDo: refactor exception handling
-        ApplicationUser user = userRepository.findById(id).orElseThrow(SecurityException::new);
+        ApplicationUser user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         user.setDeleted(true);
         userRepository.save(user);
     }
 
     @Override
     public void updateUser(Long id, UpdateUserRequest request) {
-        ApplicationUser user = userRepository.findById(id).orElseThrow(SecurityException::new);
+        ApplicationUser user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         user.setNickname(request.nickname());
         user.setPhoneNumber(request.phoneNumber());
-        if (userRepository.existsByEmail(request.email())) {
+
+        if (!request.email().equals(user.getEmail()) && userRepository.existsByEmail(request.email())) {
             throw new ResourceAlreadyExistException(EMAIL_EXIST);
         }
+
+        // update password only when it's presented in request body
+        if (Strings.hasText(request.password())) {
+            if (request.password().length() <= 6) {
+                throw new BusinessException(PASSWORD_TOO_SHORT);
+            }
+            user.setPassword(passwordEncoder.encode(request.password()));
+        }
+
         user.setEmail(request.email());
         user.setGender(request.gender());
         user.setEnable(request.enable());

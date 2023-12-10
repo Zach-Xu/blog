@@ -2,7 +2,6 @@ import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
 
 export const userService = {
 
-
     getUsers: async ({ pageSize = 5, pageNum = 0, username, email }: GetUsers) => {
         const result = await resourceAxios.get<void, PageRespsone<UserRow>>('/users', {
             params: {
@@ -16,6 +15,14 @@ export const userService = {
         return result
     },
 
+    getUserDetails: async (userId: number) => {
+        const result = await resourceAxios.get<void, UserDetails>(`/users/${userId}`, {
+            headers: requireTokenHeader
+        })
+
+        return result
+    },
+
     changeUserStatus: async ({ id, enable }: ChangeStatusRequest) => {
         const result = await resourceAxios.put<void, void>(`/users/${id}/status`, {
             enable
@@ -26,22 +33,20 @@ export const userService = {
         return result
     },
 
-    createUser: async (data: CreateUserRequest) => {
-        const result = await resourceAxios.post<void, UserRow>('/users', data, {
+    createUser: async (request: CreateUserRequest) => {
+        const result = await resourceAxios.post<void, UserRow>('/users', request, {
             headers: requireTokenHeader
         })
         return result
     },
 
-    updateUser: async ({ id, category }: UpdateCategory) => {
-        const result = await resourceAxios.put<void, void>(`/users/${id}`, category, {
+    updateUser: async (request: UpdateUserRequest) => {
+        const result = await resourceAxios.put<void, void>(`/users/${request.id}`, request, {
             headers: requireTokenHeader
         })
 
         return result
     },
-
-
 
     deleteUser: async (id: number) => {
         const result = await resourceAxios.delete<void, void>(`/users/${id}`, {

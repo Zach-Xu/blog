@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux"
 import Search from "../common/search"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useCallback, useState } from "react"
-import { updateSearch } from "../../redux/slices/article-slice"
 import { Box, InputAdornment, OutlinedInput, Theme, Typography, useMediaQuery } from "@mui/material"
+import { updateSearch } from "../../redux/slices/user-slice"
 
 
 interface Props {
@@ -15,39 +15,39 @@ const SearchUser = ({ }: Props) => {
 
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
-    const title = useSelector((state: RootState) => state.article.search.title)
-    const summary = useSelector((state: RootState) => state.article.search.summary)
+    const username = useSelector((state: RootState) => state.user.search.username)
+    const email = useSelector((state: RootState) => state.article.search.summary)
 
-    const [localSummary, setLocalSummary] = useState(summary)
+    const [localEmail, setLocaEmail] = useState(email)
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const handleTitleKeyUp = useCallback((event: React.KeyboardEvent) => {
+    const handleUsernameKeyUp = useCallback((event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
-            const searchTitle = event.target.value.trim()
-            dispatch(updateSearch({ title: searchTitle }))
+            const searchUsername = event.target.value.trim()
+            dispatch(updateSearch({ username: searchUsername }))
         }
     }, [])
 
-    const handleSummaryKeyUp = useCallback((event: React.KeyboardEvent) => {
+    const handleEmailKeyUp = useCallback((event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
-            const searchSummary = event.target.value.trim()
-            dispatch(updateSearch({ summary: searchSummary }))
+            const searchEmail = event.target.value.trim()
+            dispatch(updateSearch({ email: searchEmail }))
         }
     }, [])
 
-    const handleClick = useCallback((searchName: string) => {
+    const handleClick = useCallback((searchUsername: string) => {
         dispatch(updateSearch({
-            title: searchName,
-            summary: localSummary
+            username: searchUsername,
+            email: localEmail
         }))
-    }, [localSummary])
+    }, [localEmail])
 
 
     return (
         <Search
-            searchName={title}
-            onKeyUpHandler={handleTitleKeyUp}
+            searchName={username}
+            onKeyUpHandler={handleUsernameKeyUp}
             clickHandler={handleClick}
             name='Username'
             placeholder='Username'
@@ -76,10 +76,10 @@ const SearchUser = ({ }: Props) => {
                         <InputAdornment position="start">
                         </InputAdornment>
                     )}
-                    value={localSummary}
-                    onChange={(e) => setLocalSummary(e.target.value)}
+                    value={localEmail}
+                    onChange={(e) => setLocaEmail(e.target.value)}
                     sx={mdUp ? { maxWidth: 350 } : { maxWidth: 500 }}
-                    onKeyUp={handleSummaryKeyUp}
+                    onKeyUp={handleEmailKeyUp}
                 />
             </Box>
         </Search>

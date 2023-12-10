@@ -3,12 +3,13 @@ import Box from '@mui/material/Box';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, TreeItemContentProps, TreeItemProps, useTreeItem } from '@mui/x-tree-view/TreeItem';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react';
-import { menuService } from '../../services/resources/menu-service';
 import { Checkbox, Typography } from '@mui/material';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { checkAncestors, getAncestorIds, getTreeIds } from '../../utils/tree-utils';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 declare module 'react' {
     interface CSSProperties {
@@ -119,22 +120,13 @@ interface Props {
 
 const MenuTreeView = forwardRef<number[], Props>(({ menuIds }, ref) => {
 
-
-    const [menus, setMenus] = useState<Menu[]>()
-
     const [selected, setSelected] = useState<number[]>([])
 
     useImperativeHandle(ref, () => {
         return selected
     })
 
-    useEffect(() => {
-        const fetchMenus = async () => {
-            const menus = await menuService.getMenusInTree({})
-            setMenus(menus)
-        }
-        fetchMenus()
-    }, [])
+    const menus = useSelector((state: RootState) => state.role.menus)
 
     useEffect(() => {
         if (menuIds) {
