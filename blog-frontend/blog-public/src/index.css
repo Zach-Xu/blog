@@ -7,3 +7,21 @@
         @apply before:w-0 before:absolute before:h-[0.1875rem] before:bg-white before:-bottom-[0.3rem] before:rounded-[0.125rem] before:left-[50%] before:-translate-x-1/2 before:transition-all before:ease-in-out before:duration-500
     }
 }
+
+@layer utilities {
+    .clip-image-lb {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
+    }
+
+    .clip-image-rt {
+        clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+    }
+
+    .clip-image-br {
+        clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+    }
+
+    .clip-image-bl {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 92%);
+    }
+}
