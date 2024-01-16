@@ -35,10 +35,13 @@ const SideDrawer = () => {
     }, [isSideBarShown])
 
     return (
-        <div className={`side-drawer fixed flex flex-col h-full overflow-auto no-scrollbar top-0 -right-[250px] w-[250px] bg-[#21252b] text-white transition-all duration-300 ease-in-out z-40
+        <div className={`fixed flex justify-end h-full overflow-auto no-scrollbar top-0 -right-[250px] w-[500px] bg-transparent transition-all duration-300 ease-in-out z-40
         ${isSideBarShown ? 'right-0' : ''}`}>
-            <UserCard />
-            <SideNav />
+            <div className='side-drawer w-[250px]  bg-[#21252b] text-white'>
+                <UserCard />
+                <SideNav />
+            </div>
+
         </div>
     )
 }

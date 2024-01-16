@@ -3,7 +3,7 @@ import ArticleCard from '../components/home/article-card'
 import UserCard from '../components/home/user-card'
 import SiteStatsCard from '../components/home/site-stats-card'
 import NoticeCard from '../components/home/notice-card'
-import CommentCard from '../components/home/latest-comment/latest-comment'
+
 import LatestComments from '../components/home/latest-comment/latest-comment'
 
 const Home = () => {

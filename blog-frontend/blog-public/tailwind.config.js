@@ -8,6 +8,7 @@ export default {
     extend: {
       backgroundImage: {
         'footer': 'linear-gradient(-45deg, #ec8c69, #e9546b, #38a1db, #23d5ab)',
+        'gradient-pink': 'linear-gradient(to right, #c67696, #c78a75)',
       },
       animation: {
         shake: 'shake 1s ease 0ms normal none running',

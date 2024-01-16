@@ -33,7 +33,7 @@ const ArticleCard = ({ reverse }: Props) => {
                 <h4 className='text-[#d96d7f] text-lg mx-4'>Project Introduction</h4>
                 <p className='line-clamp-3 mx-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla totam nemo cumque? Alias dolore debitis amet excepturi voluptas eos natus!</p>
                 <div className={`flex  ${reverse ? 'flex-row pr-4' : 'flex-row-reverse pl-4'}  justify-between items-center text-[#aaa]`}>
-                    <div className={`text-black bg-gradient-to-r  from-[#c67696] to-[#c78a75] text-lg py-2 px-4 ${reverse ? 'rounded-tr-lg' : 'rounded-tl-lg md:rounded-tl-lg md:rounded-tr-none'} `}>more...    </div>
+                    <div className={`text-black bg-gradient-pink text-lg py-2 px-4 ${reverse ? 'rounded-tr-lg' : 'rounded-tl-lg md:rounded-tl-lg md:rounded-tr-none'} `}>more...    </div>
                     <div className={`flex items-center md:pl-2 `}>
                         <FlagIcon className='w-4 mr-2' />
                         <span>category</span>
