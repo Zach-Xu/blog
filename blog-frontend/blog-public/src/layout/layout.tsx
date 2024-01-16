@@ -1,6 +1,8 @@
+import SideDrawer from '../components/side-drawer/side-drawer'
+import Footer from './footer'
 import Header from './header'
 import { Outlet } from 'react-router-dom'
-import SideDrawer from '../components/sidedrawer/side-drawer'
+
 
 
 const Layout = () => {
@@ -13,6 +15,7 @@ const Layout = () => {
             <main className='flex flex-col w-full'>
                 <Outlet />
             </main>
+            <Footer />
         </div>
     )
 }

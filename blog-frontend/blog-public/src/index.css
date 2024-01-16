@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+    width: .5rem;
+    height: .5rem
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 2em
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #322d31;
+    background-image: -webkit-linear-gradient(45deg, hsla(0, 0%, 100%, .4) 25%, transparent 0, transparent 50%, hsla(0, 0%, 100%, .4) 0, hsla(0, 0%, 100%, .4) 75%, transparent 0, transparent);
+    border-radius: 2em
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent
+}
+
+::-webkit-scrollbar-track-piece {
+    background-color: #222;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.animate-gradientBG {
+    background-size: 300% 300%;
+    animation: gradientBG 10s ease infinite;
+}
+
 @layer components {
     .menu-underline {
         @apply before:w-0 before:absolute before:h-[0.1875rem] before:bg-white before:-bottom-[0.3rem] before:rounded-[0.125rem] before:left-[50%] before:-translate-x-1/2 before:transition-all before:ease-in-out before:duration-500
@@ -9,6 +51,20 @@
 }
 
 @layer utilities {
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
     .clip-image-lb {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
     }
@@ -23,5 +79,13 @@
 
     .clip-image-bl {
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0 92%);
+    }
+
+    .shadow-around {
+        box-shadow: 0 0.625rem 1.875rem -0.9375rem #000;
+    }
+
+    .shadow-around-hover {
+        box-shadow: 0 0 1.5rem #000;
     }
 }

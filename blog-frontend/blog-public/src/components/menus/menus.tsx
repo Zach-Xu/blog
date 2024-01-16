@@ -1,10 +1,10 @@
-import { HomeIcon, BookOpenIcon, LinkIcon, ChatBubbleOvalLeftEllipsisIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, BookOpenIcon, LinkIcon, ChatBubbleOvalLeftEllipsisIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/24/solid";
 import { Menu } from "../../types/navbar";
 
 export const menus: Menu[] = [
     {
         name: 'Home',
-        path: '/home',
+        path: '/',
         icon: <HomeIcon />
     },
     {

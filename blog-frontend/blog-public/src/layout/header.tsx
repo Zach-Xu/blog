@@ -47,8 +47,8 @@ const Header = () => {
     }, [y]);
 
     return (
-        <header className={`bg-black text-white fixed flex flex-nowrap items-center justify-between  w-full h-[3.125rem] px-[1rem]
-        py-[1rem] text-shadow-md text-header-text-color transition-all duration-200 ease-in-out z-9 caret-transparent ${headerClassName}`}>
+        <header className={`bg-[#312e31] text-gray-300 fixed flex flex-nowrap items-center justify-between  w-full h-[3.125rem] px-[1rem]
+        py-[1rem] text-shadow-md text-header-text-color transition-all duration-200 ease-in-out z-9 caret-transparent ${headerClassName} z-30`}>
             <Bars3Icon className="btn-show-drawer w-7 cursor-pointer lg:hidden"
                 onClick={toggleSideBar}
             />
