@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { menus } from '../menus/menus'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 
-const SideNav = () => {
+interface Props {
+    scrollTop?: number
+}
+
+const SideNav = ({ scrollTop = 0 }: Props) => {
 
     const { pathname } = useLocation()
 
@@ -12,16 +16,17 @@ const SideNav = () => {
             <ul className='group/sidebar caret-transparent '>
                 {
                     menus.map((menu, idx) => (
-                        <li key={idx} className='relative group z-50' >
+                        <li key={idx} className='group z-50' >
                             {
                                 menu.path ?
-                                    <Link to={menu.path} className={`flex justify-center items-center py-2 hover:bg-gradient-pink hover:text-black ${pathname == menu.path ? 'py-2 bg-gradient-pink text-black group-hover/sidebar:bg-none group-hover/sidebar:text-gray-300' : 'text-gray-300'}`} >
+                                    <Link to={menu.path} className={`flex justify-center items-center py-2 hover:bg-gradient-pink hover:text-black ${pathname == menu.path ? 'py-2 bg-gradient-pink group-hover/sidebar:bg-none group-hover/sidebar:text-gray-300 group-hover/sidebar:hover:text-black  group-hover/sidebar:hover:bg-gradient-pink  text-black ' : 'text-gray-300'}`} >
                                         {React.cloneElement(menu.icon, { className: 'w-5 h-5' })}
                                         <span className='ml-2'>{menu.name}</span>
                                     </Link>
                                     :
                                     <>
-                                        <div className={`flex relative justify-center items-center py-2 hover:bg-gradient-pink hover:text-black ${pathname == menu.path ? 'py-2 bg-gradient-pink text-black group-hover/sidebar:bg-none group-hover/sidebar:text-gray-300 ' : 'text-gray-300'}`} >
+                                        <div
+                                            className={`flex relative justify-center items-center py-2 hover:bg-gradient-pink hover:text-black ${pathname == menu.path ? 'py-2 bg-gradient-pink group-hover/sidebar:bg-none group-hover/sidebar:text-gray-300 group-hover/sidebar:hover:text-black  group-hover/sidebar:hover:bg-gradient-pink  text-black ' : 'text-gray-300'}`} >
                                             <ChevronLeftIcon className='w-5 absolute left-3' />
                                             <div className='flex items-center h-full'>
                                                 {React.cloneElement(menu.icon, { className: 'w-5 h-5' })}
@@ -30,7 +35,7 @@ const SideNav = () => {
                                         </div>
                                         {
                                             menu.children &&
-                                            <ul className='absolute bg-[#21252b] -translate-x-full -translate-y-1/2 rounded-lg overflow-hidden z-60 hidden group-hover:block'>
+                                            <ul style={{ transform: `translateY(-${scrollTop + 40}px)` }} className={`absolute right-[250px] bg-gray-700 text-gray-300   rounded-lg overflow-hidden z-60 hidden group-hover:block`}>
                                                 {
                                                     menu.children.map((subMenu, sIdx) => (
                                                         subMenu.path &&

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
+}
+
 ::-webkit-scrollbar {
     width: .5rem;
     height: .5rem
@@ -44,9 +49,26 @@
     animation: gradientBG 10s ease infinite;
 }
 
+.hover-image {
+    transition: filter 375ms ease-in 0.2s, transform 0.6s;
+}
+
+
 @layer components {
     .menu-underline {
         @apply before:w-0 before:absolute before:h-[0.1875rem] before:bg-white before:-bottom-[0.3rem] before:rounded-[0.125rem] before:left-[50%] before:-translate-x-1/2 before:transition-all before:ease-in-out before:duration-500
+    }
+
+    .archive-circle-lg {
+        @apply before:absolute before:top-[14px] before:-left-2 before:z-[1] before:w-[18px] before:h-[18px] before:border-solid before:border-[5px] before:border-blue-300 before:rounded-[10px] before:leading-[10px]
+    }
+
+    .archive-circle-md {
+        @apply before:absolute before:top-[55px] before:-left-[26px] before:bg-[#222] before:z-[1] before:w-[10px] before:h-[10px] before:border-solid before:border-[3px] before:border-blue-300 before:rounded-[6px] before:leading-[10px]
+    }
+
+    .archive-pipe {
+        @apply after:absolute after:bottom-0 after:left-0 after:-z-10 after:w-[2px] after:h-[1.5rem] after:bg-blue-300
     }
 }
 
@@ -87,5 +109,38 @@
 
     .shadow-around-hover {
         box-shadow: 0 0 1.5rem #000;
+    }
+
+    /* animation */
+    .-animate-delay-2 {
+        animation-delay: -2s;
+    }
+
+    .-animate-delay-3 {
+        animation-delay: -3s;
+    }
+
+    .-animate-delay-4 {
+        animation-delay: -4s;
+    }
+
+    .-animate-delay-5 {
+        animation-delay: -5s;
+    }
+
+    .animate-duration-7 {
+        animation-duration: 7s;
+    }
+
+    .animation-duration-10 {
+        animation-duration: 10s;
+    }
+
+    .animate-duration-13 {
+        animation-duration: 13s;
+    }
+
+    .animate-duration-20 {
+        animation-duration: 20s;
     }
 }

@@ -5,12 +5,14 @@ import SiteStatsCard from '../components/home/site-stats-card'
 import NoticeCard from '../components/home/notice-card'
 
 import LatestComments from '../components/home/latest-comment/latest-comment'
+import Wave from '../layout/wave'
 
 const Home = () => {
     return (
         <div className='min-h-screen caret-transparent'>
-            <div className='h-screen flex bg-[#2b2b2b] justify-center items-center -z-10'>
+            <div className='h-screen flex relative bg-[#2b2b2b] justify-center items-center -z-10'>
                 <h1 className='fixed text-[#f7f7f7] text-[3rem] '>Hello World </h1>
+                <Wave />
             </div>
             {/* Main Container */}
             <div className='bg-[#222222] relative z-10 py-4'>

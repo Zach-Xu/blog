@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/home";
 import Article from "../pages/article";
 import Layout from "../layout/layout";
+import Archive from "../pages/archive";
 
 export const router = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
             {
                 path: '/article',
                 element: <Article />
+            },
+            {
+                path: '/archive',
+                element: <Archive />
             }
         ]
     },

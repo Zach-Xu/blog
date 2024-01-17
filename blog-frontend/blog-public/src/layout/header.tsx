@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/navbar/navbar";
-import { Bars3Icon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, MoonIcon, SunIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { toggleSideBarSetting } from "../redux/slices/setting-slice";
@@ -47,11 +47,19 @@ const Header = () => {
     }, [y]);
 
     return (
-        <header className={`bg-[#312e31] text-gray-300 fixed flex flex-nowrap items-center justify-between  w-full h-[3.125rem] px-[1rem]
+        <header className={`bg-[#312e31] opacity-80 text-gray-300 fixed flex flex-nowrap items-center justify-between  w-full h-[3.125rem] px-[1rem]
         text-shadow-md text-header-text-color transition-all duration-200 ease-in-out z-9 caret-transparent ${headerClassName} z-30`}>
-            <Bars3Icon className="btn-show-drawer w-7 cursor-pointer lg:hidden"
-                onClick={toggleSideBar}
-            />
+            {
+                isSideBarShown ?
+                    <XMarkIcon className="btn-show-drawer w-7 cursor-pointer lg:hidden"
+                        onClick={toggleSideBar}
+                    />
+                    :
+                    <Bars3Icon className="btn-show-drawer w-7 cursor-pointer lg:hidden"
+                        onClick={toggleSideBar}
+                    />
+            }
+
             <span className="md:hidden lg:inline-block">Hello World</span>
             <NavBar />
             {
