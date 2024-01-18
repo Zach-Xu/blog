@@ -29,16 +29,16 @@ export const menus: Menu[] = [
             }
         ]
     },
-    {
-        name: 'Links',
-        path: '/links',
-        icon: <LinkIcon />
-    },
-    {
-        name: 'Comments',
-        path: '/comments',
-        icon: <ChatBubbleOvalLeftEllipsisIcon />
-    },
+    // {
+    //     name: 'Links',
+    //     path: '/links',
+    //     icon: <LinkIcon />
+    // },
+    // {
+    //     name: 'Comments',
+    //     path: '/comments',
+    //     icon: <ChatBubbleOvalLeftEllipsisIcon />
+    // },
     {
         name: 'About',
         path: '/about',

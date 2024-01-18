@@ -1,4 +1,3 @@
-import { ChartBarIcon, ChatBubbleOvalLeftEllipsisIcon, MegaphoneIcon } from '@heroicons/react/24/outline'
 import ArticleCard from '../components/home/article-card'
 import UserCard from '../components/home/user-card'
 import SiteStatsCard from '../components/home/site-stats-card'
@@ -10,7 +9,7 @@ import Wave from '../layout/wave'
 const Home = () => {
     return (
         <div className='min-h-screen caret-transparent'>
-            <div className='h-screen flex relative bg-[#2b2b2b] justify-center items-center -z-10'>
+            <div className='h-screen flex relative bg-[#2b2b2b] justify-center items-center z-[1]'>
                 <h1 className='fixed text-[#f7f7f7] text-[3rem] '>Hello World </h1>
                 <Wave />
             </div>

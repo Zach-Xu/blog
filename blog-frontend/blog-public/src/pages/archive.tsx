@@ -4,7 +4,7 @@ import Pagination from '../components/archive/pagination'
 
 const Archive = () => {
     return (
-        <div className='min-h-screen relative caret-transparent'>
+        <div className='min-h-screen bg-[#222]  relative caret-transparent'>
             <div className='h-[70vh] relative'>
                 <div className='h-[70vh] fixed w-full bg-archive bg-cover bg-no-repeat bg-center  flex justify-center items-center'>
                     <h1 className=' bg-white px-6 py-2 opacity-90 rounded-lg font-bold text-xl '>

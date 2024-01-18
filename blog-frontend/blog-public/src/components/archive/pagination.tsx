@@ -87,13 +87,13 @@ const Pagination = ({ total, current, around = 0 }: Props) => {
                 />
                 <div className='flex text-lg '>
                     {
-                        pageElements.map(item => (
+                        pageElements.map((item, idx) => (
                             item === '...' ?
-                                <div className='w-10 h-10 leading-10 rounded-lg text-center'>
+                                <div key={`${item}${idx}`} className='w-10 h-10 leading-10 rounded-lg text-center'>
                                     {item}
                                 </div>
                                 :
-                                <div className={`${current === item ? 'bg-gradient-pink text-black group-hover:bg-none group-hover:text-gray-300 group-hover:hover:bg-gradient-pink group-hover:hover:text-black' : ''} w-10 h-10 leading-10 rounded-lg text-center hover:bg-gradient-pink hover:text-black`}>
+                                <div key={`${item}${idx}`} className={`${current === item ? 'bg-gradient-pink text-black group-hover:bg-none group-hover:text-gray-300 group-hover:hover:bg-gradient-pink group-hover:hover:text-black' : ''} w-10 h-10 leading-10 rounded-lg text-center hover:bg-gradient-pink hover:text-black`}>
                                     {item}
                                 </div>
                         ))
