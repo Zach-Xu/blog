@@ -35,7 +35,7 @@ const SideNav = ({ scrollTop = 0 }: Props) => {
                                         </div>
                                         {
                                             menu.children &&
-                                            <ul style={{ transform: `translateY(-${scrollTop + 40}px)` }} className={`absolute right-[250px] bg-gray-700 text-gray-300   rounded-lg overflow-hidden z-60 hidden group-hover:block`}>
+                                            <ul style={{ transform: `translateY(-${scrollTop + 40}px)` }} className={`absolute right-[250px] bg-gray-700 text-gray-300 rounded-lg overflow-hidden z-60 hidden group-hover:block`}>
                                                 {
                                                     menu.children.map((subMenu, sIdx) => (
                                                         subMenu.path &&

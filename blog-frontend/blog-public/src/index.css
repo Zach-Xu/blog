@@ -7,6 +7,19 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
+.md-wrapper::after {
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fc625d;
+    -webkit-box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+    box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+    content: ' ';
+}
+
 ::-webkit-scrollbar {
     width: .5rem;
     height: .5rem

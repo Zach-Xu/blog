@@ -6,6 +6,7 @@ import Archive from "../pages/archive";
 import Category from "../pages/category";
 import Tag from "../pages/tag";
 import About from "../pages/about";
+import ArticleDetails from "../pages/article-details";
 
 export const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
             {
                 path: '/about',
                 element: <About />
+            },
+            {
+                path: '/article/:articleId',
+                element: <ArticleDetails />
             }
         ]
     },
