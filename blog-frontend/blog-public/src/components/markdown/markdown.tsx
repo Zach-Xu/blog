@@ -4,10 +4,11 @@ import rehypeHighlight from "rehype-highlight";
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 
+
 import "highlight.js/styles/atom-one-dark.css";
 import CopyButton from "./copy-button";
 
-
+import '../../styles/github-markdown-dark.css'
 
 const Markdown = ({ content }: { content: string }) => {
     return (
@@ -19,7 +20,6 @@ const Markdown = ({ content }: { content: string }) => {
                 code: ({ node, className, children, ...props }) => {
                     const match = /language-(\w+)/.exec(className || "");
                     if (match?.length) {
-                        console.log('match', match)
                         const id = Math.random().toString(36).substring(2, 9);
                         return (
                             <div className="not-prose rounded-md bg-[#2d2d2d] relative md-wrapper">

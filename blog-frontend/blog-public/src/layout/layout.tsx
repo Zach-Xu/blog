@@ -4,6 +4,7 @@ import Footer from './footer'
 import Header from './header'
 import { Outlet } from 'react-router-dom'
 import { RootState } from '../redux/store'
+import ScrollToTop from '../components/scroll-to-top/scroll-to-top'
 
 
 
@@ -12,6 +13,7 @@ const Layout = () => {
 
     return (
         <div className='relative min-h-screen '>
+            <ScrollToTop />
             <Header />
             <SideDrawer />
             <main className={`flex flex-col w-full ${isSideBarShown && 'lg:before:hidden before:absolute before:w-full before:h-full before:bg-[#1a2831] before:opacity-50 before:z-[40]'}`}>

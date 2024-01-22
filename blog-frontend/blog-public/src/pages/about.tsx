@@ -8,10 +8,10 @@ const About = () => {
     const md = 'Aspire to be an ever-evolving full-stack developer, committed to continuous learning and growth in the dynamic realm of programming.\n\n```java\nSystem.out.println(\"Hello World\")\n```'
 
     return (
-        <div className='min-h-screen bg-[#222]  relative caret-transparent'>
-            <div className='h-[70vh] relative'>
-                <div className='h-[70vh] fixed w-full bg-archive bg-cover bg-no-repeat bg-center  flex justify-center items-center'>
-                    <h1 className=' bg-white px-6 py-2 opacity-90 rounded-lg font-bold text-xl '>
+        <div className='min-h-screen  relative caret-transparent'>
+            <div className='h-[70vh] relative -z-20'>
+                <div className='h-[70vh] fixed w-full bg-archive bg-image-cover bg-cover bg-no-repeat bg-center text-white flex justify-center items-center'>
+                    <h1 className='font-bold text-3xl '>
                         About
                     </h1>
                 </div>

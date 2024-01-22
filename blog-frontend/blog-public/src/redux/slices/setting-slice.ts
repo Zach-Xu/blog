@@ -3,11 +3,13 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 interface SettingState {
     isDark: boolean
     isSideBarShown: boolean
+    isProgrammaticScroll: boolean
 }
 
 const initialState: SettingState = {
     isDark: true,
-    isSideBarShown: false
+    isSideBarShown: false,
+    isProgrammaticScroll: false
 }
 
 export const settingSlice = createSlice({
@@ -19,9 +21,13 @@ export const settingSlice = createSlice({
         },
         toggleSideBarSetting: (state, action: PayloadAction<typeof initialState.isSideBarShown>) => {
             state.isSideBarShown = action.payload
+        },
+        updateScroll: (state, action: PayloadAction<typeof initialState.isProgrammaticScroll>) => {
+            state.isProgrammaticScroll = action.payload
         }
+
     }
 })
 
 export default settingSlice.reducer
-export const { toggleModSetting, toggleSideBarSetting } = settingSlice.actions
+export const { toggleModSetting, toggleSideBarSetting, updateScroll } = settingSlice.actions

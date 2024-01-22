@@ -16,35 +16,39 @@ const Header = () => {
         dispatch(toggleSideBarSetting(!isSideBarShown))
     }
 
-    const [y, setY] = useState(0);
+    // previous scroll position
+    const [y, setY] = useState(0)
 
-    const [headerClassName, setHeaderClassName] = useState('');
+    const [headerClassName, setHeaderClassName] = useState('')
 
     const [isDay, setIsDay] = useState(true)
 
     const handleScroll = () => {
-        const newValue = window.scrollY;
+        const currentScrollPosition = window.scrollY
 
-        if (newValue > 0) {
-            if (newValue < y) {
-                setHeaderClassName('shadow-md text-shadow-md translate-y-0');
+        if (currentScrollPosition > 0) {
+            if (currentScrollPosition < y) {
+                // show header when scroll up
+                setHeaderClassName('shadow-md text-shadow-md translate-y-0')
             } else {
-                setHeaderClassName('shadow-md text-shadow-md -translate-y-full');
+                // hide header when scroll down
+                setHeaderClassName('shadow-md text-shadow-md -translate-y-full')
             }
         } else {
-            setHeaderClassName('');
+            // scrollbar is already at the top
+            setHeaderClassName('')
         }
 
-        setY(newValue);
-    };
+        setY(currentScrollPosition)
+    }
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll)
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [y]);
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [y])
 
     return (
         <header className={`bg-[#312e31] opacity-80 text-gray-300 fixed flex flex-nowrap items-center justify-between  w-full h-[3.125rem] px-[1rem]
