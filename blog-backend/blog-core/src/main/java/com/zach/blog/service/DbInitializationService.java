@@ -16,4 +16,6 @@ public interface DbInitializationService {
     void populateTags();
 
     void populateMenus();
+
+    void populateSiteInfo();
 }

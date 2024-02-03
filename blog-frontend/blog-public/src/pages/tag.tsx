@@ -49,7 +49,7 @@ const Tag = () => {
                             tags.map(tag => {
                                 const textColor = colors[Math.floor((Math.random() * length))]
                                 return (
-                                    <Link to={`/tag/${tag.id}`} style={{ fontSize: `${getFontSize(tag.count)}` }} className={`${textColor} px-2 transition-all duration-300 hover:scale-110`} >
+                                    <Link key={tag.id} to={`/tag/${tag.id}`} style={{ fontSize: `${getFontSize(tag.count)}` }} className={`${textColor} px-2 transition-all duration-300 hover:scale-110`} >
                                         {tag.name}
                                         <sup>{tag.count}</sup>
                                     </Link>

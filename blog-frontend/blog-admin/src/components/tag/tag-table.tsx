@@ -165,6 +165,7 @@ export const TagsTable = () => {
                 />
             </Stack>
             <EditTagModal
+                key={selectedTag?.id || -1}
                 open={editTagModal.open}
                 handleClose={editTagModal.handleClose}
                 tag={selectedTag}

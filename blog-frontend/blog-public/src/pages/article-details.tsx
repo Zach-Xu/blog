@@ -17,7 +17,7 @@ const ArticleDetails = () => {
   const markdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    fetch('/assets/test.md')
+    fetch('/assets/api-doc.md')
       .then(res => res.text())
       .then(text => setMdContent(text))
   }, [])
@@ -101,7 +101,7 @@ const ArticleDetails = () => {
                 </div>
               </div>
               {/* Last and next article */}
-              <div className='bg-[#363636] text-white md:flex md:flex-row  rounded-xl font-bold overflow-hidden  text-xs md:text-sm'>
+              <div className='bg-[#363636] rotate-0 text-white md:flex md:flex-row rounded-xl font-bold overflow-hidden text-xs md:text-sm'>
                 <div className='flex flex-col flex-1 relative z-0 py-6 px-6 space-y-10 bg-cover bg-image-cover hover:before:opacity-80 before:transition-opacity before:delay-100' style={{ backgroundImage: `url('/assets/bg1.png')` }}>
                   <span>Last article</span>
                   <Link to={`/article/123`} className='text-lg'>

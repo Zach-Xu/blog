@@ -32,6 +32,19 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
     })
     Optional<Article> findById(Long id);
 
+    @EntityGraph(attributePaths = {
+            "category",
+            "tags"
+    })
+    @Override
+    List<Article> findAllById(Iterable<Long> longs);
+
+    @Query(value = "" +
+            "SELECT a.id FROM Article a " +
+            "WHERE a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED " +
+            "AND a.pinned = :pinned ")
+    Page<Long> findArticleIds(@Param("pinned") boolean pinned, Pageable pageable);
+
     @Override
     Page<Article> findAll(Specification<Article> spec, Pageable pageable);
 
@@ -54,6 +67,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
         static Specification<Article> byPublishStatus(PublishStatus publishStatus) {
             return (root, query, builder) ->
                     builder.equal(root.get("publishStatus"), publishStatus);
+        }
+
+        static Specification<Article> byPinned(Boolean isPinned) {
+            return (root, query ,builder) ->
+                    builder.equal(root.get("pinned"), isPinned);
         }
 
         static Specification<Article> containsTitle(String title) {

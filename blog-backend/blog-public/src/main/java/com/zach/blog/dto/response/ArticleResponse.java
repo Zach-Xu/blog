@@ -16,7 +16,6 @@ public class ArticleResponse {
     private String title;
 
     private String summary;
-
     private String categoryName;
 
     private String thumbnail;

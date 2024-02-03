@@ -1,5 +1,5 @@
 import { HomeIcon, BookOpenIcon, LinkIcon, ChatBubbleOvalLeftEllipsisIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/24/solid";
-import { Menu } from "../../types/navbar";
+import { Menu } from "../../types/layouts/navbar";
 import { ArchiveBoxIcon, ListBulletIcon, TagIcon } from "@heroicons/react/24/solid";
 
 export const menus: Menu[] = [

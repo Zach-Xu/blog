@@ -1,21 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { toggleSideBarSetting } from '../../redux/slices/setting-slice';
-import UserCard from '../home/user-card';
+
 import SideNav from './side-nav';
-
-
+import useSettingStore from '../../store/setting-store';
+import UserCard from '../home/user-card/user-card';
 
 const SideDrawer = () => {
 
-    const isSideBarShown = useSelector((state: RootState) => state.setting.isSideBarShown)
+    const isSideBarShown = useSettingStore(state => state.isSideBarShown)
+    const toggleSideBar = useSettingStore(state => state.toggleSideBar)
 
     const [scrollTop, setScrollTop] = useState(0)
 
     const drawerRef = useRef<HTMLDivElement>(null)
 
-    const dispatch = useDispatch()
 
     useEffect(() => {
         const closeDrawer = (event: MouseEvent) => {
@@ -25,7 +22,7 @@ const SideDrawer = () => {
 
             const targetElement = event.target as HTMLElement
             if (!targetElement.closest('.side-drawer') && !targetElement.closest('.btn-show-drawer')) {
-                dispatch(toggleSideBarSetting(false))
+                toggleSideBar(false)
             }
         }
 

@@ -9,7 +9,9 @@ public enum ResourceNotFoundCode {
     ARTICLE_NOT_FOUND("Article does not exist"),
     CATEGORY_NOT_FOUND("Category does not exist"),
     ROLE_NOT_FOUND("Role does not exist"),
-    MENU_NOT_FOUND("Menu does not exist");
+    MENU_NOT_FOUND("Menu does not exist"),
+
+    SITE_INFO_NOT_FOUND("Site information does not exist, please contact admin asap");
 
     final int code = 404;
     final String message;

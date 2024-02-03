@@ -5,10 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HotArticleResponse {
+public class TagResponse {
     private Long id;
-
-    private String title;
-
-    private Long viewCount;
+    String name;
 }

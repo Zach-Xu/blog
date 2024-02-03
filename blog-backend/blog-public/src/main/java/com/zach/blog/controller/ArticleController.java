@@ -10,9 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "Article", description = "Manage articles and their view counts")
 @RestController
@@ -26,16 +25,24 @@ public class ArticleController {
     @GetMapping("/{id}")
     public ResponseResult<?> getArticleDetails(@PathVariable("id") Long categoryId) {
         Article article = articleService.getArticleDetail(categoryId);
-        ArticleDetailResponse articleDetailResponse = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
-        return ResponseResult.ok(articleDetailResponse);
+        ArticleDetailResponse response = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
+        return ResponseResult.ok(response);
     }
 
-    @Operation(summary = "Get Hot Articles", description = "Retrieve a list of hot articles.")
-    @GetMapping("/hot")
-    public ResponseResult<?> getHotArticles() {
-        List<Article> hotArticles = articleService.getHotArticles();
-        List<HotArticleResponse> hotArticlesResponse = BeanCopyUtils.copyBeanList(hotArticles, HotArticleResponse.class);
-        return ResponseResult.ok(hotArticlesResponse);
+    @Operation(summary = "Get Featured Articles", description = "Retrieve a list of featured articles.")
+    @GetMapping("/featured")
+    public ResponseResult<?> getFeaturedArticles() {
+        List<Article> featuredArticles = articleService.getFeaturedArticles();
+
+        List<FeaturedArticleResponse> response = featuredArticles.stream().
+                map(article -> {
+                    FeaturedArticleResponse featuredArticle = BeanCopyUtils.copyBean(article, FeaturedArticleResponse.class);
+                    featuredArticle.setCategory(BeanCopyUtils.copyBean(article.getCategory(), CategoryResponse.class));
+                    featuredArticle.setTags(BeanCopyUtils.copyBeanList(article.getTags().stream().toList(), TagResponse.class));
+                    return featuredArticle;
+                }).collect(Collectors.toList());
+
+        return ResponseResult.ok(response);
     }
 
     @Operation(summary = "Get Articles", description = "Retrieve a list of articles with optional pagination and category filter.")

@@ -1,15 +1,14 @@
-import { useSelector } from 'react-redux'
 import SideDrawer from '../components/side-drawer/side-drawer'
 import Footer from './footer'
 import Header from './header'
 import { Outlet } from 'react-router-dom'
-import { RootState } from '../redux/store'
 import ScrollToTop from '../components/scroll-to-top/scroll-to-top'
+import useSettingStore from '../store/setting-store'
 
 
 
 const Layout = () => {
-    const isSideBarShown = useSelector((state: RootState) => state.setting.isSideBarShown)
+    const isSideBarShown = useSettingStore(state => state.isSideBarShown)
 
     return (
         <div className='relative min-h-screen '>

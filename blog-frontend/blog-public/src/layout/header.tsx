@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
 import NavBar from "../components/navbar/navbar";
 import { Bars3Icon, MoonIcon, SunIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { toggleSideBarSetting } from "../redux/slices/setting-slice";
+import useSettingStore from "../store/setting-store";
+
 
 const Header = () => {
 
-
-    const dispatch = useDispatch()
-
-    const isSideBarShown = useSelector((state: RootState) => state.setting.isSideBarShown)
-
-    const toggleSideBar = () => {
-        dispatch(toggleSideBarSetting(!isSideBarShown))
-    }
+    const isSideBarShown = useSettingStore(state => state.isSideBarShown)
+    const toggleSideBar = useSettingStore(state => state.toggleSideBar)
 
     // previous scroll position
     const [y, setY] = useState(0)
@@ -56,11 +49,11 @@ const Header = () => {
             {
                 isSideBarShown ?
                     <XMarkIcon className="btn-show-drawer w-7 cursor-pointer lg:hidden"
-                        onClick={toggleSideBar}
+                        onClick={() => toggleSideBar(!isSideBarShown)}
                     />
                     :
                     <Bars3Icon className="btn-show-drawer w-7 cursor-pointer lg:hidden"
-                        onClick={toggleSideBar}
+                        onClick={() => toggleSideBar(!isSideBarShown)}
                     />
             }
 

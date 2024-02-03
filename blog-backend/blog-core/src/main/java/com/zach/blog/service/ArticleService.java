@@ -28,4 +28,6 @@ public interface ArticleService {
     void deleteArticle(Long id);
 
     void updateArticleImage(Long articleId, ApplicationUser user, MultipartFile image) throws IOException;
+
+    List<Article> getFeaturedArticles();
 }

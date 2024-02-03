@@ -39,7 +39,6 @@ public class RedisUtils {
     }
 
     public <T> T get(String key, Class<T> type) {
-
         String value = stringRedisTemplate.opsForValue().get(key);
         if (Strings.isEmpty(value)) {
             return null;
@@ -47,6 +46,9 @@ public class RedisUtils {
         return JsonUtils.parse(value, type);
     }
 
+    public void increase(String key, int value){
+        stringRedisTemplate.opsForValue().increment(key, value);
+    }
 
     public void setMap(String key, Map<String, String> map) {
         if (Objects.nonNull(map)) {
@@ -74,5 +76,7 @@ public class RedisUtils {
         return stringRedisTemplate.delete(key);
     }
 
-
+    public Long deleteMapKey(String key, String hKey) {
+        return stringRedisTemplate.opsForHash().delete(key, hKey);
+    }
 }

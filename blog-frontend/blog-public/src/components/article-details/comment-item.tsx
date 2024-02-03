@@ -33,6 +33,8 @@ const CommentItem = ({ comment }: Props) => {
 
     const [replyUser, setReplyUser] = useState<ReplyUser | null>(null)
 
+    // store reply user info in redux so that only one ReplyBox can be shown at a time
+
     const handleReplyClick = (user: ReplyUser) => {
         if (replyUser && replyUser.id == user.id) {
             setReplyUser(null)

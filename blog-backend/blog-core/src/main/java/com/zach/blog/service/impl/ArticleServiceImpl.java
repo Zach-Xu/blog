@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -70,10 +71,12 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getArticleDetail(Long categoryId) {
         Article article = articleRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(ARTICLE_NOT_FOUND));
-        String viewCountStr = redisUtils.getMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId));
-        if (Strings.hasText(viewCountStr)) {
-            Long viewCount = Long.valueOf(viewCountStr);
+        String viewCountCache = redisUtils.getMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId));
+        if (Strings.hasText(viewCountCache)) {
+            Long viewCount = Long.valueOf(viewCountCache);
             article.setViewCount(viewCount);
+        }else{
+            redisUtils.setMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId), String.valueOf(article.getViewCount()));
         }
         return article;
     }
@@ -173,6 +176,27 @@ public class ArticleServiceImpl implements ArticleService {
         article.setThumbnail(thumbnail);
 
         articleRepository.save(article);
+    }
+
+    @Override
+    public List<Article> getFeaturedArticles() {
+
+        // find the Ids of the pinned articles
+        Page<Long> pinPage = articleRepository.findArticleIds(true, PageRequest.of(0, 5));
+
+        int pinnedCount = pinPage.getNumberOfElements();
+
+        List<Long> featuredArticleIds = new ArrayList<>();
+        featuredArticleIds.addAll(pinPage.getContent());
+
+        // fetch the remaining from unpinned articles if the number of pinned articles is less than 5
+        if(pinnedCount < 5) {
+            Page<Long> unpinnedPage = articleRepository.findArticleIds(false, PageRequest.of(0, 5 - pinnedCount));
+            featuredArticleIds.addAll(unpinnedPage.getContent());
+        }
+
+        return articleRepository.findAllById(featuredArticleIds);
+
     }
 
 }

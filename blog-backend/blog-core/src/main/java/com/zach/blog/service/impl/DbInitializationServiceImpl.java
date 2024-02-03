@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class DbInitializationServiceImpl implements DbInitializationService {
     private final CategoryRepository categoryRepository;
     private final OutboundLinkRepository linkRepository;
     private final TagRepository tagRepository;
+    private final SocialPlatformRepository socialPlatformRepository;
+    private final SiteInfoRepository siteInfoRepository;
 
     @Override
     public void populateRoles() {
@@ -74,7 +77,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         ApplicationUser user1 = new ApplicationUser();
         Role adminRole = roleRepository.findByRoleName(RoleName.ADMIN.name()).get();
         user1.addRole(adminRole);
-        user1.setUsername("Zachary");
+        user1.setUsername("Zach");
         user1.setNickname("NotNow");
         user1.setPassword(passwordEncoder.encode("123456"));
         user1.setEnable(true);
@@ -650,6 +653,43 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         menu32.setIcon("build");
         menuRepository.save(menu32);
 
+    }
+
+    @Override
+    public void populateSiteInfo() {
+
+        if (socialPlatformRepository.count() > 0) {
+            return;
+        }
+        SocialPlatform social1 = new SocialPlatform();
+        social1.setName("GitHub");
+        social1.setUrl("https://github.com/Zach-Xu");
+
+        SocialPlatform social2 = new SocialPlatform();
+        social2.setName("LinkedIn");
+        social2.setUrl("https://www.linkedin.com/in/zach-xu-b45293262");
+
+        SocialPlatform social3 = new SocialPlatform();
+        social3.setName("WhatsApp");
+        social3.setUrl("https://wa.me/14167104222");
+
+        social1 = socialPlatformRepository.save(social1);
+        social2 = socialPlatformRepository.save(social2);
+        social3 = socialPlatformRepository.save(social3);
+
+        SiteInfo siteInfo = new SiteInfo();
+        ApplicationUser owner = userRepository.getReferenceById(1L);
+        siteInfo.setOwner(owner);
+
+        List<SocialPlatform> socials = new ArrayList<>();
+        socials.add(social1);
+        socials.add(social2);
+        socials.add(social3);
+
+        siteInfo.setSocials(socials);
+        siteInfo.setHostSince(LocalDateTime.now());
+        siteInfo.setVisitCount(0L);
+        siteInfoRepository.save(siteInfo);
     }
 
     @Override
