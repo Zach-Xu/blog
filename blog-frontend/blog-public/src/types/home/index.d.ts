@@ -11,20 +11,14 @@ interface UserCard {
     }[]
 }
 
-interface Article {
+interface FeaturedArticle {
     id: number
     pinned: boolean
     createdTime: string
-    tags: {
-        id: number
-        tagName: string
-    }[]
+    tags: Tag[]
     title: string
     summary: string
-    category: {
-        id: number
-        name: string
-    }
+    category: Category
     thumbnail: string
 }
 
@@ -34,3 +28,12 @@ interface SiteStats {
     visitCount: number
 }
 
+interface Category {
+    id: number
+    name: string
+}
+
+interface Tag {
+    id: number
+    name: string
+}

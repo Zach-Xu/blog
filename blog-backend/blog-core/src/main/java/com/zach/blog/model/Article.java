@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,6 +64,8 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "author_id")
     @JsonIgnoreProperties({"authorities"})
     private ApplicationUser author;
+
+    private LocalDateTime modifiedOn;
 
     public void addTag(Tag tag){
         this.tags.add(tag);

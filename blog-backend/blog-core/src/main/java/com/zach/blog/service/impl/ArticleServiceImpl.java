@@ -2,6 +2,8 @@ package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.request.UpdateArticleRequest;
 import com.zach.blog.dto.request.WriteArticleRequest;
+import com.zach.blog.dto.response.AdjacentArticle;
+import com.zach.blog.dto.response.ArticleDetailResponse;
 import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.ApplicationUser;
@@ -14,6 +16,7 @@ import com.zach.blog.repository.CategoryRepository;
 import com.zach.blog.repository.TagRepository;
 import com.zach.blog.service.ArticleService;
 import com.zach.blog.service.FileService;
+import com.zach.blog.utils.BeanCopyUtils;
 import com.zach.blog.utils.RedisUtils;
 import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,13 +59,22 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> getArticles(Integer pageNum, Integer pageSize, Long categoryId) {
-        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by("pinned").descending());
+    public Page<Article> getArticles(Integer pageNum, Integer pageSize, Long categoryId, Long tagId) {
+        // at maximum 10 articles per request is allowed
+        if(pageSize > 10){
+            pageSize = 10;
+        }
+
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by("createdTime").descending());
 
         Specification<Article> spec = byPublishStatus(PublishStatus.PUBLISHED);
 
-        if (!Objects.isNull(categoryId)) {
+        if (Objects.nonNull(categoryId)) {
             spec = spec.and(byCategoryId(categoryId));
+        }
+
+        if(Objects.nonNull(tagId)){
+            spec = spec.and(byTagId(tagRepository.getReferenceById(tagId)));
         }
 
         Page<Article> articlePage = articleRepository.findAll(spec, pageRequest);
@@ -68,17 +82,48 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article getArticleDetail(Long categoryId) {
-        Article article = articleRepository.findById(categoryId)
+    public Page<Article> getArticles(Integer pageNum, Integer pageSize, String title, String summary) {
+        if(pageSize > 10){
+            pageSize = 10;
+        }
+
+        Sort sort = Sort.by("title").ascending().and(Sort.by("createdTime").descending());
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
+        Specification<Article> spec = Specification.where(null);
+        if (Strings.hasText(title)) {
+            spec = spec.and(containsTitle(title));
+        }
+        if (Strings.hasText(summary)) {
+            spec = spec.and(containsSummary(summary));
+        }
+
+        Page<Article> articlePage = articleRepository.findAll(spec, pageRequest);
+        return articlePage;
+    }
+
+    @Override
+    public ArticleDetailResponse getArticleDetail(Long articleId) {
+        Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResourceNotFoundException(ARTICLE_NOT_FOUND));
-        String viewCountCache = redisUtils.getMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId));
+        String viewCountCache = redisUtils.getMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(articleId));
         if (Strings.hasText(viewCountCache)) {
             Long viewCount = Long.valueOf(viewCountCache);
             article.setViewCount(viewCount);
         }else{
-            redisUtils.setMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(categoryId), String.valueOf(article.getViewCount()));
+            redisUtils.setMapValue(ARTICLE_VIEW_COUNT_KEY, String.valueOf(articleId), String.valueOf(article.getViewCount()));
         }
-        return article;
+
+        List<AdjacentArticle> previous = articleRepository.findPreviousArticle(articleId, PageRequest.of(0, 1)).getContent();
+        List<AdjacentArticle> next = articleRepository.findNextArticle(articleId, PageRequest.of(0, 1)).getContent();
+        ArticleDetailResponse articleDetailResponse = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
+        if(previous.size() >= 1){
+            articleDetailResponse.setPreviousArticle(previous.get(0));
+        }
+
+        if(next.size() >= 1){
+            articleDetailResponse.setNextArticle(next.get(0));
+        }
+        return articleDetailResponse;
     }
 
     @Override
@@ -116,21 +161,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
-    @Override
-    public Page<Article> getArticles(Integer pageNum, Integer pageSize, String title, String summary) {
-        Sort sort = Sort.by("title").ascending().and(Sort.by("createdTime").descending());
-        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
-        Specification<Article> spec = Specification.where(null);
-        if (Strings.hasText(title)) {
-            spec = spec.and(containsTitle(title));
-        }
-        if (Strings.hasText(summary)) {
-            spec = spec.and(containsSummary(summary));
-        }
 
-        Page<Article> articlePage = articleRepository.findAll(spec, pageRequest);
-        return articlePage;
-    }
 
     @Override
     public Article updateArticle(Long id, UpdateArticleRequest updateArticleRequest) throws IOException {
@@ -154,7 +185,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(tagId -> tagRepository.getReferenceById(tagId))
                 .collect(Collectors.toSet());
         article.setTags(tags);
-
+        article.setModifiedOn(LocalDateTime.now(Clock.systemUTC()));
         return articleRepository.save(article);
     }
 

@@ -27,6 +27,8 @@ public class ArticleDetailResponse {
 
     private LocalDateTime createdTime;
 
+    private LocalDateTime modifiedOn;
+
     private Boolean pinned;
 
     private Boolean allowedComment;
@@ -36,4 +38,8 @@ public class ArticleDetailResponse {
 
     @JsonIncludeProperties({ "id", "name" })
     private Set<Tag> tags;
+
+    private AdjacentArticle previousArticle;
+
+    private AdjacentArticle nextArticle;
 }

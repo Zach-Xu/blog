@@ -15,7 +15,7 @@ const Layout = () => {
             <ScrollToTop />
             <Header />
             <SideDrawer />
-            <main className={`flex flex-col w-full ${isSideBarShown && 'lg:before:hidden before:absolute before:w-full before:h-full before:bg-[#1a2831] before:opacity-50 before:z-[40]'}`}>
+            <main className={`flex flex-col w-full  ${isSideBarShown && 'lg:before:hidden before:absolute before:w-full before:h-full before:bg-[#1a2831] before:opacity-50 before:z-[40]'}`}>
                 <Outlet />
             </main>
             <Footer />

@@ -15,13 +15,14 @@ import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
-    height: 1,
+    height: '200px',
     overflow: 'hidden',
     position: 'absolute',
     bottom: 0,
     left: 0,
     whiteSpace: 'nowrap',
-    width: 1
+    width: '100%',
+    zIndex: 20
 })
 
 interface Props {
@@ -113,11 +114,15 @@ const ImageUpload = forwardRef<HTMLInputElement, Props>(({ type }, ref) => {
             }
             if (fileInputRef.current && imgRef.current) {
                 const imageSrc = URL.createObjectURL(droppedFiles[0])
+                const dT = new DataTransfer()
+                dT.items.add(droppedFiles[0])
+                fileInputRef.current.files = dT.files
                 imgRef.current.setAttribute('src', imageSrc)
             }
 
         }
     }
+
 
     return (
         <Stack
@@ -182,7 +187,6 @@ const ImageUpload = forwardRef<HTMLInputElement, Props>(({ type }, ref) => {
                     </Button>
                 }
 
-
                 <IconButton
                     onClick={removeImage}
                     aria-label="delete"
@@ -236,6 +240,7 @@ const ImageUpload = forwardRef<HTMLInputElement, Props>(({ type }, ref) => {
                             ref={uploadIconRef}
                             component="label"
                             sx={{
+                                position: 'static',
                                 bgcolor: 'transparent',
                                 ":hover": {
                                     bgcolor: 'transparent'

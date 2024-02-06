@@ -2,6 +2,7 @@ package com.zach.blog.service;
 
 import com.zach.blog.dto.request.UpdateArticleRequest;
 import com.zach.blog.dto.request.WriteArticleRequest;
+import com.zach.blog.dto.response.ArticleDetailResponse;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Article;
 import org.springframework.data.domain.Page;
@@ -13,9 +14,9 @@ import java.util.List;
 public interface ArticleService {
     List<Article> getHotArticles();
 
-    Page<Article> getArticles(Integer pageNum, Integer pageSize, Long categoryId);
+    Page<Article> getArticles(Integer pageNum, Integer pageSize, Long categoryId, Long tagId);
 
-    Article getArticleDetail(Long categoryId);
+    ArticleDetailResponse getArticleDetail(Long articleId);
 
     void updateViewCount(Long articleId);
 

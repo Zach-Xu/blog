@@ -2,6 +2,7 @@ package com.zach.blog.service.impl;
 
 import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
+import com.zach.blog.dto.response.CategoryStatsResponse;
 import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.service.CategoryService;
@@ -104,5 +105,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getParentCategories() {
         // By default, parent categories have pid set to -1
         return categoryRepository.findAllByPid(-1L);
+    }
+
+    @Override
+    public List<CategoryStatsResponse> getCategoryStats() {
+        return categoryRepository.getCategoryStats();
     }
 }

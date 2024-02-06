@@ -159,6 +159,10 @@ body {
         animation-delay: -5s;
     }
 
+    .animate-duration-3 {
+        animation-duration: 3s;
+    }
+
     .animate-duration-7 {
         animation-duration: 7s;
     }

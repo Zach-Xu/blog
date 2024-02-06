@@ -83,6 +83,8 @@ public class CommentServiceImpl implements CommentService {
             throw new MissingParameterException("The ID of the article being replied to was not specified");
         }
 
+
+        // ToDo: validate if article is allowed to comment
         if (!articleRepository.existsById(commentRequest.articleId())) {
             throw new ResourceNotFoundException(ARTICLE_NOT_FOUND);
         }

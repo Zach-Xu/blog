@@ -60,27 +60,10 @@ public class BeanCopyUtils {
         return emptyNames.toArray(result);
     }
 
-    public static <T> T copyBeanWithAssociationPropertyAsField(Object source, Class<T> type) {
-        T target;
-
-        try {
-            target = type.getDeclaredConstructor(source.getClass()).newInstance(source);
-            BeanUtils.copyProperties(source, target);
-        } catch (Exception e) {
-            throw new FailedToCopyBeanException();
-        }
-        return target;
-    }
 
     public static <T> List<T> copyBeanList(List<?> source, Class<T> type) {
         return source.stream()
                 .map(element -> copyBean(element, type))
-                .collect(Collectors.toList());
-    }
-
-    public static <T> List<T> copyBeanListWithAssociationPropertyAsField(List<?> source, Class<T> type) {
-        return source.stream()
-                .map(element -> copyBeanWithAssociationPropertyAsField(element, type))
                 .collect(Collectors.toList());
     }
 

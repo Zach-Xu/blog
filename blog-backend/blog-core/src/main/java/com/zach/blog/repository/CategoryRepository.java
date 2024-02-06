@@ -1,5 +1,6 @@
 package com.zach.blog.repository;
 
+import com.zach.blog.dto.response.CategoryStatsResponse;
 import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.model.Category;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,6 +29,16 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
     List<Category> findCategoriesWithPublishedArticles(@Param("status") PublishStatus status);
 
     List<Category> findAllByPid(Long parentId);
+
+    @Query(value = """
+            SELECT new com.zach.blog.dto.response.CategoryStatsResponse(c.id, c.name, COUNT (a))
+            FROM Category c
+            JOIN Article  a
+            ON c.id = a.category.id
+            GROUP BY c.id
+            HAVING COUNT (a) > 0
+            """)
+    List<CategoryStatsResponse> getCategoryStats();
 
     interface Specs {
         static Specification<Category> containsName(String name) {

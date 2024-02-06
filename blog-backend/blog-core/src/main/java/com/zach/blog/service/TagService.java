@@ -1,5 +1,6 @@
 package com.zach.blog.service;
 
+import com.zach.blog.dto.response.TagStatsResponse;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Tag;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,6 @@ public interface TagService {
     void updateTag(Long userId, Long tagId, String name, String description);
 
     List<Tag> getAllTags();
+
+    List<TagStatsResponse> getTagStats();
 }

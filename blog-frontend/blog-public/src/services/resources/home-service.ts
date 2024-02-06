@@ -2,7 +2,7 @@ import { resourceAxios } from "../../utils/axios-utils"
 
 export const homeService = {
     getFeaturedArticles: async () => {
-        return await resourceAxios.get<void, Article[]>('/articles/featured')
+        return await resourceAxios.get<void, FeaturedArticle[]>('/articles/featured')
     },
 
     getSiteOwnerInfo: async () => {

@@ -2,6 +2,7 @@ package com.zach.blog.service;
 
 import com.zach.blog.dto.request.CreateCategoryRequest;
 import com.zach.blog.dto.request.UpdateCategoryRequest;
+import com.zach.blog.dto.response.CategoryStatsResponse;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Category;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,6 @@ public interface CategoryService {
     void changeCategoryStatus(Long id, Boolean enable, Long userId);
 
     List<Category> getParentCategories();
+
+    List<CategoryStatsResponse> getCategoryStats();
 }

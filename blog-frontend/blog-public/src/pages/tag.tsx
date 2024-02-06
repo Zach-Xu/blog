@@ -1,6 +1,8 @@
 import React from 'react'
 import Wave from '../layout/wave'
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { tagService } from '../services/resources/tag-service';
 
 const getFontSize = (count: number) => {
     return ((1 + 6 * count / 10) / 3) * 2 + "rem";
@@ -16,18 +18,20 @@ const length = colors.length
 
 const Tag = () => {
 
-    let tags = [
-        { id: 1, name: "Java", count: 3 },
-        { id: 2, name: "React", count: 1 },
-        { id: 4, name: "CSS", count: 2 },
-        { id: 3, name: "DevOps", count: 1 },
-        { id: 5, name: "LeetCode", count: 6 },
-        { id: 1, name: "frontend", count: 3 },
-        { id: 4, name: "CSS", count: 2 },
-        { id: 3, name: "DevOps", count: 1 },
-        { id: 5, name: "LeetCode", count: 6 },
+    const { data: tags } = useQuery('tagStats', tagService.getTagStats)
 
-    ];
+    // let tags = [
+    //     { id: 1, name: "Java", count: 3 },
+    //     { id: 2, name: "React", count: 1 },
+    //     { id: 4, name: "CSS", count: 2 },
+    //     { id: 3, name: "DevOps", count: 1 },
+    //     { id: 5, name: "LeetCode", count: 6 },
+    //     { id: 1, name: "frontend", count: 3 },
+    //     { id: 4, name: "CSS", count: 2 },
+    //     { id: 3, name: "DevOps", count: 1 },
+    //     { id: 5, name: "LeetCode", count: 6 },
+
+    // ];
 
 
     return (
@@ -46,12 +50,12 @@ const Tag = () => {
                 <div className='shadow-around-hover rounded-lg p-6 md:p-8 lg:p-10 lg:w-[60.5rem] mx-auto flex flex-col'>
                     <div className='w-full flex justify-center items-center flex-wrap'>
                         {
-                            tags.map(tag => {
+                            tags && tags.map(tag => {
                                 const textColor = colors[Math.floor((Math.random() * length))]
                                 return (
-                                    <Link key={tag.id} to={`/tag/${tag.id}`} style={{ fontSize: `${getFontSize(tag.count)}` }} className={`${textColor} px-2 transition-all duration-300 hover:scale-110`} >
-                                        {tag.name}
-                                        <sup>{tag.count}</sup>
+                                    <Link key={tag.id} to={`/tag/${tag.id}`} style={{ fontSize: `${getFontSize(tag.articleCount)}` }} className={`${textColor} px-2 transition-all duration-300 hover:scale-110`} >
+                                        {tag.tagName}
+                                        <sup>{tag.articleCount}</sup>
                                     </Link>
                                 )
                             })

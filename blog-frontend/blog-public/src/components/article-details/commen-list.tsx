@@ -89,20 +89,15 @@ const CommentList = () => {
     const comments = dummyComments
 
     return (
-        <div>
-            <div className='flex items-center font-bold space-x-2 md:text-lg ml-2'>
-                <ChatBubbleOvalLeftEllipsisIcon className='w-6' />
-                <h4>Comment</h4>
-            </div>
-            <ReplyBox />
+        <>
             {/* Comment List */}
             {
                 dummyComments.map(item => (
                     <CommentItem key={item.id} comment={item} />
                 ))
             }
+        </>
 
-        </div>
     )
 }
 

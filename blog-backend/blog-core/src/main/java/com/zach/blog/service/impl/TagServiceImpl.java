@@ -1,5 +1,6 @@
 package com.zach.blog.service.impl;
 
+import com.zach.blog.dto.response.TagStatsResponse;
 import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.ApplicationUser;
@@ -76,5 +77,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getAllTags() {
         return tagRepository.findAll(Sort.by("name").ascending());
+    }
+
+    @Override
+    public List<TagStatsResponse> getTagStats() {
+        return tagRepository.getTagStats();
     }
 }

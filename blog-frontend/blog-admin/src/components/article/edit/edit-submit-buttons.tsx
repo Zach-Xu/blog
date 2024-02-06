@@ -41,6 +41,7 @@ const EditSubmitButtons = ({ id, fileInputRef }: Props) => {
     const navigate = useNavigate()
 
     const handleClick = useCallback((status: PublishStatus) => {
+        console.log('file', fileInputRef.current?.files)
         const data = createRequestData(id, status, article, fileInputRef.current?.files)
         if (!validateDate(data)) {
             return

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -16,7 +17,8 @@ public class ArticleResponse {
     private String title;
 
     private String summary;
-    private String categoryName;
+    private CategoryResponse category;
+    private List<TagResponse> tags;
 
     private String thumbnail;
 
@@ -24,13 +26,4 @@ public class ArticleResponse {
 
     private LocalDateTime createdTime;
 
-    public ArticleResponse() {
-
-    }
-
-    public ArticleResponse(Article article) {
-        if (Objects.nonNull(article)) {
-            this.categoryName = article.getCategory().getName();
-        }
-    }
 }

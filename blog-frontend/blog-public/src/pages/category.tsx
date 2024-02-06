@@ -1,66 +1,71 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import Wave from '../layout/wave'
 import * as echarts from 'echarts';
-import { ECElementEvent } from 'echarts'
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { categoryService } from '../services/resources/category-service';
 
 type EChartsOption = echarts.EChartsOption;
 
+let option: EChartsOption = {
+    textStyle: {
+        fontSize: '1.4rem',
+        fontWeight: 'normal',
+        fontFamily: 'Raleway',
+    },
+    legend: {
+        top: 'bottom',
+        textStyle: {
+            fontFamily: 'Raleway',
+            color: '#aaa'
+        },
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    title: {
+        text: "Article Category Stats",
+        textStyle: {
+            fontFamily: 'Raleway',
+            fontSize: '1.6rem',
+            color: '#aaa'
+        },
+        left: 'center'
+    }
+
+}
 
 const Category = () => {
 
     const navigate = useNavigate()
 
-    const option: EChartsOption = {
-        textStyle: {
-            fontSize: '1.4rem',
-            fontWeight: 'normal',
-            fontFamily: 'Raleway',
-        },
-        legend: {
-            top: 'bottom',
-            textStyle: {
-                fontFamily: 'Raleway',
-                color: '#aaa'
-            },
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        title: {
-            text: "Article Category Stats",
-            textStyle: {
-                fontFamily: 'Raleway',
-                fontSize: '1.6rem',
-                color: '#aaa'
-            },
-            left: 'center'
-        },
-        series: [
-            {
-                name: 'Category',
-                type: 'pie',
-                radius: [35, 130],
-                center: ['50%', '50%'],
-                roseType: 'area',
-                itemStyle: {
-                    borderRadius: 6
-                },
-                label: {
-                    color: "#aaa"
-                },
-                data: [
-                    { value: 3, name: 'Project', id: 54984 },
-                    { value: 1, name: 'Java', id: 2 },
-                    { value: 2, name: 'React', id: 4 },
-                    { value: 1, name: 'Algorithm', id: 5 },
-                ]
-            }
-        ]
-    }
-
     const chartRef = useRef<HTMLDivElement>(null)
+
+    const { data: categoryStats } = useQuery('categoryStats', categoryService.getCategoryStats)
+
+    const categoryOption = useMemo(() => {
+        if (!categoryStats) return option
+        option.series = {
+            name: 'Category',
+            type: 'pie',
+            radius: [35, 130],
+            center: ['50%', '50%'],
+            roseType: 'area',
+            itemStyle: {
+                borderRadius: 6
+            },
+            label: {
+                color: "#aaa"
+            },
+            data: categoryStats.map(category => ({
+                value: category.articleCount,
+                name: category.categoryName,
+                id: category.id
+            }))
+        }
+        return option
+    }, [categoryStats])
 
     useEffect(() => {
 
@@ -78,11 +83,14 @@ const Category = () => {
             if (!chartRef.current) {
                 return
             }
+
+
             if (!myChart) {
                 myChart = echarts.init(chartRef.current, null)
+
             }
 
-            myChart.setOption(option)
+            myChart.setOption(categoryOption)
             myChart.on('click', handleEchartClick)
 
         }
@@ -105,9 +113,7 @@ const Category = () => {
             }
         }
 
-    }, [option])
-
-
+    }, [option, categoryStats])
 
     return (
         <div className='min-h-screen  relative caret-transparent'>

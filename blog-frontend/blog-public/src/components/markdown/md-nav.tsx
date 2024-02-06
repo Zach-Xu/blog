@@ -100,11 +100,12 @@ const MarkdownNav = ({ markdownRef }: Props) => {
 
 
     useEffect(() => {
+
         const handleScroll = () => {
             anchors.forEach((item, idx) => {
                 const heading = markdownRef.current?.querySelector(`[order="${item.index}"]`) as HTMLElement
-                console.log(heading)
-                if (window.scrollY >= heading.offsetTop - 62) {
+
+                if (heading && window.scrollY >= heading.offsetTop - 62) {
                     setCurrentIndex(idx);
                 }
             });

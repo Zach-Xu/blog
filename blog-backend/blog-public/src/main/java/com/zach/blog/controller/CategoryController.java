@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.dto.response.CategoryStatsResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.Category;
 import com.zach.blog.service.CategoryService;
@@ -29,4 +30,13 @@ public class CategoryController {
         List<CategoryResponse> categoriesResponse = BeanCopyUtils.copyBeanList(categories, CategoryResponse.class);
         return ResponseResult.ok(categoriesResponse);
     }
+
+    @Operation(summary = "Get category stats", description = "Retrieve a list of categories and their corresponding number of articles ")
+    @GetMapping("/stats")
+    public ResponseResult<?> getCategoryStats(){
+        List<CategoryStatsResponse> response = categoryService.getCategoryStats();
+        return ResponseResult.ok(response);
+    }
+
+
 }

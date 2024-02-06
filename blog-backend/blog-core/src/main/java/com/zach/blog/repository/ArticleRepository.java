@@ -1,8 +1,10 @@
 package com.zach.blog.repository;
 
+import com.zach.blog.dto.response.AdjacentArticle;
 import com.zach.blog.enums.PublishStatus;
 import com.zach.blog.model.Article;
 
+import com.zach.blog.model.Tag;
 import com.zach.blog.projection.ArticleViewCount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +47,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
             "AND a.pinned = :pinned ")
     Page<Long> findArticleIds(@Param("pinned") boolean pinned, Pageable pageable);
 
+    @EntityGraph(attributePaths = {
+            "category",
+            "tags"
+    })
     @Override
     Page<Article> findAll(Specification<Article> spec, Pageable pageable);
 
@@ -58,10 +64,33 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
 
     List<ArticleViewCount> findAllBy();
 
+    @Query(value = """
+            SELECT new com.zach.blog.dto.response.AdjacentArticle(a.id, a.title, a.thumbnail)
+            FROM Article a
+            WHERE a.id < :articleId
+            AND a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED
+            ORDER BY a.id DESC 
+            """)
+    Page<AdjacentArticle> findPreviousArticle(@Param("articleId") Long articleId, Pageable pageable);
+
+    @Query(value = """
+            SELECT new com.zach.blog.dto.response.AdjacentArticle(a.id, a.title, a.thumbnail)
+            FROM Article a
+            WHERE a.id > :articleId
+            AND a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED
+            ORDER BY a.id ASC 
+            """)
+    Page<AdjacentArticle> findNextArticle(@Param("articleId") Long articleId, Pageable pageable);
+
     interface Specs {
         static Specification<Article> byCategoryId(Long categoryId) {
             return (root, query, builder) ->
                     builder.equal(root.get("category").get("id"), categoryId);
+        }
+
+        static Specification<Article> byTagId(Tag tag){
+            return (root, query, builder) ->
+                    builder.isMember(tag, root.get("tags"));
         }
 
         static Specification<Article> byPublishStatus(PublishStatus publishStatus) {
@@ -70,7 +99,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
         }
 
         static Specification<Article> byPinned(Boolean isPinned) {
-            return (root, query ,builder) ->
+            return (root, query, builder) ->
                     builder.equal(root.get("pinned"), isPinned);
         }
 

@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid'
 import React, { useMemo } from 'react'
+import useArticleStore from '../../store/article-store';
 
 /**
  * 
@@ -54,27 +55,32 @@ const makePage = (total: number, cur: number, around: number) => {
 
 interface Props {
     total: number
-    current: number
     around?: number
 }
 
 
-const Pagination = ({ total, current, around = 0 }: Props) => {
+const Pagination = ({ total, around = 0 }: Props) => {
+
+    const current = useArticleStore(state => state.pageNum)
 
     const pageElements = useMemo(() => makePage(total, current, around), [total, current, around])
 
-    const getLastPage = () => {
+    const updatePageNumber = useArticleStore(state => state.updatePageNum)
+
+    const getPreviousPage = () => {
         if (current - 1 <= 0) {
             return
         }
-        // update curret and fetch data 
+        console.log('get pre')
+        updatePageNumber(current - 1)
     }
 
     const getNextPage = () => {
         if (current + 1 > total) {
             return
         }
-        // update curret and fetch data
+        console.log('get next')
+        updatePageNumber(current + 1)
     }
 
     return (
@@ -82,26 +88,28 @@ const Pagination = ({ total, current, around = 0 }: Props) => {
             {/* Pagination */}
             {/* Props total pages */}
             <div className='flex group'>
-                <ChevronLeftIcon className='w-10 p-2 rounded-lg font-bold hover:bg-gradient-pink hover:text-black'
-                    onClick={() => getLastPage()}
-                />
-                <div className='flex text-lg '>
+                <button onClick={getPreviousPage} className={current - 1 <= 0 ? 'cursor-not-allowed' : ''}>
+                    <ChevronLeftIcon className='w-10 p-2 rounded-lg font-bold hover:bg-gradient-pink hover:text-black ' />
+                </button>
+                <div className='flex text-lg cursor-pointer'>
                     {
                         pageElements.map((item, idx) => (
                             item === '...' ?
-                                <div key={`${item}${idx}`} className='w-10 h-10 leading-10 rounded-lg text-center'>
+                                <div key={`${item}${idx}`} className='w-10 h-10 leading-10 rounded-lg text-center' >
                                     {item}
                                 </div>
                                 :
-                                <div key={`${item}${idx}`} className={`${current === item ? 'bg-gradient-pink text-black group-hover:bg-none group-hover:text-gray-300 group-hover:hover:bg-gradient-pink group-hover:hover:text-black' : ''} w-10 h-10 leading-10 rounded-lg text-center hover:bg-gradient-pink hover:text-black`}>
+                                <div key={`${item}${idx}`} className={`${current === item ? 'bg-gradient-pink text-black group-hover:bg-none group-hover:text-gray-300 group-hover:hover:bg-gradient-pink group-hover:hover:text-black' : ''} w-10 h-10 leading-10 rounded-lg text-center hover:bg-gradient-pink hover:text-black`}
+                                    onClick={() => updatePageNumber(+item - 1)}
+                                >
                                     {item}
                                 </div>
                         ))
                     }
                 </div>
-                <ChevronRightIcon className='w-10 p-2 rounded-lg font-bold hover:bg-gradient-pink hover:text-black'
-                    onClick={() => getNextPage()}
-                />
+                <button onClick={getNextPage} className={current + 1 > total ? 'cursor-not-allowed' : ''}>
+                    <ChevronRightIcon className='w-10 p-2 rounded-lg font-bold hover:bg-gradient-pink hover:text-black ' />
+                </button>
             </div>
         </div>
     )

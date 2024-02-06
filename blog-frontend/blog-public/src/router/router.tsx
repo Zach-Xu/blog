@@ -7,6 +7,7 @@ import Category from "../pages/category";
 import Tag from "../pages/tag";
 import About from "../pages/about";
 import ArticleDetails from "../pages/article-details";
+import NotFound from "../pages/not-found";
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
             {
                 path: '/article/:articleId',
                 element: <ArticleDetails />
+            },
+            {
+                path: '*',
+                element: <NotFound />
             }
         ]
     },

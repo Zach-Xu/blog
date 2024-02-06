@@ -42,6 +42,7 @@ public class ArticleController {
                                          @RequestParam(required = false) String title, @RequestParam(required = false) String summary) {
         Page<Article> page = articleService.getArticles(pageNum, pageSize, title, summary);
         List<Article> articles = page.getContent();
+
         List<ArticleResponse> articleResponses = BeanCopyUtils.copyBeanList(articles, ArticleResponse.class);
         int totalPages = page.getTotalPages();
         PageResponse pageResponse = new PageResponse(articleResponses, totalPages, articleResponses.size());
@@ -50,9 +51,7 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public ResponseResult<?> getArticleDetails(@PathVariable Long id) {
-        Article article = articleService.getArticleDetail(id);
-        ArticleDetailResponse articleDetailResponse = BeanCopyUtils.copyBean(article, ArticleDetailResponse.class);
-        return ResponseResult.ok(articleDetailResponse);
+        return ResponseResult.ok(articleService.getArticleDetail(id));
     }
 
     @Validate

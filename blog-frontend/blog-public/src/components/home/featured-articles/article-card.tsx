@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface Props {
     reverse: boolean
-    article: Article
+    article: FeaturedArticle
 }
 
 const ArticleCard = ({ article, reverse }: Props) => {
@@ -54,7 +54,7 @@ const ArticleCard = ({ article, reverse }: Props) => {
                         &&
                         <div className={`flex items-center md:pl-2 `}>
                             <FlagIcon className='w-4 mr-2' />
-                            <span>{article.tags[0].tagName}</span>
+                            <span>{article.tags[0].name}</span>
                         </div>
                     }
                 </div>
