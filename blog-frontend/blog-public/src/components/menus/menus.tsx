@@ -46,7 +46,6 @@ export const menus: Menu[] = [
     },
     // {
     //     name: 'Login',
-    //     path: '/login',
     //     icon: <UserIcon />
     // }
 ]
