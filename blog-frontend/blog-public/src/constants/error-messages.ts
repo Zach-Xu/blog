@@ -1,0 +1,1 @@
+export const INVALID_TOKEN = "Invalid or expired token"

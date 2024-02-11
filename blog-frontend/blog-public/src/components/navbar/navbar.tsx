@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { menus } from '../menus/menus'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
-import LoginNav from './login-nav'
+import UserMenu from './user-menu'
 
 const NavBar = () => {
     return (
@@ -42,7 +42,7 @@ const NavBar = () => {
                     </li>
                 ))
             }
-            <LoginNav />
+            <UserMenu />
         </ul>
     )
 }

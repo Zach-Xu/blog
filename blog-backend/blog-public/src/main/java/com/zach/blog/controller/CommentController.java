@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.request.CommentRequest;
 import com.zach.blog.dto.response.CommentQueryResult;
 import com.zach.blog.dto.response.ResponseResult;
@@ -7,8 +8,10 @@ import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +32,10 @@ public class CommentController {
         return ResponseResult.ok(comments);
     }
 
+    @Validate
     @Operation(summary = "Create Comment", description = "Create a new comment.")
     @PostMapping
-    public ResponseResult<?> createComment(@AuthenticationPrincipal ApplicationUser user, @RequestBody CommentRequest commentRequest){
+    public ResponseResult<?> createComment(@AuthenticationPrincipal ApplicationUser user, @Valid @RequestBody CommentRequest commentRequest, BindingResult bindingResult){
         commentService.createComment(user, commentRequest);
         return ResponseResult.ok();
     }

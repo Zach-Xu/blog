@@ -20,8 +20,8 @@ public interface ApplicationUserRepository extends JpaRepository<ApplicationUser
             "SELECT u FROM ApplicationUser u " +
             "LEFT JOIN FETCH u.roles r " +
             "LEFT JOIN FETCH r.menus m " +
-            "WHERE u.username = ?1 ")
-    Optional<ApplicationUser> findUserAndPermissionByUsername(String username);
+            "WHERE u.email = ?1 ")
+    Optional<ApplicationUser> findUserAndPermissionByEmail(String email);
 
 
     @Query(value = "" +

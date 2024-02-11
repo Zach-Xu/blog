@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import { menus } from '../menus/menus'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronLeftIcon } from '@heroicons/react/24/solid'
-import SideLoginNav from './side-login-nav'
 import useSettingStore from '../../store/setting-store'
+import SideUserMenu from './side-user-menu'
 
 interface Props {
     scrollTop?: number
@@ -60,7 +60,7 @@ const SideNav = ({ scrollTop = 0 }: Props) => {
 
                     ))
                 }
-                <SideLoginNav />
+                <SideUserMenu />
             </ul>
         </nav>
     )

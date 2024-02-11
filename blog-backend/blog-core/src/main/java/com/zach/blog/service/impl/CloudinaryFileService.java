@@ -3,8 +3,7 @@ package com.zach.blog.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.StoredFile;
 import com.cloudinary.utils.ObjectUtils;
-import com.zach.blog.exception.MissingParameterException;
-import com.zach.blog.exception.UnsupportedFileTypeException;
+import com.zach.blog.exception.BusinessException;
 
 import com.zach.blog.service.FileService;
 
@@ -15,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+
+import static com.zach.blog.enums.code.BusinessErrorCode.IMAGE_FILE_REQUIRED;
+import static com.zach.blog.enums.code.BusinessErrorCode.UNSUPPORTED_FILE_TYPE;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +32,11 @@ public class CloudinaryFileService implements FileService {
     public String UploadFile(MultipartFile file) throws IOException {
 
         if (Objects.isNull(file) || Objects.isNull(file.getOriginalFilename())) {
-            throw new MissingParameterException("Image file is required");
+            throw new BusinessException(IMAGE_FILE_REQUIRED);
         }
 
         if (allowedFileTypes.stream().noneMatch(extension -> file.getOriginalFilename().endsWith(extension))) {
-            throw new UnsupportedFileTypeException();
+            throw new BusinessException(UNSUPPORTED_FILE_TYPE);
         }
 
         // Upload image to Cloudinary

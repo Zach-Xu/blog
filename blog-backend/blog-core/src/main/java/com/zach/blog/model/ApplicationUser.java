@@ -20,10 +20,8 @@ import java.util.Set;
 @Where(clause = "deleted = false")
 public class ApplicationUser extends BaseEntity{
 
-    @Column(unique = true)
+    @Column
     private String username;
-
-    private String nickname;
 
     @JsonIgnore
     private String password;
@@ -43,6 +41,7 @@ public class ApplicationUser extends BaseEntity{
 
     private boolean enable = true;
 
+    @Column(unique = true)
     private String email;
 
     @Column(name = "phone_number")

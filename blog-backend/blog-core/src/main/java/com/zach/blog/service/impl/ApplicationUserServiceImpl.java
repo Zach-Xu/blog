@@ -84,7 +84,6 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     public ApplicationUser createUser(CreateUserRequest request) {
         ApplicationUser user = new ApplicationUser();
         user.setUsername(request.username());
-        user.setNickname(request.nickname());
         user.setGender(request.gender());
         user.setPhoneNumber(request.phoneNumber());
         user.setEmail(request.email());
@@ -108,7 +107,7 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     @Override
     public void updateUser(Long id, UpdateUserRequest request) {
         ApplicationUser user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-        user.setNickname(request.nickname());
+        user.setUsername(request.username());
         user.setPhoneNumber(request.phoneNumber());
 
         if (!request.email().equals(user.getEmail()) && userRepository.existsByEmail(request.email())) {

@@ -36,7 +36,7 @@ let option: EChartsOption = {
 
 }
 
-const Category = () => {
+const CategoryStats = () => {
 
     const navigate = useNavigate()
 
@@ -138,4 +138,4 @@ const Category = () => {
     )
 }
 
-export default Category
+export default CategoryStats

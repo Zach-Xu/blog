@@ -11,6 +11,5 @@ public class UserResponse {
     private String email;
     private Long id;
     private String username;
-    private String nickname;
     private Gender gender;
 }

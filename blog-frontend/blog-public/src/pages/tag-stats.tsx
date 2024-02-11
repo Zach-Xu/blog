@@ -16,7 +16,7 @@ const colors: string[] = ['text-orange-300', 'text-green-300', 'text-yellow-500'
 const length = colors.length
 
 
-const Tag = () => {
+const TagStats = () => {
 
     const { data: tags } = useQuery('tagStats', tagService.getTagStats)
 
@@ -67,4 +67,4 @@ const Tag = () => {
     )
 }
 
-export default Tag
+export default TagStats

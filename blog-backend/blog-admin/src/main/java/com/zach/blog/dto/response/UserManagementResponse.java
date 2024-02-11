@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class UserManagementResponse {
     private Long id;
     private String username;
-    private String nickname;
     private String email;
     private boolean enable;
     private LocalDateTime createdTime;

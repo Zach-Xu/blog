@@ -17,8 +17,6 @@ public class SessionUser {
 
     private String username;
 
-    private String nickname;
-
     private Gender gender;
 
     private String roleName;

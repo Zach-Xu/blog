@@ -1,8 +1,8 @@
 package com.zach.blog.controller;
 
 import com.zach.blog.dto.response.UserPermissionResponse;
-import com.zach.blog.dto.response.UserResponse;
 import com.zach.blog.dto.response.ResponseResult;
+import com.zach.blog.dto.response.UserResponse;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Menu;
 import com.zach.blog.model.Role;

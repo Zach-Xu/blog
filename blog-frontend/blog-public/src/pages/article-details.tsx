@@ -13,6 +13,7 @@ import { useMutation, useQuery } from 'react-query'
 import { articleService } from '../services/resources/article-service'
 import Loading from '../components/loading/loading'
 import ReplyBox from '../components/article-details/reply-box'
+import Tag from '../components/commons/tag'
 
 const countWords = (content: string) => {
   const words = content.split(' ').length
@@ -121,10 +122,7 @@ const ArticleDetails = () => {
                   <div className='flex space-x-2 flex-nowrap'>
                     {
                       article.tags.map(tag => (
-                        <div key={tag.id} className='flex items-center bg-[#2d2e2f] py-1 px-2 text-xs md:text-sm space-x-2 text-blue-300 rounded-md hover:text-orange-600 cursor-pointer'>
-                          <TagIcon className='w-4' />
-                          <Link to={`/tag/${tag.id}`}>{tag.name}</Link>
-                        </div>
+                        <Tag key={tag.id} tag={tag} />
                       ))
                     }
                   </div>

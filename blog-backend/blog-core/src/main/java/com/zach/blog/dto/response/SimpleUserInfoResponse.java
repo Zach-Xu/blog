@@ -6,10 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserInfoResponse {
+public class SimpleUserInfoResponse {
     private Long id;
-    private String username;
-    private String email;
-    private Gender gender;
+
     private String avatar;
+
+    private String email;
+
+    private String username;
+
+    private Gender gender;
 }

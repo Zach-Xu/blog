@@ -78,7 +78,6 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         Role adminRole = roleRepository.findByRoleName(RoleName.ADMIN.name()).get();
         user1.addRole(adminRole);
         user1.setUsername("Zach");
-        user1.setNickname("NotNow");
         user1.setPassword(passwordEncoder.encode("123456"));
         user1.setEnable(true);
         user1.setEmail("zach.popping@gmail.com");
@@ -89,7 +88,6 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         ApplicationUser user2 = new ApplicationUser();
         user2.addRole(adminRole);
         user2.setUsername("John");
-        user2.setNickname("Milk");
         user2.setPassword(passwordEncoder.encode("123456"));
         user2.setEnable(true);
         user2.setEmail("random.unknown@gmail.com");

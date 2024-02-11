@@ -12,7 +12,6 @@ import java.util.List;
 public class UserInfoForUpdateResponse {
     private Long id;
     private String username;
-    private String nickname;
     private String phoneNumber;
     private String email;
     private Gender gender;

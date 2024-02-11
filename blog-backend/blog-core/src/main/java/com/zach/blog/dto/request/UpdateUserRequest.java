@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record UpdateUserRequest(
-        @NotBlank(message = "Nickname must be provided")
-        String nickname,
+        @NotBlank(message = "Username must be provided")
+        String username,
 
         @NotBlank(message = "Phone number must be provided")
         String phoneNumber,

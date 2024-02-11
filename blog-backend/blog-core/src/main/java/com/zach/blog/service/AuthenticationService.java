@@ -1,12 +1,11 @@
 package com.zach.blog.service;
 
-import com.zach.blog.dto.response.AuthResponse;
 import com.zach.blog.model.ApplicationUser;
 
 public interface AuthenticationService {
-    AuthResponse register(String username, String password);
+    ApplicationUser register(String email, String password);
 
-    AuthResponse login(String username, String password);
+    ApplicationUser login(String email, String password);
 
     void logout(Long userId);
 }

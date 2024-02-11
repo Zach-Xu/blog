@@ -1,11 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
 import { errorCode } from './error-utils'
 import { toast } from 'react-toastify'
+import { INVALID_TOKEN } from '../constants/error-messages'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 export const resourceAxios = axios.create({
-    baseURL: 'http://localhost:8080/api'
+    baseURL: 'http://localhost:8080/api',
+    withCredentials: true
 })
 
 const commonResponseInterceptor = (res: AxiosResponse) => {
@@ -20,7 +22,11 @@ const commonResponseInterceptor = (res: AxiosResponse) => {
     // Therefore we should manully check the code and handle the error
     if (code !== 200 && code !== 201) {
         console.log('http status code is neither 200 nor 201')
-        toast.error(message)
+
+        if (message !== INVALID_TOKEN) {
+            toast.error(message)
+        }
+
         return Promise.reject(new Error(message))
     }
 

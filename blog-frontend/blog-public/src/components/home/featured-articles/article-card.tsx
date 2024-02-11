@@ -1,7 +1,8 @@
 import { CalendarDaysIcon, EyeDropperIcon, FlagIcon, TagIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import LazyLoadImage from './lazy-load-image'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import Tag from '../../commons/tag'
 
 interface Props {
     reverse: boolean
@@ -21,7 +22,7 @@ const ArticleCard = ({ article, reverse }: Props) => {
             <LazyLoadImage reverse={reverse} src={article.thumbnail} />
             <div className='h-[14rem] md:w-1/2 flex flex-col justify-between space-y-5'>
                 {/* Article Info */}
-                <div className={`flex ${reverse ? 'justify-start ml-4' : 'justify-end mr-4'} space-x-2 md:mt-4 md:ml-4`}>
+                <div className={`flex ${reverse ? 'justify-start ml-4' : 'justify-end mr-4'} space-x-6 lg:space-x-4 md:mt-4 md:ml-4`}>
                     {
                         article.pinned &&
                         <div className='flex items-center space-x-1 text-[#d96d7f]'>
@@ -33,10 +34,10 @@ const ArticleCard = ({ article, reverse }: Props) => {
                         <CalendarDaysIcon className='w-4' />
                         <span>{new Date(article.createdTime).toLocaleDateString()}</span>
                     </div>
-                    <div className='flex items-center space-x-1'>
-                        <TagIcon className='w-4' />
+                    <Link to={`/category/${article.category.id}`} className='flex items-center space-x-1 hover:text-orange-600'>
+                        <FlagIcon className='w-4' />
                         <span>{article.category.name}</span>
-                    </div>
+                    </Link>
                 </div>
                 {/* Article Intro */}
 
@@ -52,10 +53,20 @@ const ArticleCard = ({ article, reverse }: Props) => {
                     {
                         article.tags && article.tags.length > 0
                         &&
-                        <div className={`flex items-center md:pl-2 `}>
-                            <FlagIcon className='w-4 mr-2' />
-                            <span>{article.tags[0].name}</span>
+                        <div className={`flex space-x-3 flex-wrap h-full overflow-y-hidden  ${reverse ? 'pl-2' : ''}`}>
+                            {
+                                article.tags.map(tag => (
+                                    <div key={tag.id} className='h-full flex items-center'>
+                                        <Tag tag={tag} />
+                                    </div>
+                                ))
+                            }
                         </div>
+
+                        // <div className={`flex items-center md:pl-2 `}>
+                        //     <FlagIcon className='w-4 mr-2' />
+                        //     <span>{article.tags[0].name}</span>
+                        // </div>
                     }
                 </div>
             </div>

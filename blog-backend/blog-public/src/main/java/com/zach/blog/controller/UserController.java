@@ -45,4 +45,6 @@ public class UserController {
         userService.updateUserInfo(user.getId(), updateUserInfoRequest);
         return ResponseResult.ok();
     }
+
+
 }

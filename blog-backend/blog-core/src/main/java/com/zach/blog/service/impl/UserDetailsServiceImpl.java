@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<ApplicationUser> userOpt = userRepository.findUserAndPermissionByUsername(username);
+        Optional<ApplicationUser> userOpt = userRepository.findUserAndPermissionByEmail(username);
         return userOpt.map(UserDetailsImpl::new).orElseThrow(()-> new UsernameNotFoundException("Invalid credentials"));
     }
 }
