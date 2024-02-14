@@ -13,13 +13,14 @@ public class PageResponse {
 
     private int totalPages;
 
-    private int total;
+    /** total number of records in DB */
+    private long total;
 
     public PageResponse(){
 
     }
 
-    public PageResponse(List rows, int totalPages, int total) {
+    public PageResponse(List rows, int totalPages, long total) {
         this.rows = rows;
         this.totalPages = totalPages;
         this.total = total;

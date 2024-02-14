@@ -1,5 +1,6 @@
 package com.zach.blog.service;
 
+import com.zach.blog.dto.response.AboutMeQueryResult;
 import com.zach.blog.dto.response.OwnerCardInfoResponse;
 import com.zach.blog.dto.response.SiteInfoResponse;
 
@@ -9,4 +10,6 @@ public interface HomeService {
     SiteInfoResponse getSiteInfo();
 
     void updateSiteVisitCount();
+
+    AboutMeQueryResult getAboutMe();
 }

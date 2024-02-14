@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import Wave from '../layout/wave'
 import * as echarts from 'echarts';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { categoryService } from '../services/resources/category-service';
+import { useQuery } from '@tanstack/react-query';
 
 type EChartsOption = echarts.EChartsOption;
 
@@ -42,7 +42,10 @@ const CategoryStats = () => {
 
     const chartRef = useRef<HTMLDivElement>(null)
 
-    const { data: categoryStats } = useQuery('categoryStats', categoryService.getCategoryStats)
+    const { data: categoryStats } = useQuery({
+        queryKey: ['categoryStats'],
+        queryFn: categoryService.getCategoryStats
+    })
 
     const categoryOption = useMemo(() => {
         if (!categoryStats) return option
@@ -74,7 +77,7 @@ const CategoryStats = () => {
         const handleEchartClick = (params: echarts.ECElementEvent) => {
             if (params.data instanceof Object) {
                 if ('id' in params.data) {
-                    navigate(`/category/${params.data.id}`)
+                    navigate(`/articles?categoryId=${params.data.id}`)
                 }
             }
         }
@@ -119,7 +122,7 @@ const CategoryStats = () => {
         <div className='min-h-screen  relative caret-transparent'>
             <div className='h-[70vh] relative -z-20'>
                 <div className='h-[70vh] fixed w-full bg-archive bg-image-cover bg-cover bg-no-repeat bg-center text-white flex justify-center items-center'>
-                    <h1 className='font-bold text-3xl '>
+                    <h1 className='font-bold text-4xl md:text-5xl '>
                         Category
                     </h1>
                 </div>

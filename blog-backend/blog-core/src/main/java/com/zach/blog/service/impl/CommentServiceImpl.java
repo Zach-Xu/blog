@@ -2,18 +2,21 @@ package com.zach.blog.service.impl;
 
 
 import com.zach.blog.dto.request.CommentRequest;
+import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.enums.CommentType;
-import com.zach.blog.enums.code.ResourceNotFoundCode;
 import com.zach.blog.exception.*;
 import com.zach.blog.dto.response.CommentQueryResult;
-import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.model.Comment;
+import com.zach.blog.model.SessionUser;
+import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.repository.ArticleRepository;
 import com.zach.blog.repository.CommentRepository;
 import com.zach.blog.service.CommentService;
 import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,16 +31,19 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
+    private final ApplicationUserRepository userRepository;
 
     @Override
-    public List<CommentQueryResult> getComments(Integer pageNum, Integer pageSize, Long articleId) {
+    public PageResponse getComments(Integer pageNum, Integer pageSize, Long articleId) {
         PageRequest rootPageRequest = PageRequest.of(pageNum, pageSize);
-        List<CommentQueryResult> rootComments = commentRepository.findRootCommentsByArticleId(articleId, rootPageRequest).getContent();
-        return getSubComments(rootComments);
+        Page<CommentQueryResult> page = commentRepository.findRootCommentsByArticleId(articleId, rootPageRequest);
+        List<CommentQueryResult> rootComments = page.getContent();
+        int totalPages = page.getTotalPages();
+        return new PageResponse( getSubComments(rootComments), totalPages, page.getTotalElements());
     }
 
     @Override
-    public void createComment(ApplicationUser user, CommentRequest commentRequest) {
+    public void createComment(SessionUser user, CommentRequest commentRequest) {
 
         if (commentRequest.type() == CommentType.ARTICLE) {
             createArticleComment(user, commentRequest);
@@ -46,13 +52,13 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    private void createArticleComment(ApplicationUser user, CommentRequest commentRequest) {
+    private void createArticleComment(SessionUser user, CommentRequest commentRequest) {
         validateArticleComment(commentRequest);
 
         Comment comment = new Comment();
         comment.setType(commentRequest.type());
         comment.setContent(commentRequest.content());
-        comment.setUser(user);
+        comment.setUser(userRepository.getReferenceById(user.getId()));
         comment.setArticle(articleRepository.getReferenceById(commentRequest.articleId()));
         // Set ToComment association only when this is a sub comment
         if (commentRequest.rootCommentId() != -1L) {
@@ -63,13 +69,13 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
-    private void createLinkComment(ApplicationUser user, CommentRequest commentRequest) {
+    private void createLinkComment(SessionUser user, CommentRequest commentRequest) {
         validateComment(commentRequest);
 
         Comment comment = new Comment();
         comment.setType(commentRequest.type());
         comment.setContent(commentRequest.content());
-        comment.setUser(user);
+        comment.setUser(userRepository.getReferenceById(user.getId()));
         // Set ToComment association only when this is a sub comment
         if (commentRequest.rootCommentId() != -1L) {
             comment.setToComment(commentRepository.getReferenceById(commentRequest.toCommentId()));
@@ -83,11 +89,11 @@ public class CommentServiceImpl implements CommentService {
             throw new MissingParameterException("The ID of the article being replied to was not specified");
         }
 
-
         // ToDo: validate if article is allowed to comment
         if (!articleRepository.existsById(commentRequest.articleId())) {
             throw new ResourceNotFoundException(ARTICLE_NOT_FOUND);
         }
+
         validateComment(commentRequest);
     }
 
@@ -114,6 +120,13 @@ public class CommentServiceImpl implements CommentService {
         PageRequest rootPageRequest = PageRequest.of(pageNum, pageSize);
         List<CommentQueryResult> rootLinkComments = commentRepository.findRootLinkComments(rootPageRequest).getContent();
         return getSubComments(rootLinkComments);
+    }
+
+    @Override
+    public List<CommentQueryResult> getLatestComments() {
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<CommentQueryResult> page = commentRepository.findLatestComments(pageRequest);
+        return page.getContent();
     }
 
     private List<CommentQueryResult> getSubComments(List<CommentQueryResult> rootComments) {

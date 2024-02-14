@@ -1,5 +1,6 @@
 package com.zach.blog.repository;
 
+import com.zach.blog.dto.response.AboutMeQueryResult;
 import com.zach.blog.dto.response.SiteInfoQueryResult;
 import com.zach.blog.model.SiteInfo;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -26,4 +27,12 @@ public interface SiteInfoRepository extends JpaRepository<SiteInfo, Long> {
             WHERE s.id = :siteInfoId
             """)
     Optional<SiteInfoQueryResult> findSiteStats(@Param("siteInfoId") Long siteInfoId);
+
+    @Query(value = """
+            SELECT new com.zach.blog.dto.response.AboutMeQueryResult(s.aboutMe, o.avatar)
+            FROM SiteInfo s
+            JOIN s.owner o
+            WHERE s.id = :siteInfoId
+            """)
+    Optional<AboutMeQueryResult> findAboutMe(@Param("siteInfoId") Long siteInfoId);
 }

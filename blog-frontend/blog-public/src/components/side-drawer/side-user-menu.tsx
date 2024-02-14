@@ -3,8 +3,9 @@ import useSettingStore from '../../store/setting-store'
 import { ArrowRightStartOnRectangleIcon, ChevronLeftIcon, UserIcon } from '@heroicons/react/24/solid'
 import useUserStore from '../../store/user-store'
 import { Link } from 'react-router-dom'
-import { useMutation } from 'react-query'
+
 import { authService } from '../../services/resources/auth-service'
+import { useMutation } from '@tanstack/react-query'
 
 interface Props {
     scrollTop?: number
@@ -20,7 +21,10 @@ const SideUserMenu = ({ scrollTop = 0 }: Props) => {
     const isRegisterModalShown = useSettingStore(state => state.isRegisterModalShown)
     const toggleLoginModal = useSettingStore(state => state.toggleLoginModal)
 
-    const { mutate } = useMutation('logout', authService.logout)
+    const { mutate } = useMutation({
+        mutationKey: ['logout'],
+        mutationFn: authService.logout
+    })
 
     const logOut = () => {
         updateUser(null)

@@ -1,8 +1,9 @@
 import React from 'react'
 import Wave from '../layout/wave'
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-query';
+
 import { tagService } from '../services/resources/tag-service';
+import { useQuery } from '@tanstack/react-query';
 
 const getFontSize = (count: number) => {
     return ((1 + 6 * count / 10) / 3) * 2 + "rem";
@@ -18,27 +19,16 @@ const length = colors.length
 
 const TagStats = () => {
 
-    const { data: tags } = useQuery('tagStats', tagService.getTagStats)
-
-    // let tags = [
-    //     { id: 1, name: "Java", count: 3 },
-    //     { id: 2, name: "React", count: 1 },
-    //     { id: 4, name: "CSS", count: 2 },
-    //     { id: 3, name: "DevOps", count: 1 },
-    //     { id: 5, name: "LeetCode", count: 6 },
-    //     { id: 1, name: "frontend", count: 3 },
-    //     { id: 4, name: "CSS", count: 2 },
-    //     { id: 3, name: "DevOps", count: 1 },
-    //     { id: 5, name: "LeetCode", count: 6 },
-
-    // ];
-
+    const { data: tags } = useQuery({
+        queryKey: ['tagStats'],
+        queryFn: tagService.getTagStats
+    })
 
     return (
         <div className='min-h-screen  relative caret-transparent'>
             <div className='h-[70vh] relative -z-20'>
                 <div className='h-[70vh] fixed w-full bg-archive bg-image-cover bg-cover bg-no-repeat bg-center text-white flex justify-center items-center'>
-                    <h1 className='font-bold text-3xl '>
+                    <h1 className='font-bold text-4xl md:text-5xl '>
                         Tag
                     </h1>
                 </div>
@@ -53,7 +43,7 @@ const TagStats = () => {
                             tags && tags.map(tag => {
                                 const textColor = colors[Math.floor((Math.random() * length))]
                                 return (
-                                    <Link key={tag.id} to={`/tag/${tag.id}`} style={{ fontSize: `${getFontSize(tag.articleCount)}` }} className={`${textColor} px-2 transition-all duration-300 hover:scale-110`} >
+                                    <Link key={tag.id} to={`/articles?tagId=${tag.id}`} state={{ tagName: tag.tagName }} style={{ fontSize: `${getFontSize(tag.articleCount)}` }} className={`${textColor} px-2 transition-all duration-300 hover:scale-110`} >
                                         {tag.tagName}
                                         <sup>{tag.articleCount}</sup>
                                     </Link>

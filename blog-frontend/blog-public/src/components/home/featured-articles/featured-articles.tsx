@@ -1,10 +1,13 @@
 import React, { useMemo } from 'react'
 import ArticleCard from './article-card'
 import { homeService } from '../../../services/resources/home-service'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 const FeaturedArticles = () => {
 
-    let { data } = useQuery('featuredArticles', homeService.getFeaturedArticles)
+    let { data } = useQuery({
+        queryKey: ['featuredArticles'],
+        queryFn: homeService.getFeaturedArticles
+    })
 
     const articles: FeaturedArticle[] = useMemo(() => {
         if (!data) {

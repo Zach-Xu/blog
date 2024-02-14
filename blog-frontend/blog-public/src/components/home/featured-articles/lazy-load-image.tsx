@@ -1,14 +1,13 @@
 import React, { ImgHTMLAttributes, useState } from 'react'
 
 interface Props extends ImgHTMLAttributes<HTMLImageElement> {
-    reverse: boolean
 }
 
-const LazyLoadImage = ({ reverse, ...rest }: Props) => {
+const LazyLoadImage = ({ ...rest }: Props) => {
     const [loaded, setLoaded] = useState(false);
 
     return (
-        <div className={`h-[14rem] md:w-1/2 overflow-hidden} ${reverse ? 'clip-image-bl md:clip-image-lb' : 'clip-image-br md:clip-image-rt'}`}>
+        <>
             {
                 !loaded &&
                 <div className="flex items-center justify-center w-full h-full bg-gray-300  dark:bg-gray-700">
@@ -18,11 +17,8 @@ const LazyLoadImage = ({ reverse, ...rest }: Props) => {
                 </div>
             }
 
-            <img {...rest} loading='lazy'
-                onLoad={() => setLoaded(true)}
-                className={`object-cover w-full h-full group-hover:scale-105 group-hover:rotate-1 transition-all ease-in-out duration-200`}
-            />
-        </div>
+            <img {...rest} loading='lazy' onLoad={() => setLoaded(true)} />
+        </>
 
     )
 }

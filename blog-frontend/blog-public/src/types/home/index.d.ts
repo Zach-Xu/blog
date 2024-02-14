@@ -37,3 +37,15 @@ interface Tag {
     id: number
     name: string
 }
+
+interface AboutMe {
+    content: string
+    avatar: string
+}
+
+interface LatestComment {
+    content: string
+    username: string
+    createdTime: string
+    avatar: string
+}

@@ -1,6 +1,7 @@
 import React from 'react'
 import ArticleItem from './article-item'
 import Pagination from './pagination'
+import useArticleStore from '../../store/article-store'
 
 interface Props {
     articles: Article[]
@@ -9,7 +10,8 @@ interface Props {
 
 const ArticleList = ({ articles, totalPages }: Props) => {
 
-
+    const currentPage = useArticleStore(state => state.pageNum)
+    const updatePageNum = useArticleStore(state => state.updatePageNum)
     return (
         <>
             {/* Article List */}
@@ -22,7 +24,7 @@ const ArticleList = ({ articles, totalPages }: Props) => {
                 }
 
             </div>
-            <Pagination total={totalPages} />
+            <Pagination total={totalPages} currentPage={currentPage} updatePageNumber={updatePageNum} />
         </>
     )
 }

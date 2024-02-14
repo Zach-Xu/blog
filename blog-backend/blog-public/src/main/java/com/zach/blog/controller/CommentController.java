@@ -3,8 +3,11 @@ package com.zach.blog.controller;
 import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.request.CommentRequest;
 import com.zach.blog.dto.response.CommentQueryResult;
+import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
+import com.zach.blog.model.Comment;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,14 +31,14 @@ public class CommentController {
     @GetMapping
     public ResponseResult<?> getComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                          @RequestParam Long articleId) {
-        List<CommentQueryResult> comments = commentService.getComments(pageNum, pageSize, articleId);
-        return ResponseResult.ok(comments);
+        PageResponse response = commentService.getComments(pageNum, pageSize, articleId);
+        return ResponseResult.ok(response);
     }
 
     @Validate
     @Operation(summary = "Create Comment", description = "Create a new comment.")
     @PostMapping
-    public ResponseResult<?> createComment(@AuthenticationPrincipal ApplicationUser user, @Valid @RequestBody CommentRequest commentRequest, BindingResult bindingResult){
+    public ResponseResult<?> createComment(@AuthenticationPrincipal SessionUser user, @Valid @RequestBody CommentRequest commentRequest, BindingResult bindingResult){
         commentService.createComment(user, commentRequest);
         return ResponseResult.ok();
     }
@@ -44,6 +47,13 @@ public class CommentController {
     @GetMapping("/link")
     public ResponseResult<?> getLinkComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize){
         List<CommentQueryResult> comments = commentService.getLinkComments(pageNum,pageSize);
+        return ResponseResult.ok(comments);
+    }
+
+    @Operation(summary = "Get Latest Comments", description = "Retrieve latest comments")
+    @GetMapping("/latest")
+    public ResponseResult<?> getLatestComments(@RequestParam(defaultValue = "5") Integer pageSize){
+        List<CommentQueryResult> comments = commentService.getLatestComments();
         return ResponseResult.ok(comments);
     }
 }

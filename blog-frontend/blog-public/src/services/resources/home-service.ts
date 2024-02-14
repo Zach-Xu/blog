@@ -15,6 +15,15 @@ export const homeService = {
 
     updateSiteVisitCount: async () => {
         await resourceAxios.post<void, void>('/home/site/visit-count')
+    },
+
+    getAboutMe: async () => {
+        return await resourceAxios.get<void, AboutMe>('/home/about')
+
+    },
+
+    getLatestComments: async () => {
+        return await resourceAxios.get<void, LatestComment[]>('/comments/latest')
     }
 
 }

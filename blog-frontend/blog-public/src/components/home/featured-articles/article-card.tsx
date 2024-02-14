@@ -1,5 +1,5 @@
-import { CalendarDaysIcon, EyeDropperIcon, FlagIcon, TagIcon } from '@heroicons/react/24/outline'
 import React from 'react'
+import { CalendarDaysIcon, EyeDropperIcon, FlagIcon } from '@heroicons/react/24/outline'
 import LazyLoadImage from './lazy-load-image'
 import { Link, useNavigate } from 'react-router-dom'
 import Tag from '../../commons/tag'
@@ -19,7 +19,9 @@ const ArticleCard = ({ article, reverse }: Props) => {
 
     return (
         <div className={`flex flex-col group ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} shadow-around hover:shadow-around-hover bg-[#222222] text-[#aaa] rounded-xl overflow-hidden m-3  border-gray-900`}>
-            <LazyLoadImage reverse={reverse} src={article.thumbnail} />
+            <div className={`h-[14rem] md:w-1/2 overflow-hidden} ${reverse ? 'clip-image-bl md:clip-image-lb' : 'clip-image-br md:clip-image-rt'}`}>
+                <LazyLoadImage className={`object-cover w-full h-full group-hover:scale-105 group-hover:rotate-1 transition-all ease-in-out duration-200`} src={article.thumbnail} />
+            </div>
             <div className='h-[14rem] md:w-1/2 flex flex-col justify-between space-y-5'>
                 {/* Article Info */}
                 <div className={`flex ${reverse ? 'justify-start ml-4' : 'justify-end mr-4'} space-x-6 lg:space-x-4 md:mt-4 md:ml-4`}>
@@ -34,7 +36,8 @@ const ArticleCard = ({ article, reverse }: Props) => {
                         <CalendarDaysIcon className='w-4' />
                         <span>{new Date(article.createdTime).toLocaleDateString()}</span>
                     </div>
-                    <Link to={`/category/${article.category.id}`} className='flex items-center space-x-1 hover:text-orange-600'>
+                    <Link to={`/articles?categoryId=${article.category.id}`} state={{ categoryName: article.category.name }}
+                        className='flex items-center space-x-1 hover:text-orange-600'>
                         <FlagIcon className='w-4' />
                         <span>{article.category.name}</span>
                     </Link>
@@ -62,11 +65,6 @@ const ArticleCard = ({ article, reverse }: Props) => {
                                 ))
                             }
                         </div>
-
-                        // <div className={`flex items-center md:pl-2 `}>
-                        //     <FlagIcon className='w-4 mr-2' />
-                        //     <span>{article.tags[0].name}</span>
-                        // </div>
                     }
                 </div>
             </div>

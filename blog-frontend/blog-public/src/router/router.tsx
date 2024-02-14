@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/home";
-import Article from "../pages/article";
+import Article from "../pages/articles";
 import Layout from "../layout/layout";
 import Archive from "../pages/archive";
 import About from "../pages/about";
@@ -8,6 +8,7 @@ import ArticleDetails from "../pages/article-details";
 import NotFound from "../pages/not-found";
 import CategoryStats from "../pages/category-stats";
 import TagStats from "../pages/tag-stats";
+import User from "../pages/user";
 
 export const router = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
                 element: <Home />
             },
             {
-                path: '/article',
+                path: '/articles',
                 element: <Article />
             },
             {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
             {
                 path: '/article/:articleId',
                 element: <ArticleDetails />
+            },
+            {
+                path: '/user',
+                element: <User />
             },
             {
                 path: '*',

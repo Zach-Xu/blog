@@ -1,12 +1,16 @@
 import React from 'react'
 import { ChartBarIcon } from '@heroicons/react/24/outline'
-import { useQuery } from 'react-query'
+
 import { homeService } from '../../../services/resources/home-service'
 import UpTime from './up-time'
+import { useQuery } from '@tanstack/react-query'
 
 const SiteStatsCard = () => {
 
-    const { data: site } = useQuery('site-stats', homeService.getSiteStats)
+    const { data: site } = useQuery({
+        queryKey: ['site-stats'],
+        queryFn: homeService.getSiteStats
+    })
 
     return (
         <div className='shadow-around-hover rounded-lg flex flex-col p-4 text-gray-400 space-y-2'>

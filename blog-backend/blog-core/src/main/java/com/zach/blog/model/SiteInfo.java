@@ -23,4 +23,6 @@ public class SiteInfo extends BaseEntity{
 
     private Long visitCount;
 
+    @Column(columnDefinition = "longtext")
+    private String aboutMe;
 }

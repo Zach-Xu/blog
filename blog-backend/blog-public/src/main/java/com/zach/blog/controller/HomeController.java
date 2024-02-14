@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.dto.response.AboutMeQueryResult;
 import com.zach.blog.dto.response.OwnerCardInfoResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.dto.response.SiteInfoResponse;
@@ -33,5 +34,11 @@ public class HomeController {
     public ResponseResult<?> updateSiteVisitCount(){
         homeService.updateSiteVisitCount();
         return ResponseResult.ok();
+    }
+
+    @GetMapping("/about")
+    public ResponseResult<?> getAboutMe(){
+        AboutMeQueryResult response = homeService.getAboutMe();
+        return ResponseResult.ok(response);
     }
 }

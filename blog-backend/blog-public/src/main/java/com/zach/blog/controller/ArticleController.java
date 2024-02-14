@@ -59,7 +59,7 @@ public class ArticleController {
             return articleResp;
         }).collect(Collectors.toList());
 
-        PageResponse pageResponse = new PageResponse(response, totalPages, articles.size());
+        PageResponse pageResponse = new PageResponse(response, totalPages, page.getTotalElements());
         return ResponseResult.ok(pageResponse);
     }
 
@@ -69,7 +69,4 @@ public class ArticleController {
         articleService.updateViewCount(articleId);
         return ResponseResult.ok();
     }
-
-
-
 }

@@ -56,31 +56,33 @@ const makePage = (total: number, cur: number, around: number) => {
 interface Props {
     total: number
     around?: number
+    currentPage: number
+    updatePageNumber: (pageNum: number) => void
 }
 
 
-const Pagination = ({ total, around = 0 }: Props) => {
+const Pagination = ({ total, around = 0, currentPage, updatePageNumber }: Props) => {
 
-    const current = useArticleStore(state => state.pageNum)
+    // const current = useArticleStore(state => state.pageNum)
 
-    const pageElements = useMemo(() => makePage(total, current, around), [total, current, around])
+    // const pageElements = useMemo(() => makePage(total, current, around), [total, current, around])
 
-    const updatePageNumber = useArticleStore(state => state.updatePageNum)
+    const pageElements = useMemo(() => makePage(total, currentPage, around), [total, currentPage, around])
+    // const updatePageNumber = useArticleStore(state => state.updatePageNum)
 
     const getPreviousPage = () => {
-        if (current - 1 <= 0) {
+        if (currentPage - 1 <= 0) {
             return
         }
-        console.log('get pre')
-        updatePageNumber(current - 1)
+        updatePageNumber(currentPage - 1)
     }
 
     const getNextPage = () => {
-        if (current + 1 > total) {
+        if (currentPage + 1 > total) {
             return
         }
         console.log('get next')
-        updatePageNumber(current + 1)
+        updatePageNumber(currentPage + 1)
     }
 
     return (
@@ -88,7 +90,7 @@ const Pagination = ({ total, around = 0 }: Props) => {
             {/* Pagination */}
             {/* Props total pages */}
             <div className='flex group'>
-                <button onClick={getPreviousPage} className={current - 1 <= 0 ? 'cursor-not-allowed' : ''}>
+                <button onClick={getPreviousPage} className={currentPage - 1 <= 0 ? 'cursor-not-allowed' : ''}>
                     <ChevronLeftIcon className='w-10 p-2 rounded-lg font-bold hover:bg-gradient-pink hover:text-black ' />
                 </button>
                 <div className='flex text-lg cursor-pointer'>
@@ -99,15 +101,15 @@ const Pagination = ({ total, around = 0 }: Props) => {
                                     {item}
                                 </div>
                                 :
-                                <div key={`${item}${idx}`} className={`${current === item ? 'bg-gradient-pink text-black group-hover:bg-none group-hover:text-gray-300 group-hover:hover:bg-gradient-pink group-hover:hover:text-black' : ''} w-10 h-10 leading-10 rounded-lg text-center hover:bg-gradient-pink hover:text-black`}
-                                    onClick={() => updatePageNumber(+item - 1)}
+                                <div key={`${item}${idx}`} className={`${currentPage === item ? 'bg-gradient-pink text-black group-hover:bg-none group-hover:text-gray-300 group-hover:hover:bg-gradient-pink group-hover:hover:text-black' : ''} w-10 h-10 leading-10 rounded-lg text-center hover:bg-gradient-pink hover:text-black`}
+                                    onClick={() => updatePageNumber(+item)}
                                 >
                                     {item}
                                 </div>
                         ))
                     }
                 </div>
-                <button onClick={getNextPage} className={current + 1 > total ? 'cursor-not-allowed' : ''}>
+                <button onClick={getNextPage} className={currentPage + 1 > total ? 'cursor-not-allowed' : ''}>
                     <ChevronRightIcon className='w-10 p-2 rounded-lg font-bold hover:bg-gradient-pink hover:text-black ' />
                 </button>
             </div>

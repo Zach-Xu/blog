@@ -1,11 +1,12 @@
 
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router'
-import { useMutation, useQuery } from 'react-query'
+
 import { homeService } from './services/resources/home-service'
 import { useEffect } from 'react'
 import { authService } from './services/resources/auth-service'
 import useUserStore from './store/user-store'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 let ditInit = false
 
@@ -13,13 +14,16 @@ function App() {
 
   const updateUser = useUserStore(state => state.updateUser)
 
-  const { mutate: updateVisitCount } = useMutation('updateVisitCount', homeService.updateSiteVisitCount)
+  const { mutate: updateVisitCount } = useMutation({
+    mutationKey: ['updateVisitCount'],
+    mutationFn: homeService.updateSiteVisitCount
+  })
 
-  const { refetch: verifyToken } = useQuery('verifyToken', authService.verifyToken, {
-    onSuccess: (data) => {
-      updateUser(data)
-    },
-    enabled: false
+  const { data: user, refetch: verifyToken } = useQuery({
+    queryKey: ['verifyToken'],
+    queryFn: authService.verifyToken,
+    enabled: false,
+
   })
 
   useEffect(() => {
@@ -29,6 +33,12 @@ function App() {
       verifyToken()
     }
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      updateUser(user)
+    }
+  }, [user])
 
   return (
     <RouterProvider router={router} />

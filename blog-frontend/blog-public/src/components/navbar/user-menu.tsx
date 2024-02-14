@@ -3,8 +3,8 @@ import { ArrowRightStartOnRectangleIcon, ChevronDownIcon, UserIcon } from '@hero
 import useSettingStore from '../../store/setting-store'
 import useUserStore from '../../store/user-store'
 import { Link } from 'react-router-dom'
-import { useMutation } from 'react-query'
 import { authService } from '../../services/resources/auth-service'
+import { useMutation } from '@tanstack/react-query'
 
 const UserMenu = () => {
     const isLoginModalShown = useSettingStore(state => state.isLoginModalShown)
@@ -13,7 +13,10 @@ const UserMenu = () => {
     const user = useUserStore(state => state.user)
     const updateUser = useUserStore(state => state.updateUser)
 
-    const { mutate } = useMutation('logout', authService.logout)
+    const { mutate } = useMutation({
+        mutationKey: ['logout'],
+        mutationFn: authService.logout
+    })
 
     const logOut = () => {
         updateUser(null)

@@ -20,3 +20,30 @@ interface AdjacentArticle {
     title: string
     thumbnail: string
 }
+
+interface PostCommentReq {
+    articleId: number
+    type: 'ARTICLE' | 'LINK'
+    content: string
+    rootCommentId: number
+    toCommentId?: number
+}
+
+interface GetCommentsReq extends PageRequest {
+    articleId: number
+}
+
+interface Comment {
+    articleId: number
+    commentId: number
+    toCommentId: number
+    content: string
+    userId: number
+    toUserId: number
+    createdTime: string
+    rootCommentId: string
+    username: string
+    toUsername?: string
+    subComments: Comment[]
+    userAvatar: string
+}

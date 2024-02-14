@@ -9,11 +9,12 @@ import MarkdownNav from '../components/markdown/md-nav'
 import { InformationCircleIcon, LinkIcon } from '@heroicons/react/24/outline'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import CommentList from '../components/article-details/commen-list'
-import { useMutation, useQuery } from 'react-query'
+
 import { articleService } from '../services/resources/article-service'
 import Loading from '../components/loading/loading'
 import ReplyBox from '../components/article-details/reply-box'
 import Tag from '../components/commons/tag'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 const countWords = (content: string) => {
   const words = content.split(' ').length
@@ -44,9 +45,15 @@ const ArticleDetails = () => {
     return null
   }
 
-  const { data: article } = useQuery(['articleDetails', { articleId }], () => articleService.getArticleDetails(articleId))
+  const { data: article } = useQuery({
+    queryKey: ['articleDetails', articleId],
+    queryFn: () => articleService.getArticleDetails(articleId)
+  })
 
-  const { mutate } = useMutation(['articleViewCount', { articleId }], () => articleService.updateArticleViewCount(articleId))
+  const { mutate } = useMutation({
+    mutationKey: ['articleViewCount', { articleId }],
+    mutationFn: () => articleService.updateArticleViewCount(articleId)
+  })
 
   const wordsCount = useMemo(() => {
     return article ? countWords(article.content) : 0
@@ -129,13 +136,14 @@ const ArticleDetails = () => {
                 }
 
                 {/* Like button */}
-                <div className='flex justify-center md:my-8 text-xs md:text-sm'>
+                {/* To be implemented */}
+                {/* <div className='flex justify-center md:my-8 text-xs md:text-sm'>
                   <button className='flex items-center justify-between rounded-lg bg-gray-300 py-1 px-3 space-x-2 text-black'>
                     <HandThumbUpIcon className='w-4' />
                     <span>Like</span>
                     <span>123</span>
                   </button>
-                </div>
+                </div> */}
                 {/* Copyright */}
                 <div className='bg-[#363636] rounded-xl px-6 md:px-10 text-xs md:text-sm py-5 space-y-4'>
                   <div className='flex space-x-2'>
@@ -179,9 +187,9 @@ const ArticleDetails = () => {
                       <ChatBubbleOvalLeftEllipsisIcon className='w-6' />
                       <h4>Comment</h4>
                     </div>
-                    <ReplyBox allowedComment={article.allowedComment} />
+                    <ReplyBox allowedComment={article.allowedComment} rootCommentId={-1} articleId={parseInt(articleId)} />
                     {
-                      article.allowedComment && <CommentList />
+                      article.allowedComment && <CommentList articleId={parseInt(articleId)} />
                     }
                   </div>
                 }

@@ -1,5 +1,6 @@
 package com.zach.blog.service.impl;
 
+import com.zach.blog.dto.response.AboutMeQueryResult;
 import com.zach.blog.dto.response.OwnerCardInfoResponse;
 import com.zach.blog.dto.response.SiteInfoQueryResult;
 import com.zach.blog.dto.response.SiteInfoResponse;
@@ -85,5 +86,10 @@ public class HomeServiceImpl implements HomeService {
 
         // update the last visited time
         redisUtils.setMapValue(SITE_VISIT_IP_KEY, ipAddress, String.valueOf(currentTime));
+    }
+
+    @Override
+    public AboutMeQueryResult getAboutMe() {
+       return siteInfoRepository.findAboutMe(1L).orElseThrow(() -> new ResourceNotFoundException(SITE_INFO_NOT_FOUND));
     }
 }

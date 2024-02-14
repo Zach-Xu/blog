@@ -1,12 +1,16 @@
 import React from 'react'
-import { useQuery } from 'react-query'
+
 import { SocialIcon } from 'react-social-icons'
 import { homeService } from '../../../services/resources/home-service'
 import LazyLoadAvatar from './lazy-load-avatar'
+import { useQuery } from '@tanstack/react-query'
 
 const UserCard = () => {
 
-    const { data: user } = useQuery('userCard', homeService.getSiteOwnerInfo)
+    const { data: user } = useQuery({
+        queryKey: ['userCard'],
+        queryFn: homeService.getSiteOwnerInfo
+    },)
 
 
     return (

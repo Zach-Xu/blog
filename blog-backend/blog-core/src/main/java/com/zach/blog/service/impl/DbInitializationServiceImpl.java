@@ -684,6 +684,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         socials.add(social2);
         socials.add(social3);
 
+        siteInfo.setAboutMe("Aspire to be an ever-evolving full-stack developer, committed to continuous learning and growth in the dynamic realm of programming.\n\n```java\nSystem.out.println(\"Hello World\")\n```");
         siteInfo.setSocials(socials);
         siteInfo.setHostSince(LocalDateTime.now());
         siteInfo.setVisitCount(0L);

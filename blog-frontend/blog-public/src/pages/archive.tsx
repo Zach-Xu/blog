@@ -2,18 +2,21 @@ import Wave from '../layout/wave'
 
 import ArticleList from '../components/archive/article-list'
 import useArticleStore from '../store/article-store'
-import { useQuery } from 'react-query'
 import { articleService } from '../services/resources/article-service'
+import { useQuery } from '@tanstack/react-query'
 
 const Archive = () => {
     const pageNum = useArticleStore(state => state.pageNum)
-    const { data } = useQuery(['archiveArticle', { pageNum }], () => articleService.getArticles({ pageNum: pageNum - 1 }))
+    const { data } = useQuery({
+        queryKey: ['archiveArticle', pageNum],
+        queryFn: () => articleService.getArticles({ pageNum: pageNum - 1 })
+    })
 
     return (
         <div className='min-h-screen  relative caret-transparent'>
             <div className='h-[70vh] relative -z-20'>
                 <div className='h-[70vh] fixed w-full bg-archive bg-image-cover bg-cover bg-no-repeat bg-center text-white flex justify-center items-center'>
-                    <h1 className='font-bold text-3xl '>
+                    <h1 className='font-bold text-4xl md:text-5xl '>
                         Archive
                     </h1>
                 </div>
