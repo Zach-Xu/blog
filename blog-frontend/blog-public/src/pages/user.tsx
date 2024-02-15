@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Wave from '../layout/wave'
-import LazyLoadImage from '../components/home/featured-articles/lazy-load-image'
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authService } from '../services/resources/auth-service'
 import UserAvatar from '../components/user/user-avatar'
+import UserInfoForm from '../components/user/user-info-form'
+import { userService } from '../services/resources/user-service'
 
 const User = () => {
 
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [avatar, setAvatar] = useState<string | null>('')
-    const [password, setPassword] = useState('')
-    const [confirmedPassword, setConfirmedPassword] = useState('')
-
     const navigate = useNavigate()
+
+    const croppedImgRef = useRef<File>(null)
 
     const { data: user, isFetched } = useQuery({
         queryKey: ['verifyToken'],
@@ -22,6 +19,7 @@ const User = () => {
         enabled: false,
     })
 
+    const queryClient = useQueryClient()
 
     useEffect(() => {
         if (!isFetched) {
@@ -29,15 +27,24 @@ const User = () => {
         }
         if (!user) {
             navigate('/')
-        } else {
-            setUsername(user.username)
-            setEmail(user.email || '')
-            setAvatar(user.avatar || null)
         }
     }, [user, isFetched])
 
-    const updateUserInfo = (event: React.FormEvent) => {
-        event.preventDefault()
+    const { mutate } = useMutation({
+        mutationKey: ['updateUserInfo'],
+        mutationFn: (data: UpdateUserInfoReq) => userService.updateUserInfo(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['verifyToken']
+            })
+        }
+    })
+
+    const updateUserInfo = (data: UpdateUserInfoReq) => {
+        mutate({
+            ...data,
+            ...(croppedImgRef.current && croppedImgRef.current.name !== 'init.jpg' ? { avatarImage: croppedImgRef.current } : {})
+        })
     }
 
     return (
@@ -58,62 +65,9 @@ const User = () => {
                         <h6>Basic Info</h6>
                         <div className='flex flex-col lg:flex-row'>
                             {/* User Avatar */}
-                            <UserAvatar avatar={avatar} />
+                            <UserAvatar ref={croppedImgRef} />
                             {/* User Info Form */}
-                            <form className='flex-1 space-y-4' onSubmit={updateUserInfo}>
-                                <div>
-                                    <label htmlFor="username" className="block mb-1 text-sm font-medium">
-                                        Username
-                                    </label>
-                                    <input type="text" name="username" id="username"
-                                        className="bg-gray-50 placeholder:text-gray-900 focus:outline-none text-black text-sm rounded-lg  block w-full p-2.5 "
-                                        value={username}
-                                        onChange={e => setUsername(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div >
-                                    <label htmlFor="email" className="block mb-1 text-sm font-medium">
-                                        Email
-                                    </label>
-                                    <input type="email" name="email" id="email"
-                                        className="bg-gray-50 cursor-not-allowed placeholder:text-gray-900 focus:outline-none text-black text-sm rounded-lg  block w-full p-2.5 "
-                                        value={email}
-                                        readOnly
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="password3" className="block mb-1 text-sm font-medium ">
-                                        Password
-                                    </label>
-                                    <input type="password" name="password3" id="password3"
-                                        minLength={password.trim() === '' ? undefined : 6}
-                                        placeholder="Leave it empty if you don't want to change password"
-                                        className="bg-gray-50 placeholder:text-gray-700  focus:outline-none border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5"
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
-                                        required={password.trim() !== ''}
-                                    />
-                                </div>
-                                <div className={password.trim() === '' ? 'invisible' : 'visible'}>
-                                    <label htmlFor="confirmPassword" className="block mb-1 text-sm font-medium ">
-                                        Confirm password
-                                    </label>
-                                    <input type="password" name="confirmPassword" id="confirmPassword"
-                                        minLength={6}
-                                        placeholder="Leave it empty if you don't want to change password"
-                                        className="bg-gray-50 placeholder:text-gray-700  focus:outline-none border border-gray-300 text-black text-sm rounded-lg  block w-full p-2.5"
-                                        value={confirmedPassword}
-                                        onChange={e => setConfirmedPassword(e.target.value)}
-                                        required={password.trim() !== ''}
-                                    />
-                                </div>
-                                <div>
-                                    <button type='submit' className='bg-cyan-600 px-4 py-1 rounded-md text-white'>
-                                        Save change
-                                    </button>
-                                </div>
-                            </form>
+                            <UserInfoForm onSubmit={updateUserInfo} isAvatarChanged={(croppedImgRef.current && croppedImgRef.current.name !== 'init.jpg') ? true : false} />
                         </div>
                     </div>
                 </div>

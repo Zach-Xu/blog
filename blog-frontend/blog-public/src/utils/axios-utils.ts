@@ -30,8 +30,14 @@ const commonResponseInterceptor = (res: AxiosResponse) => {
         return Promise.reject(new Error(message))
     }
 
+
     if (['post', 'put', 'delete'].includes(res.config.method || '')) {
-        //   toast.success(message)
+
+        const endPoint = res.config.url || ''
+        const noToastEnpoints = ['count', 'token']
+        if (!noToastEnpoints.some(item => endPoint.includes(item))) {
+            toast.success(message)
+        }
     }
 
     return res.data.data

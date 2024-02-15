@@ -47,5 +47,5 @@ interface LatestComment {
     content: string
     username: string
     createdTime: string
-    avatar: string
+    userAvatar: string
 }

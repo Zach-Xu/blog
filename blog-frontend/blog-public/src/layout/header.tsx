@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/navbar/navbar";
 import { Bars3Icon, MoonIcon, SunIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import useSettingStore from "../store/setting-store";
+import { toast } from "react-toastify";
 
 
 const Header = () => {
@@ -61,9 +62,15 @@ const Header = () => {
             <NavBar />
             {
                 isDay ?
-                    <MoonIcon className="w-5 cursor-pointer" onClick={() => setIsDay(false)} />
+                    <MoonIcon className="w-5 cursor-pointer" onClick={() => {
+                        setIsDay(false)
+                        toast.error('To be implemented')
+                    }} />
                     :
-                    <SunIcon className="w-5 cursor-pointer" onClick={() => setIsDay(true)} />
+                    <SunIcon className="w-5 cursor-pointer" onClick={() => {
+                        setIsDay(true)
+                        toast.error('To be implemented')
+                    }} />
             }
 
         </header>

@@ -18,3 +18,9 @@ interface Role {
     id: number
     roleName: string
 }
+
+interface UpdateUserInfoReq {
+    username: string
+    avatarImage?: File
+    password?: string
+}

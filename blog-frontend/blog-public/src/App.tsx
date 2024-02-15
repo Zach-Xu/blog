@@ -21,9 +21,7 @@ function App() {
 
   const { data: user, refetch: verifyToken } = useQuery({
     queryKey: ['verifyToken'],
-    queryFn: authService.verifyToken,
-    enabled: false,
-
+    queryFn: authService.verifyToken
   })
 
   useEffect(() => {
