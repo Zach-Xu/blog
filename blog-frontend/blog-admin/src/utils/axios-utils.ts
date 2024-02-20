@@ -11,26 +11,28 @@ export const injectStore = (_store: ToolkitStore) => {
 }
 
 
-export const requireTokenHeader: Partial<RawAxiosRequestHeaders> = {
-    requireToken: true
-}
+// export const requireTokenHeader: Partial<RawAxiosRequestHeaders> = {
+//     requireToken: true
+// }
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 export const authAxios = axios.create({
     baseURL: 'http://localhost:8081/api/auth',
+    withCredentials: true
     // timeout: 10000
 })
 
 export const resourceAxios = axios.create({
     baseURL: 'http://localhost:8081/api',
+    withCredentials: true
     // timeout: 10000
 })
 
 const commonRequestInterceptor = (config: InternalAxiosRequestConfig<any>) => {
-    if (config.headers['requireToken']) {
-        config.headers['Authorization'] = `Bearer ${localStorage.getItem('tk')}`
-    }
+    // if (config.headers['requireToken']) {
+    //     config.headers['Authorization'] = `Bearer ${localStorage.getItem('tk')}`
+    // }
     store.dispatch(onLoading())
     return config
 }

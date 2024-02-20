@@ -65,6 +65,9 @@ export const userSlice = createSlice({
                 ...action.payload
             }
         },
+        updatePageNum: (state, action: PayloadAction<number>) => {
+            state.currentPageNum = action.payload
+        }
     },
     extraReducers: (builder) => {
 
@@ -140,4 +143,4 @@ export const userSlice = createSlice({
 })
 
 export default userSlice.reducer
-export const { updateSearch } = userSlice.actions
+export const { updateSearch, updatePageNum } = userSlice.actions

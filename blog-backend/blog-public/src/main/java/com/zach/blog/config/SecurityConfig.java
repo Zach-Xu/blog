@@ -3,6 +3,7 @@ package com.zach.blog.config;
 import com.zach.blog.filter.JwtFilter;
 import com.zach.blog.handler.AccessDeniedHandlerImpl;
 import com.zach.blog.handler.AuthenticationEntryPointImpl;
+import com.zach.blog.interceptor.AccessLimitInterceptor;
 import com.zach.blog.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebSecurity
@@ -33,7 +35,7 @@ public class SecurityConfig {
     private final AuthenticationEntryPointImpl authenticationEntryPoint;
     private final AccessDeniedHandlerImpl accessDeniedHandler;
     private final JwtFilter jwtFilter;
-
+    private final AccessLimitInterceptor accessLimitInterceptor;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -64,6 +66,13 @@ public class SecurityConfig {
                         .allowCredentials(true)
                         .allowedHeaders("*")
                         .maxAge(3600);
+
+            }
+
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(accessLimitInterceptor)
+                        .addPathPatterns("/**");
             }
         };
     }
@@ -77,13 +86,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequests -> {
                     authRequests.requestMatchers("/api/auth/login", "/api/auth/register").permitAll();
                     authRequests.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
-//                    authRequests.requestMatchers("/api/tags/**").permitAll();
-//                    authRequests.requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll();
-//                    authRequests.requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "USER");
-//                    authRequests.requestMatchers("/api/categories/**").hasAnyRole("ADMIN", "USER");
-//                    authRequests.requestMatchers("/api/menus/**").hasAnyRole("ADMIN", "USER");
-//                    authRequests.requestMatchers("/api/users/**").authenticated();
-//                    authRequests.requestMatchers(HttpMethod.POST, "/api/comments").hasAnyRole("ADMIN", "USER");
                     authRequests.anyRequest().permitAll();
                 });
 

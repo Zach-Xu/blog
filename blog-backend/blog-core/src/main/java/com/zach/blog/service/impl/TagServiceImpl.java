@@ -29,13 +29,13 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Page<Tag> getTags(Integer pageNum, Integer pageSize, String tagName, String description) {
-        PageRequest pageRequest = PageRequest.of(pageNum,pageSize, Sort.by("id").ascending());
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by("id").ascending());
 
         Specification<Tag> spec = Specification.where(null);
-        if(Strings.hasText(tagName)){
+        if (Strings.hasText(tagName)) {
             spec = spec.and(containsTagName(tagName));
         }
-        if(Strings.hasText(description)){
+        if (Strings.hasText(description)) {
             spec = spec.and(containsDescription(description));
         }
         return tagRepository.findAll(spec, pageRequest);
@@ -43,7 +43,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag createTag(Long userId, String name, String description) {
-        if( tagRepository.existsByNameIgnoreCase(name)){
+        if (tagRepository.existsByNameIgnoreCase(name)) {
             throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
         }
 
@@ -65,7 +65,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public void updateTag(Long userId, Long tagId, String name, String description) {
         Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new ResourceNotFoundException(TAG_NOT_FOUND));
-        if(tagRepository.existsByNameIgnoreCase(name)){
+        if ((!tag.getName().equals(name)) && tagRepository.existsByNameIgnoreCase(name)) {
             throw new ResourceAlreadyExistException(TAG_NAME_EXIST);
         }
         tag.setName(name);

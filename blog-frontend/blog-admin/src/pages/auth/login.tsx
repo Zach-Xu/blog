@@ -11,18 +11,18 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-    const [method, setMethod] = useState('username');
-    const [account, setAccount] = useState('')
+    // const [method, setMethod] = useState('username');
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const isLoading = useSelector((state: RootState) => state.loading.isLoading)
 
-    const handleMethodChange = useCallback(
-        (_: any, value: React.SetStateAction<string>) => {
-            setMethod(value);
-        },
-        []
-    );
+    // const handleMethodChange = useCallback(
+    //     (_: any, value: React.SetStateAction<string>) => {
+    //         setMethod(value);
+    //     },
+    //     []
+    // );
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -32,7 +32,7 @@ const Login = () => {
         e.preventDefault()
 
         dispatch(login({
-            username: account,
+            email,
             password
         }))
             .unwrap().then(() => navigate('/'))
@@ -73,7 +73,7 @@ const Login = () => {
                     <form
                         onSubmit={handleSubmit}
                     >
-                        <Tabs
+                        {/* <Tabs
                             onChange={handleMethodChange}
                             sx={{ mb: 3 }}
                             value={method}
@@ -86,15 +86,23 @@ const Login = () => {
                                 label="Email"
                                 value="email"
                             />
-                        </Tabs>
+                        </Tabs> */}
                         <Stack spacing={3}>
-                            <TextField
+                            {/* <TextField
                                 fullWidth
                                 label={method === 'email' ? "Email Address" : 'Username'}
                                 name={method === 'email' ? "email" : 'username'}
                                 onChange={e => setAccount(e.target.value)}
                                 type={method === 'email' ? 'email' : 'text'}
                                 value={account}
+                            /> */}
+                            <TextField
+                                fullWidth
+                                label={'Email Address'}
+                                name={'email'}
+                                onChange={e => setEmail(e.target.value)}
+                                type={'email'}
+                                value={email}
                             />
                             <TextField
                                 fullWidth

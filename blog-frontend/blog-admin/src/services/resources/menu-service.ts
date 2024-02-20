@@ -1,17 +1,13 @@
-import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
+import { resourceAxios } from "../../utils/axios-utils"
 
 export const menuService = {
     getAll: async () => {
-        const result = await resourceAxios.get<void, Menu[]>('/menus/all', {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.get<void, Menu[]>('/menus/all')
         return result
     },
 
     getUserMenus: async () => {
-        const result = await resourceAxios.get<void, Menu[]>('/menus/user-menu', {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.get<void, Menu[]>('/menus/user-menu')
         return result
     },
 
@@ -21,8 +17,7 @@ export const menuService = {
             params: {
                 ...(name !== '' ? { name } : {}),
                 ...(enable !== null ? { enable } : {})
-            },
-            headers: requireTokenHeader
+            }
         })
         return result
     },
@@ -31,8 +26,6 @@ export const menuService = {
         const { id, enable } = request
         await resourceAxios.put<void, void>(`/menus/${id}/status`, {
             enable
-        }, {
-            headers: requireTokenHeader
         })
     }
 }

@@ -1,4 +1,4 @@
-import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
+import { resourceAxios } from "../../utils/axios-utils"
 
 export const userService = {
 
@@ -8,52 +8,35 @@ export const userService = {
                 pageSize,
                 pageNum,
                 ...(username !== '' ? { username } : {}),
-                ...(email !== null ? { email } : {})
-            },
-            headers: requireTokenHeader
+                ...(email !== '' ? { email } : {})
+            }
         })
         return result
     },
 
     getUserDetails: async (userId: number) => {
-        const result = await resourceAxios.get<void, UserDetails>(`/users/${userId}`, {
-            headers: requireTokenHeader
-        })
+        return await resourceAxios.get<void, UserDetails>(`/users/${userId}`)
 
-        return result
+
     },
 
     changeUserStatus: async ({ id, enable }: ChangeStatusRequest) => {
-        const result = await resourceAxios.put<void, void>(`/users/${id}/status`, {
+        return await resourceAxios.put<void, void>(`/users/${id}/status`, {
             enable
-        }, {
-            headers: requireTokenHeader
         })
 
-        return result
     },
 
     createUser: async (request: CreateUserRequest) => {
-        const result = await resourceAxios.post<void, UserRow>('/users', request, {
-            headers: requireTokenHeader
-        })
-        return result
+        return await resourceAxios.post<void, UserRow>('/users', request)
     },
 
     updateUser: async (request: UpdateUserRequest) => {
-        const result = await resourceAxios.put<void, void>(`/users/${request.id}`, request, {
-            headers: requireTokenHeader
-        })
-
-        return result
+        return await resourceAxios.put<void, void>(`/users/${request.id}`, request)
     },
 
     deleteUser: async (id: number) => {
-        const result = await resourceAxios.delete<void, void>(`/users/${id}`, {
-            headers: requireTokenHeader
-        })
-
-        return result
+        return await resourceAxios.delete<void, void>(`/users/${id}`)
     }
 
 }

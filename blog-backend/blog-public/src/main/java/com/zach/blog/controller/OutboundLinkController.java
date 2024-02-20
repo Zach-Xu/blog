@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.response.OutboundLinkResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.OutboundLink;
@@ -22,6 +23,7 @@ public class OutboundLinkController {
 
     private final OutboundLinkService linkService;
 
+    @AccessLimit()
     @Operation(summary = "Get Outbound links", description = "Retrieve a list of outbound links")
     @GetMapping
     public ResponseResult<?> getAllOutBoundLinks(){

@@ -16,7 +16,7 @@ const SearchUser = ({ }: Props) => {
     const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
     const username = useSelector((state: RootState) => state.user.search.username)
-    const email = useSelector((state: RootState) => state.article.search.summary)
+    const email = useSelector((state: RootState) => state.user.search.email)
 
     const [localEmail, setLocaEmail] = useState(email)
 

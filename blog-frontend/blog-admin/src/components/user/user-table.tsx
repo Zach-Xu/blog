@@ -6,10 +6,10 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { useCallback, useEffect, useState } from 'react';
-import { updatePageNum } from '../../redux/slices/tag-slice';
+
 import AlertDialog from '../common/alert-dialog';
 import { useOpenClose } from '../../hooks/use-open-close';
-import { changeUserStatus, deleteUser, getUsers } from '../../redux/slices/user-slice';
+import { changeUserStatus, deleteUser, getUsers, updatePageNum } from '../../redux/slices/user-slice';
 import EditUserModal from './edit-user-modal';
 
 const UserTable = () => {
@@ -84,9 +84,6 @@ const UserTable = () => {
                                         Username
                                     </TableCell>
                                     <TableCell>
-                                        Nickname
-                                    </TableCell>
-                                    <TableCell>
                                         Email
                                     </TableCell>
                                     <TableCell>
@@ -114,11 +111,6 @@ const UserTable = () => {
                                                 <TableCell>
                                                     <Typography variant="subtitle2">
                                                         {user.username}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle2">
-                                                        {user.nickname}
                                                     </Typography>
                                                 </TableCell>
                                                 <TableCell>

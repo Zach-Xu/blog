@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.response.CategoryStatsResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.dto.response.TagStatsResponse;
@@ -21,6 +22,7 @@ public class TagController {
 
     private final TagService tagService;
 
+    @AccessLimit()
     @Operation(summary = "Get category stats", description = "Retrieve a list of tags and their corresponding number of articles ")
     @GetMapping("/stats")
     public ResponseResult<?> getTagStats(){

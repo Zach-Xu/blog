@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         category.setName(request.name());
         category.setDescription(request.description());
-        category.setPid(request.parentId());
+        category.setPid(request.pid());
         category.setEnable(request.enable());
         category.setCreatedBy(userId);
         return categoryRepository.save(category);

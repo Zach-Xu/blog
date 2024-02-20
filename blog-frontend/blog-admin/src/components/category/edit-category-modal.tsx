@@ -31,7 +31,7 @@ const EditCategoryModal = ({ open, handleClose, item }: Props) => {
                 category: category
             })).unwrap().then(handleClose)
         }
-    }, [])
+    }, [item])
 
     useEffect(() => {
         if (item) {

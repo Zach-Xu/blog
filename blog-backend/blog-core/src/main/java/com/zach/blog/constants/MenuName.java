@@ -20,12 +20,20 @@ public class MenuName {
     public static final String MENU_QUERY = "Query menu";
     public static final String MENU_ADD = "Add menu";
     public static final String MENU_EDIT = "Edit menu";
-    public static final String MENU_DELETE = "Delete menu";
+    public static final String MENU_DISABLE = "Disable menu";
     public static final String CONTENT_MANAGEMENT = "Content Management";
     public static final String CATEGORY_MANAGEMENT = "Category";
+    public static final String CATEGORY_ADD = "Add category";
+    public static final String CATEGORY_EDIT = "Edit category";
+    public static final String CATEGORY_DELETE = "Delete category";
+    public static final String CATEGORY_QUERY = "Query category";
     public static final String CATEGORY_EXPORT = "Export category";
     public static final String ARTICLE_MANAGEMENT = "Article";
     public static final String TAG_MANAGEMENT = "Tag";
+    public static final String TAG_ADD = "Add tag";
+    public static final String TAG_EDIT = "Edit tag";
+    public static final String TAG_DELETE = "Delete tag";
+    public static final String TAG_QUERY = "Query tag";
     public static final String LINK_MANAGEMENT = "Link";
     public static final String WRITE_ARTICLE = "Write article";
     public static final String EDIT_ARTICLE = "Edit article";
@@ -33,5 +41,8 @@ public class MenuName {
     public static final String LINK_EDIT = "Edit link";
     public static final String LINK_DELETE = "Delete link";
     public static final String LINK_QUERY = "Query link";
+    public static final String COMMENT_MANAGEMENT ="Comment";
+    public static final String COMMENT_REPLY = "Reply comment";
+    public static final String USER_INFO_UPDATE ="Update user info";
 
 }

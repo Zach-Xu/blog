@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 @RequiredArgsConstructor
-public class SystemLogAdvice {
+public class SystemLogAspect {
 
     private final HttpServletRequest request;
 

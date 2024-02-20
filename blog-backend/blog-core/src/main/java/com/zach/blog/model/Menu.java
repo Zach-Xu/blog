@@ -2,32 +2,32 @@ package com.zach.blog.model;
 
 import com.zach.blog.enums.MenuType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
+@Builder
 @Entity
 @Table(name = "blog_menu")
 @Getter
 @Setter
+@AllArgsConstructor
 public class Menu extends BaseEntity implements GrantedAuthority {
 
     @Column(name = "menu_name")
     private String name;
-
     private Long parentId;
 
     @Column(name = "display_order")
     private Integer displayOrder;
-
     @Column(name = "router_path")
     private String routerPath;
 
     private String component;
-
-    private boolean frame;
 
     @Column(name="menu_type")
     @Enumerated(EnumType.ORDINAL)
@@ -39,9 +39,11 @@ public class Menu extends BaseEntity implements GrantedAuthority {
 
     private String permission;
 
-    private String icon;
-
     private Long updatedBy;
+
+    public Menu() {
+
+    }
 
     @Override
     public boolean equals(Object o) {

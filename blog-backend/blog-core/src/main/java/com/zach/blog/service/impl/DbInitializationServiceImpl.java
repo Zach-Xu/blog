@@ -46,25 +46,23 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         adminRole.addMenu(menuRepository.findByName(LINK_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(CONTENT_MANAGEMENT).get());
         adminRole.addMenu(menuRepository.findByName(MENU_MANAGEMENT).get());
-
-        Role auditorRole = new Role(RoleName.LINK_AUDITOR);
-        auditorRole.setDescription("Role that has access to link");
-        auditorRole.addMenu(menuRepository.findByName(CONTENT_MANAGEMENT).get());
-        auditorRole.addMenu(menuRepository.findByName(LINK_MANAGEMENT).get());
-        auditorRole.addMenu(menuRepository.findByName(LINK_ADD).get());
-        auditorRole.addMenu(menuRepository.findByName(LINK_EDIT).get());
-        auditorRole.addMenu(menuRepository.findByName(LINK_QUERY).get());
-        auditorRole.addMenu(menuRepository.findByName(LINK_DELETE).get());
+        adminRole.addMenu(menuRepository.findByName(WRITE_ARTICLE).get());
+        adminRole.addMenu(menuRepository.findByName(EDIT_ARTICLE).get());
 
         Role userRole = new Role(RoleName.USER);
         userRole.addMenu(menuRepository.findByName(WRITE_ARTICLE).get());
         userRole.setDescription("Regular user, can only write article");
 
+        Role viewerRole = new Role(RoleName.VIEWER);
+        viewerRole.addMenu(menuRepository.findByName(USER_INFO_UPDATE).get());
+        viewerRole.addMenu(menuRepository.findByName(COMMENT_REPLY).get());
+
+        viewerRole.setDescription("Blog viewer, can only write article");
+
         List<Role> roleList = new ArrayList<>();
         roleList.add(adminRole);
-        roleList.add(auditorRole);
         roleList.add(userRole);
-
+        roleList.add(viewerRole);
         roleRepository.saveAll(roleList);
     }
 
@@ -77,7 +75,7 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         ApplicationUser user1 = new ApplicationUser();
         Role adminRole = roleRepository.findByRoleName(RoleName.ADMIN.name()).get();
         user1.addRole(adminRole);
-        user1.setUsername("Zach");
+        user1.setUsername("Zachary");
         user1.setPassword(passwordEncoder.encode("123456"));
         user1.setEnable(true);
         user1.setEmail("zach.popping@gmail.com");
@@ -203,453 +201,427 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         if (menuRepository.count() > 0) {
             return;
         }
-        Menu menu1 = new Menu();
-        menu1.setName(SYSTEM_MANAGEMENT);
-        menu1.setParentId(-1L);
-        menu1.setDisplayOrder(1);
-        menu1.setRouterPath("/system");
-        menu1.setComponent(null);
-        menu1.setFrame(false);
-        menu1.setMenuType(MenuType.CONTENT);
-        menu1.setVisible(true);
-        menu1.setEnable(true);
-        menu1.setPermission("");
-        menu1.setIcon("system");
+        Menu menu1 = Menu.builder().name(SYSTEM_MANAGEMENT)
+                .parentId(-1L)
+                .displayOrder(1)
+                .routerPath("/system")
+                .component(null)
+                .menuType(MenuType.CONTENT)
+                .visible(true)
+                .enable(true)
+                .permission("system").build();
         menu1 = menuRepository.save(menu1);
 
-        Menu menu2 = new Menu();
-        menu2.setName(USER_MANAGEMENT);
-        menu2.setParentId(menu1.getId());
-        menu2.setDisplayOrder(1);
-        menu2.setRouterPath("/system/user");
-        menu2.setComponent("user");
-        menu2.setFrame(false);
-        menu2.setMenuType(MenuType.MENU);
-        menu2.setVisible(true);
-        menu2.setEnable(true);
-        menu2.setPermission("system:user:list");
-        menu2.setIcon("user");
+        Menu menu2 = Menu.builder().name(USER_MANAGEMENT)
+                .parentId(menu1.getId())
+                .displayOrder(1)
+                .routerPath("/system/user")
+                .component("user")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("system:user").build();
         menu2 = menuRepository.save(menu2);
 
-        Menu menu3 = new Menu();
-        menu3.setName(ROLE_MANAGEMENT);
-        menu3.setParentId(menu1.getId());
-        menu3.setDisplayOrder(2);
-        menu3.setRouterPath("/system/role");
-        menu3.setComponent("role");
-        menu3.setFrame(false);
-        menu3.setMenuType(MenuType.CONTENT);
-        menu3.setVisible(true);
-        menu3.setEnable(true);
-        menu3.setPermission("system:role:list");
-        menu3.setIcon("peoples");
+
+        Menu menu3 = Menu.builder().name(ROLE_MANAGEMENT)
+                .parentId(menu1.getId())
+                .displayOrder(2)
+                .routerPath("/system/role")
+                .component("role")
+                .menuType(MenuType.CONTENT)
+                .visible(true)
+                .enable(true)
+                .permission("system:role:list").build();
         menu3 = menuRepository.save(menu3);
 
-        Menu menu4 = new Menu();
-        menu4.setName(MENU_MANAGEMENT);
-        menu4.setParentId(menu1.getId());
-        menu4.setDisplayOrder(3);
-        menu4.setRouterPath("/system/menu");
-        menu4.setComponent("menu");
-        menu4.setFrame(false);
-        menu4.setMenuType(MenuType.MENU);
-        menu4.setVisible(true);
-        menu4.setEnable(true);
-        menu4.setPermission("system:menu:list");
-        menu4.setIcon("tree-table");
+        Menu menu4 = Menu.builder().name(MENU_MANAGEMENT)
+                .parentId(menu1.getId())
+                .displayOrder(3)
+                .routerPath("/system/menu")
+                .component("menu")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("system:menu").build();
         menu4 = menuRepository.save(menu4);
 
-        Menu menu5 = new Menu();
-        menu5.setName(USER_QUERY);
-        menu5.setParentId(menu2.getId());
-        menu5.setDisplayOrder(1);
-        menu5.setRouterPath("");
-        menu5.setComponent(null);
-        menu5.setFrame(false);
-        menu5.setMenuType(MenuType.BUTTON);
-        menu5.setVisible(true);
-        menu5.setEnable(true);
-        menu5.setPermission("system:user:query");
-        menu5.setIcon("#");
+        Menu menu5 = Menu.builder().name(USER_QUERY)
+                .parentId(menu2.getId())
+                .displayOrder(1)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:user:query").build();
         menuRepository.save(menu5);
 
-        Menu menu6 = new Menu();
-        menu6.setName(USER_ADD);
-        menu6.setParentId(menu2.getId());
-        menu6.setDisplayOrder(2);
-        menu6.setRouterPath("");
-        menu6.setComponent(null);
-        menu6.setFrame(false);
-        menu6.setMenuType(MenuType.BUTTON);
-        menu6.setVisible(true);
-        menu6.setEnable(true);
-        menu6.setPermission("system:user:add");
-        menu6.setIcon("#");
+        Menu menu6 = Menu.builder().name(USER_ADD)
+                .parentId(menu2.getId())
+                .displayOrder(2)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:user:add").build();
         menuRepository.save(menu6);
 
-        Menu menu7 = new Menu();
-        menu7.setName(USER_EDIT);
-        menu7.setParentId(menu2.getId());
-        menu7.setDisplayOrder(3);
-        menu7.setRouterPath("");
-        menu7.setComponent(null);
-        menu7.setFrame(false);
-        menu7.setMenuType(MenuType.BUTTON);
-        menu7.setVisible(true);
-        menu7.setEnable(true);
-        menu7.setPermission("system:user:edit");
-        menu7.setIcon("#");
+        Menu menu7 = Menu.builder().name(USER_EDIT)
+                .parentId(menu2.getId())
+                .displayOrder(3)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:user:edit").build();
         menuRepository.save(menu7);
 
-        Menu menu8 = new Menu();
-        menu8.setName(USER_DELETE);
-        menu8.setParentId(menu2.getId());
-        menu8.setDisplayOrder(4);
-        menu8.setRouterPath("");
-        menu8.setComponent(null);
-        menu8.setFrame(false);
-        menu8.setMenuType(MenuType.BUTTON);
-        menu8.setVisible(true);
-        menu8.setEnable(true);
-        menu8.setPermission("system:user:remove");
-        menu8.setIcon("#");
+        Menu menu8 = Menu.builder().name(USER_DELETE)
+                .parentId(menu2.getId())
+                .displayOrder(4)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:user:remove").build();
         menuRepository.save(menu8);
 
-        Menu menu9 = new Menu();
-        menu9.setName(USER_EXPORT);
-        menu9.setParentId(menu2.getId());
-        menu9.setDisplayOrder(5);
-        menu9.setRouterPath("");
-        menu9.setComponent(null);
-        menu9.setFrame(false);
-        menu9.setMenuType(MenuType.BUTTON);
-        menu9.setVisible(true);
-        menu9.setEnable(true);
-        menu9.setPermission("system:user:export");
-        menu9.setIcon("#");
-        menuRepository.save(menu9);
-
-        Menu menu10 = new Menu();
-        menu10.setName(USER_IMPORT);
-        menu10.setParentId(menu2.getId());
-        menu10.setDisplayOrder(6);
-        menu10.setRouterPath("");
-        menu10.setComponent(null);
-        menu10.setFrame(false);
-        menu10.setMenuType(MenuType.BUTTON);
-        menu10.setVisible(true);
-        menu10.setEnable(true);
-        menu10.setPermission("system:user:import");
-        menu10.setIcon("#");
-        menuRepository.save(menu10);
-
-        Menu menu11 = new Menu();
-        menu11.setName(USER_PASSWORD_RESET);
-        menu11.setParentId(menu2.getId());
-        menu11.setDisplayOrder(7);
-        menu11.setRouterPath("");
-        menu11.setComponent(null);
-        menu11.setFrame(false);
-        menu11.setMenuType(MenuType.BUTTON);
-        menu11.setVisible(true);
-        menu11.setEnable(true);
-        menu11.setPermission("system:user:resetPwd");
-        menu11.setIcon("#");
+        Menu menu11 = Menu.builder().name(USER_PASSWORD_RESET)
+                .parentId(menu2.getId())
+                .displayOrder(5)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:user:resetPwd").build();
         menuRepository.save(menu11);
 
-        Menu menu12 = new Menu();
-        menu12.setName(ROLE_QUERY);
-        menu12.setParentId(menu3.getId());
-        menu12.setDisplayOrder(1);
-        menu12.setRouterPath("");
-        menu12.setComponent(null);
-        menu12.setFrame(false);
-        menu12.setMenuType(MenuType.BUTTON);
-        menu12.setVisible(true);
-        menu12.setEnable(true);
-        menu12.setPermission("system:role:query");
-        menu12.setIcon("#");
+        Menu menu10 = Menu.builder().name(USER_INFO_UPDATE)
+                .parentId(menu2.getId())
+                .displayOrder(6)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(false)
+                .enable(true)
+                .permission("system:user:infoUpdate").build();
+        menuRepository.save(menu10);
+
+        Menu menu12 = Menu.builder().name(ROLE_QUERY)
+                .parentId(menu3.getId())
+                .displayOrder(1)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:role:query").build();
         menuRepository.save(menu12);
 
-        Menu menu13 = new Menu();
-        menu13.setName(ROLE_ADD);
-        menu13.setParentId(menu3.getId());
-        menu13.setDisplayOrder(2);
-        menu13.setRouterPath("");
-        menu13.setComponent(null);
-        menu13.setFrame(false);
-        menu13.setMenuType(MenuType.BUTTON);
-        menu13.setVisible(true);
-        menu13.setEnable(true);
-        menu13.setPermission("system:role:add");
-        menu13.setIcon("#");
+        Menu menu13 = Menu.builder().name(ROLE_ADD)
+                .parentId(menu3.getId())
+                .displayOrder(2)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:role:add").build();
         menuRepository.save(menu13);
 
-        Menu menu14 = new Menu();
-        menu14.setName(ROLE_EDIT);
-        menu14.setParentId(menu3.getId());
-        menu14.setDisplayOrder(3);
-        menu14.setRouterPath("");
-        menu14.setComponent("");
-        menu14.setFrame(false);
-        menu14.setMenuType(MenuType.BUTTON);
-        menu14.setVisible(true);
-        menu14.setEnable(true);
-        menu14.setPermission("system:role:edit");
-        menu14.setIcon("#");
+        Menu menu14 = Menu.builder().name(ROLE_EDIT)
+                .parentId(menu3.getId())
+                .displayOrder(3)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:role:edit").build();
         menuRepository.save(menu14);
 
-        Menu menu15 = new Menu();
-        menu15.setName(ROLE_DELETE);
-        menu15.setParentId(menu3.getId());
-        menu15.setDisplayOrder(4);
-        menu15.setRouterPath("");
-        menu15.setComponent("");
-        menu15.setFrame(false);
-        menu15.setMenuType(MenuType.BUTTON);
-        menu15.setVisible(true);
-        menu15.setEnable(true);
-        menu15.setPermission("system:role:remove");
-        menu15.setIcon("#");
+        Menu menu15 = Menu.builder().name(ROLE_DELETE)
+                .parentId(menu3.getId())
+                .displayOrder(4)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:role:remove").build();
         menuRepository.save(menu15);
 
-        Menu menu16 = new Menu();
-        menu16.setName(ROLE_EXPORT);
-        menu16.setParentId(menu3.getId());
-        menu16.setDisplayOrder(5);
-        menu16.setRouterPath("");
-        menu16.setComponent("");
-        menu16.setFrame(false);
-        menu16.setMenuType(MenuType.BUTTON);
-        menu16.setVisible(true);
-        menu16.setEnable(true);
-        menu16.setPermission("system:role:export");
-        menu16.setIcon("#");
-        menuRepository.save(menu16);
-
-        Menu menu17 = new Menu();
-        menu17.setName(MENU_QUERY);
-        menu17.setParentId(menu4.getId());
-        menu17.setDisplayOrder(1);
-        menu17.setRouterPath("");
-        menu17.setComponent("");
-        menu17.setFrame(false);
-        menu17.setMenuType(MenuType.BUTTON);
-        menu17.setVisible(true);
-        menu17.setEnable(true);
-        menu17.setPermission("system:menu:query");
-        menu17.setIcon("#");
+        Menu menu17 = Menu.builder().name(MENU_QUERY)
+                .parentId(menu4.getId())
+                .displayOrder(1)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:menu:query").build();
         menuRepository.save(menu17);
 
-        Menu menu18 = new Menu();
-        menu18.setName(MENU_ADD);
-        menu18.setParentId(menu4.getId());
-        menu18.setDisplayOrder(2);
-        menu18.setRouterPath("");
-        menu18.setComponent("");
-        menu18.setFrame(false);
-        menu18.setMenuType(MenuType.BUTTON);
-        menu18.setVisible(true);
-        menu18.setEnable(true);
-        menu18.setPermission("system:menu:add");
-        menu18.setIcon("#");
-        menuRepository.save(menu18);
-
-        Menu menu19 = new Menu();
-        menu19.setName(MENU_EDIT);
-        menu19.setParentId(menu4.getId());
-        menu19.setDisplayOrder(3);
-        menu19.setRouterPath("");
-        menu19.setComponent("");
-        menu19.setFrame(false);
-        menu19.setMenuType(MenuType.BUTTON);
-        menu19.setVisible(true);
-        menu19.setEnable(true);
-        menu19.setPermission("system:menu:edit");
-        menu19.setIcon("#");
+        Menu menu19 = Menu.builder().name(MENU_EDIT)
+                .parentId(menu4.getId())
+                .displayOrder(2)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:menu:edit").build();
         menuRepository.save(menu19);
 
-        Menu menu20 = new Menu();
-        menu20.setName(MENU_DELETE);
-        menu20.setParentId(menu4.getId());
-        menu20.setDisplayOrder(4);
-        menu20.setRouterPath("");
-        menu20.setComponent("");
-        menu20.setFrame(false);
-        menu20.setMenuType(MenuType.BUTTON);
-        menu20.setVisible(true);
-        menu20.setEnable(true);
-        menu20.setPermission("system:menu:remove");
-        menu20.setIcon("#");
+        Menu menu20 = Menu.builder().name(MENU_DISABLE)
+                .parentId(menu4.getId())
+                .displayOrder(3)
+                .routerPath("")
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("system:menu:disable").build();
         menuRepository.save(menu20);
 
-        Menu menu21 = new Menu();
-        menu21.setName(CONTENT_MANAGEMENT);
-        menu21.setParentId(-1L);
-        menu21.setDisplayOrder(4);
-        menu21.setRouterPath("/content");
-        menu21.setComponent(null);
-        menu21.setFrame(false);
-        menu21.setMenuType(MenuType.CONTENT);
-        menu21.setVisible(true);
-        menu21.setEnable(true);
-        menu21.setPermission(null);
-        menu21.setIcon("table");
+        Menu menu21 = Menu.builder().name(CONTENT_MANAGEMENT)
+                .parentId(-1L)
+                .displayOrder(4)
+                .routerPath("/content")
+                .component(null)
+                .menuType(MenuType.CONTENT)
+                .visible(true)
+                .enable(true)
+                .permission("content").build();
         menu21 = menuRepository.save(menu21);
 
-        Menu menu22 = new Menu();
-        menu22.setName(CATEGORY_MANAGEMENT);
-        menu22.setParentId(menu21.getId());
-        menu22.setDisplayOrder(1);
-        menu22.setRouterPath("/content/category");
-        menu22.setComponent("category");
-        menu22.setFrame(false);
-        menu22.setMenuType(MenuType.MENU);
-        menu22.setVisible(true);
-        menu22.setEnable(true);
-        menu22.setPermission("content:category:list");
-        menu22.setIcon("example");
+        Menu menu22 = Menu.builder().name(CATEGORY_MANAGEMENT)
+                .parentId(menu21.getId())
+                .displayOrder(1)
+                .routerPath("/content/category")
+                .component("category")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("content:category").build();
         menu22 = menuRepository.save(menu22);
 
-        Menu menu23 = new Menu();
-        menu23.setName(ARTICLE_MANAGEMENT);
-        menu23.setParentId(menu21.getId());
-        menu23.setDisplayOrder(0);
-        menu23.setRouterPath("/content/article");
-        menu23.setComponent("article");
-        menu23.setFrame(false);
-        menu23.setMenuType(MenuType.MENU);
-        menu23.setVisible(true);
-        menu23.setEnable(true);
-        menu23.setPermission("content:article:list");
-        menu23.setIcon("build");
-        menuRepository.save(menu23);
+        Menu menu35 = Menu.builder().name(CATEGORY_ADD)
+                .parentId(menu22.getId())
+                .displayOrder(1)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:category:add").build();
+        menuRepository.save(menu35);
 
-        Menu menu24 = new Menu();
-        menu24.setName(TAG_MANAGEMENT);
-        menu24.setParentId(menu21.getId());
-        menu24.setDisplayOrder(6);
-        menu24.setRouterPath("/content/tag");
-        menu24.setComponent("tag");
-        menu24.setFrame(false);
-        menu24.setMenuType(MenuType.MENU);
-        menu24.setVisible(true);
-        menu24.setEnable(true);
-        menu24.setPermission("content:tag:index");
-        menu24.setIcon("button");
-        menuRepository.save(menu24);
+        Menu menu36 = Menu.builder().name(CATEGORY_EDIT)
+                .parentId(menu22.getId())
+                .displayOrder(2)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:category:edit").build();
+        menuRepository.save(menu36);
 
-        Menu menu25 = new Menu();
-        menu25.setName(LINK_MANAGEMENT);
-        menu25.setParentId(menu21.getId());
-        menu25.setDisplayOrder(4);
-        menu25.setRouterPath("/content/link");
-        menu25.setComponent("link");
-        menu25.setFrame(false);
-        menu25.setMenuType(MenuType.MENU);
-        menu25.setVisible(true);
-        menu25.setEnable(true);
-        menu25.setPermission("content:link:list");
-        menu25.setIcon("404");
+        Menu menu37 = Menu.builder().name(CATEGORY_DELETE)
+                .parentId(menu22.getId())
+                .displayOrder(3)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:category:remove").build();
+        menuRepository.save(menu37);
+
+        Menu menu38 = Menu.builder().name(CATEGORY_DELETE)
+                .parentId(menu22.getId())
+                .displayOrder(4)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:category:query").build();
+        menuRepository.save(menu38);
+
+        Menu menu24 = Menu.builder().name(TAG_MANAGEMENT)
+                .parentId(menu21.getId())
+                .displayOrder(2)
+                .routerPath("/content/tag")
+                .component("tag")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("content:tag").build();
+        menu24= menuRepository.save(menu24);
+
+        Menu menu39 = Menu.builder().name(TAG_ADD)
+                .parentId(menu24.getId())
+                .displayOrder(1)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:tag:add").build();
+        menuRepository.save(menu39);
+
+        Menu menu40 = Menu.builder().name(TAG_EDIT)
+                .parentId(menu24.getId())
+                .displayOrder(2)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:tag:edit").build();
+        menuRepository.save(menu40);
+
+        Menu menu41 = Menu.builder().name(TAG_DELETE)
+                .parentId(menu24.getId())
+                .displayOrder(3)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:tag:remove").build();
+        menuRepository.save(menu41);
+
+        Menu menu42 = Menu.builder().name(TAG_QUERY)
+                .parentId(menu24.getId())
+                .displayOrder(4)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:tag:query").build();
+        menuRepository.save(menu42);
+
+        Menu menu23 = Menu.builder().name(ARTICLE_MANAGEMENT)
+                .parentId(menu21.getId())
+                .displayOrder(1)
+                .routerPath("/content/article")
+                .component("article")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("content:article").build();
+        menu23 = menuRepository.save(menu23);
+
+
+
+        Menu menu25 = Menu.builder().name(LINK_MANAGEMENT)
+                .parentId(menu21.getId())
+                .displayOrder(3)
+                .routerPath("/content/tag")
+                .component("link")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("content:link").build();
         menu25 = menuRepository.save(menu25);
 
-        Menu menu27 = new Menu();
-        menu27.setName(LINK_ADD);
-        menu27.setParentId(menu25.getId());
-        menu27.setDisplayOrder(0);
-        menu27.setRouterPath(null);
-        menu27.setComponent(null);
-        menu27.setFrame(false);
-        menu27.setMenuType(MenuType.BUTTON);
-        menu27.setVisible(true);
-        menu27.setEnable(true);
-        menu27.setPermission("content:link:add");
-        menu27.setIcon("#");
+        Menu menu27 = Menu.builder().name(LINK_ADD)
+                .parentId(menu25.getId())
+                .displayOrder(2)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:link:add").build();
         menuRepository.save(menu27);
 
-        Menu menu28 = new Menu();
-        menu28.setName(LINK_EDIT);
-        menu28.setParentId(menu25.getId());
-        menu28.setDisplayOrder(1);
-        menu28.setRouterPath(null);
-        menu28.setComponent(null);
-        menu28.setFrame(false);
-        menu28.setMenuType(MenuType.BUTTON);
-        menu28.setVisible(true);
-        menu28.setEnable(true);
-        menu28.setPermission("content:link:edit");
-        menu28.setIcon("#");
+        Menu menu28 = Menu.builder().name(LINK_EDIT)
+                .parentId(menu25.getId())
+                .displayOrder(3)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:link:edit").build();
         menuRepository.save(menu28);
 
-        Menu menu29 = new Menu();
-        menu29.setName(LINK_DELETE);
-        menu29.setParentId(menu25.getId());
-        menu29.setDisplayOrder(1);
-        menu29.setRouterPath(null);
-        menu29.setComponent(null);
-        menu29.setFrame(false);
-        menu29.setMenuType(MenuType.BUTTON);
-        menu29.setVisible(true);
-        menu29.setEnable(true);
-        menu29.setPermission("content:link:remove");
-        menu29.setIcon("#");
+        Menu menu29 = Menu.builder().name(LINK_DELETE)
+                .parentId(menu25.getId())
+                .displayOrder(4)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:link:remove").build();
         menuRepository.save(menu29);
 
-        Menu menu30 = new Menu();
-        menu30.setName(LINK_QUERY);
-        menu30.setParentId(menu25.getId());
-        menu30.setDisplayOrder(2);
-        menu30.setRouterPath(null);
-        menu30.setComponent(null);
-        menu30.setFrame(false);
-        menu30.setMenuType(MenuType.BUTTON);
-        menu30.setVisible(true);
-        menu30.setEnable(true);
-        menu30.setPermission("content:link:query");
-        menu30.setIcon("#");
+        Menu menu30 = Menu.builder().name(LINK_QUERY)
+                .parentId(menu25.getId())
+                .displayOrder(1)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(true)
+                .enable(true)
+                .permission("content:link:query").build();
         menuRepository.save(menu30);
 
-        Menu menu31 = new Menu();
-        menu31.setName(CATEGORY_EXPORT);
-        menu31.setParentId(menu22.getId());
-        menu31.setDisplayOrder(1);
-        menu31.setRouterPath(null);
-        menu31.setComponent(null);
-        menu31.setFrame(false);
-        menu31.setMenuType(MenuType.BUTTON);
-        menu31.setVisible(true);
-        menu31.setEnable(true);
-        menu31.setPermission("content:category:export");
-        menu31.setIcon("#");
-        menuRepository.save(menu31);
-
-        Menu menu26 = new Menu();
-        menu26.setName(WRITE_ARTICLE);
-        menu26.setParentId(-1L);
-        menu26.setDisplayOrder(0);
-        menu26.setRouterPath("/content/article/write");
-        menu26.setComponent("write");
-        menu26.setFrame(false);
-        menu26.setMenuType(MenuType.MENU);
-        menu26.setVisible(true);
-        menu26.setEnable(true);
-        menu26.setPermission("content:article:write");
-        menu26.setIcon("build");
+        Menu menu26 = Menu.builder().name(WRITE_ARTICLE)
+                .parentId(-1L)
+                .displayOrder(1)
+                .routerPath("/content/article/write")
+                .component("write")
+                .menuType(MenuType.MENU)
+                .visible(true)
+                .enable(true)
+                .permission("content:article:write").build();
         menuRepository.save(menu26);
 
-        Menu menu32 = new Menu();
-        menu32.setName(EDIT_ARTICLE);
-        menu32.setParentId(-1L);
-        menu32.setDisplayOrder(0);
-        menu32.setRouterPath("/content/article/edit");
-        menu32.setComponent("edit");
-        menu32.setFrame(false);
-        menu32.setMenuType(MenuType.MENU);
-        menu32.setVisible(false);
-        menu32.setEnable(true);
-        menu32.setPermission("content:article:edit");
-        menu32.setIcon("build");
+        Menu menu32 = Menu.builder().name(EDIT_ARTICLE)
+                .parentId(-1L)
+                .displayOrder(1)
+                .routerPath("/content/article/edit")
+                .component("edit")
+                .menuType(MenuType.MENU)
+                .visible(false)
+                .enable(true)
+                .permission("content:article:edit").build();
         menuRepository.save(menu32);
+
+
+        Menu menu33 = Menu.builder().name(COMMENT_MANAGEMENT)
+                .parentId(menu21.getId())
+                .displayOrder(4)
+                .routerPath("/content/comment")
+                .component("comment")
+                .menuType(MenuType.MENU)
+                .visible(false)
+                .enable(true)
+                .permission("content:comment").build();
+        menu33 = menuRepository.save(menu33);
+
+        Menu menu34 = Menu.builder().name(COMMENT_REPLY)
+                .parentId(menu33.getId())
+                .displayOrder(1)
+                .routerPath(null)
+                .component(null)
+                .menuType(MenuType.BUTTON)
+                .visible(false)
+                .enable(true)
+                .permission("content:comment:reply").build();
+        menuRepository.save(menu34);
 
     }
 

@@ -143,35 +143,6 @@ const UserModalContent = ({ title, user, handleClose, handleSubmit }: Props) => 
                     onChange={handleInputChange}
                 />
             </Stack>
-            <Stack
-                sx={{
-                    width: '100%',
-                    flexDirection: lgUp ? 'row' : 'column',
-                    alignItems: lgUp ? 'center' : '',
-                    pl: 2
-                }}
-            >
-                <Typography variant="subtitle2"
-                    sx={{
-                        width: 100,
-                        mb: lgUp ? '' : 1
-                    }}>
-                    Nickname
-                </Typography>
-
-                <OutlinedInput
-                    required
-                    fullWidth
-                    placeholder={''}
-                    startAdornment={(
-                        <InputAdornment position="start">
-                        </InputAdornment>
-                    )}
-                    name={'nickname'}
-                    value={localUser.nickname}
-                    onChange={handleInputChange}
-                />
-            </Stack>
 
             <Stack
                 sx={{
@@ -380,7 +351,7 @@ const UserModalContent = ({ title, user, handleClose, handleSubmit }: Props) => 
                         multiple
                         value={localUser.roleIds}
                         onChange={handleChange}
-                        input={<OutlinedInput id="select-multiple-chip" />}
+                        input={<OutlinedInput />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                 {selected.map((value) => (

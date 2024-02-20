@@ -49,6 +49,7 @@ logging:
 zach:
   blog:
     jwt:
+      name: ${JWT_NAME}
       secret: ${JWT_SECRET}
       expirationMs: ${JWT_EXPIRATION_MS}
 

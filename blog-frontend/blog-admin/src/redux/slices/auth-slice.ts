@@ -34,9 +34,9 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                const { user, jwt } = action.payload
+                const { user } = action.payload
                 state.user = user
-                localStorage.setItem('tk', jwt)
+
             })
             .addCase(verifyToken.fulfilled, (state, action) => {
                 const user = action.payload
@@ -44,7 +44,6 @@ export const authSlice = createSlice({
             })
             .addCase(logout.fulfilled, (state, _) => {
                 state.user = null
-                localStorage.removeItem('tk')
             })
     }
 })

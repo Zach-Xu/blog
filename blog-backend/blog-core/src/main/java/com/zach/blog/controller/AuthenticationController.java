@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.request.LoginRequest;
 import com.zach.blog.dto.request.RegisterRequest;
 import com.zach.blog.dto.response.ResponseResult;
@@ -25,6 +26,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    @AccessLimit(maxCount = 3)
     @Operation(summary = "User Registration", description = "Register a new user account.")
     @PostMapping("/register")
     public ResponseResult<?> register(@RequestBody RegisterRequest registerRequest) {
@@ -33,6 +35,7 @@ public class AuthenticationController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit(maxCount = 5)
     @Operation(summary = "User Login", description = "Log in and authenticate a user.")
     @PostMapping("/login")
     public ResponseResult<?> login(@RequestBody LoginRequest loginRequest) {
@@ -41,6 +44,7 @@ public class AuthenticationController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit(maxCount = 15)
     @Operation(summary = "Token verification", description = "Verify user token.")
     @GetMapping("/token")
     public ResponseResult<?> verifyToken(@AuthenticationPrincipal SessionUser user){
@@ -51,6 +55,7 @@ public class AuthenticationController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit(maxCount = 3)
     @Operation(summary = "User Logout", description = "Log out the currently authenticated user.")
     @PostMapping("/logout")
     public ResponseResult<?> logout(@AuthenticationPrincipal SessionUser user) {

@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.response.AboutMeQueryResult;
 import com.zach.blog.dto.response.OwnerCardInfoResponse;
 import com.zach.blog.dto.response.ResponseResult;
@@ -18,24 +19,28 @@ public class HomeController {
 
     private final HomeService homeService;
 
+    @AccessLimit()
     @GetMapping("/owner-card")
     public ResponseResult<?> getOwnerCardInfo(){
         OwnerCardInfoResponse response = homeService.getOwnerCardInfo();
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit()
     @GetMapping("/site")
     public ResponseResult<?> getSiteInfo(){
         SiteInfoResponse response = homeService.getSiteInfo();
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit()
     @PostMapping("/site/visit-count")
     public ResponseResult<?> updateSiteVisitCount(){
         homeService.updateSiteVisitCount();
         return ResponseResult.ok();
     }
 
+    @AccessLimit()
     @GetMapping("/about")
     public ResponseResult<?> getAboutMe(){
         AboutMeQueryResult response = homeService.getAboutMe();

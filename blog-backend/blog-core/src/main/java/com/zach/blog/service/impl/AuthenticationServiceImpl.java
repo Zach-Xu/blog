@@ -10,10 +10,7 @@ import com.zach.blog.model.UserDetailsImpl;
 import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.service.AuthenticationService;
 import com.zach.blog.service.RoleService;
-import com.zach.blog.utils.BeanCopyUtils;
-import com.zach.blog.utils.CookieUtils;
-import com.zach.blog.utils.JwtUtils;
-import com.zach.blog.utils.RedisUtils;
+import com.zach.blog.utils.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
@@ -44,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RedisUtils redisUtils;
     private final HttpServletResponse response;
     private final CookieUtils cookieUtils;
+    private final UserUtils userUtils;
 
     @Override
     @Transactional
@@ -65,7 +63,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Persist new user
         ApplicationUser newUser = userRepository.save(user);
 
-        redisUtils.set(USER_KEY + newUser.getId(), newUser);
+        SessionUser sessionUser = userUtils.convertUserToSessionUser(newUser);
+
+        redisUtils.set(USER_KEY + newUser.getId(), sessionUser);
 
         String jwt = jwtUtils.generateJwtToken(newUser.getId());
         ResponseCookie cookie = cookieUtils.generateJwtCookie(jwt);
@@ -92,14 +92,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
 
         ApplicationUser user = userDetails.getUser();
+        SessionUser sessionUser = userUtils.convertUserToSessionUser(user);
 
-        SessionUser sessionUser = BeanCopyUtils.copyBean(user, SessionUser.class);
-        sessionUser.setRoleName(user.getRoles().stream().findFirst().map(Role::getRoleName).orElse("Regular User"));
-        sessionUser.setPermissions(authenticate.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).
-                filter(permission -> Strings.isNotBlank(permission)
-                ).collect(Collectors.toList())
-        );
         // Store user info in redis
         redisUtils.set(USER_KEY + user.getId(), sessionUser);
 

@@ -14,6 +14,6 @@ public record CreateCategoryRequest(
         Boolean enable,
 
         @NotNull(message = "Parent category must be specified")
-        Long parentId
+        Long pid
 ) {
 }

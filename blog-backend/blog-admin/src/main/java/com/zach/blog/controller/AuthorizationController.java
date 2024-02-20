@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.response.UserPermissionResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.dto.response.UserResponse;
@@ -11,6 +12,7 @@ import com.zach.blog.service.AuthorizationService;
 import com.zach.blog.utils.BeanCopyUtils;
 import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class AuthorizationController {
     private final AuthorizationService authorizationService;
 
+    @AccessLimit()
     @GetMapping("/permissions")
     public ResponseResult<UserPermissionResponse> getCurrentUserPermissions(@AuthenticationPrincipal SessionUser sessionUser) {
         ApplicationUser user = authorizationService.getUserPermission(sessionUser.getId());

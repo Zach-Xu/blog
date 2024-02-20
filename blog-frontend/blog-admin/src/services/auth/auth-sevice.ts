@@ -1,4 +1,4 @@
-import { authAxios, requireTokenHeader } from "../../utils/axios-utils"
+import { authAxios } from "../../utils/axios-utils"
 
 
 export const authService = {
@@ -16,15 +16,11 @@ export const authService = {
     },
 
     logout: async () => {
-        await authAxios.post('/logout', {}, {
-            headers: requireTokenHeader
-        })
+        await authAxios.post('/logout')
     },
 
     verifyToken: async () => {
-        const result = await authAxios.get<void, User>('/token', {
-            headers: requireTokenHeader
-        })
+        const result = await authAxios.get<void, User>('/token')
 
         return result
     }

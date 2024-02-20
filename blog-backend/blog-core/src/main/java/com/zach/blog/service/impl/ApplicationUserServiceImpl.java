@@ -3,19 +3,19 @@ package com.zach.blog.service.impl;
 import com.zach.blog.dto.request.CreateUserRequest;
 import com.zach.blog.dto.request.UpdateUserInfoRequest;
 import com.zach.blog.dto.request.UpdateUserRequest;
-import com.zach.blog.enums.code.BusinessErrorCode;
 import com.zach.blog.exception.BusinessException;
 import com.zach.blog.exception.ResourceAlreadyExistException;
 import com.zach.blog.exception.ResourceNotFoundException;
 import com.zach.blog.model.Role;
+import com.zach.blog.model.SessionUser;
 import com.zach.blog.repository.RoleRepository;
 import com.zach.blog.service.ApplicationUserService;
 import com.zach.blog.model.ApplicationUser;
 import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.service.FileService;
 import com.zach.blog.utils.BeanCopyUtils;
-import com.zach.blog.utils.JsonUtils;
 import com.zach.blog.utils.RedisUtils;
+import com.zach.blog.utils.UserUtils;
 import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,18 +48,31 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
     private final RedisUtils redisUtils;
     private final RoleRepository roleRepository;
     private final FileService fileService;
+    private final UserUtils userUtils;
 
     @Override
-    public void updateUserInfo(Long userId, UpdateUserInfoRequest updateUserInfoRequest) {
+    public void updateUserInfo(Long userId, UpdateUserInfoRequest updateUserInfoRequest) throws IOException {
         ApplicationUser user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         BeanCopyUtils.copyPropertiesIgnoreNull(updateUserInfoRequest, user);
+
+        SessionUser sessionUser = redisUtils.get(USER_KEY + userId, SessionUser.class);
+        BeanCopyUtils.copyPropertiesIgnoreNull(updateUserInfoRequest, sessionUser);
+
+        if(Objects.nonNull(updateUserInfoRequest.avatarImage())){
+            String avatar= fileService.UploadFile(updateUserInfoRequest.avatarImage());
+            user.setAvatar(avatar);
+            sessionUser.setAvatar(avatar);
+        }
+
         if (Strings.hasText(updateUserInfoRequest.password())) {
             user.setPassword(passwordEncoder.encode(updateUserInfoRequest.password()));
         }
+
         ApplicationUser updatedUser = userRepository.save(user);
+
         // Sync user info with redis
-        redisUtils.set(USER_KEY + userId, updatedUser);
+        redisUtils.set(USER_KEY + userId, sessionUser);
     }
 
     @Override
@@ -131,7 +144,11 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
                 .collect(Collectors.toSet());
         user.setRoles(roles);
 
-        userRepository.save(user);
+        ApplicationUser updatedUser = userRepository.save(user);
+
+        if (Objects.nonNull(redisUtils.get(USER_KEY + id, SessionUser.class))) {
+            redisUtils.set(USER_KEY + id, userUtils.convertUserToSessionUser(updatedUser));
+        }
     }
 
     @Override
@@ -141,14 +158,16 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
 
     @Transactional
     @Override
-    public void updateAvatarImage(ApplicationUser user, MultipartFile image) throws IOException {
+    public void updateAvatarImage(SessionUser user, MultipartFile image) throws IOException {
         String avatar = fileService.UploadFile(image);
 
         // Update user
-        user = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        ApplicationUser userDb = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        userDb.setAvatar(avatar);
+        userRepository.save(userDb);
+
         user.setAvatar(avatar);
-        user = userRepository.save(user);
-        redisUtils.set(USER_KEY + user.getId(), JsonUtils.stringify(user));
+        redisUtils.set(USER_KEY + user.getId(), user);
     }
 
     @Override

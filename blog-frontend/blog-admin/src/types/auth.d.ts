@@ -11,7 +11,7 @@ interface User {
 
 
 interface LoginRequest {
-    username: string
+    email: string
     password: string
 }
 
@@ -22,5 +22,4 @@ interface RegisterRequest {
 
 interface LoginResponse {
     user: User
-    jwt: string
 }

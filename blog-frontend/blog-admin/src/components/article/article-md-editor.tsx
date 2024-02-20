@@ -1,9 +1,9 @@
-import { Box, FormControl, FormHelperText, Theme, useMediaQuery } from "@mui/material"
+import { FormControl, FormHelperText, Theme, useMediaQuery } from "@mui/material"
 import MDEditor from "@uiw/react-md-editor"
-import { palette } from "../../theme/create-palette"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../redux/store"
 import { updateErrorMessage } from "../../redux/slices/error-message-slice"
+import Markdown from "../common/markdown"
 
 interface Props {
     content: string
@@ -45,25 +45,24 @@ const ArticleMarkdownEditor = ({ content, preview, contentChangeHandler }: Props
                     onChange={handleContentChange}
                     preview={mdUp ? 'live' : 'edit'}
                     height={mdUp ? 400 : 275}
+                    components={{
+                        preview: (source, state, dispatch) =>
+                            <div className='min-w-0  flex-1 shadow-around-hover rounded-xl w-full bg-[#222]'>
+                                <div className="p-6 md:p-8 lg:p-10 ">
+                                    <Markdown content={content} />
+                                </div>
+                            </div>,
+                    }}
                 />
 
             </FormControl>
             {
                 preview &&
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        border: `1px solid ${palette.color.grey[400]}`,
-                        p: 2,
-                        borderRadius: 1,
-                        ':hover': {
-                            border: `1px solid ${palette.color.blue[400]}`
-                        }
-                    }}
-                >
-                    <MDEditor.Markdown source={content} style={{ whiteSpace: 'pre-wrap' }} />
-                </Box>
+                <div className='min-w-0  flex-1 shadow-around-hover rounded-xl w-full bg-[#222]'>
+                    <div className="p-6 md:p-8 lg:p-10 ">
+                        <Markdown content={content} />
+                    </div>
+                </div>
             }
 
         </>

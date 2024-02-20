@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.response.CategoryStatsResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.Category;
@@ -23,6 +24,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @AccessLimit()
     @Operation(summary = "Get Categories", description = "Retrieve a list of article categories.")
     @GetMapping
     public ResponseResult<?> getCategories(){
@@ -31,6 +33,7 @@ public class CategoryController {
         return ResponseResult.ok(categoriesResponse);
     }
 
+    @AccessLimit()
     @Operation(summary = "Get category stats", description = "Retrieve a list of categories and their corresponding number of articles ")
     @GetMapping("/stats")
     public ResponseResult<?> getCategoryStats(){

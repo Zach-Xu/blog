@@ -1,4 +1,4 @@
-import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
+import { resourceAxios } from "../../utils/axios-utils"
 
 export const articleService = {
     createArticle: async (data: WriteArticleRequest) => {
@@ -9,8 +9,7 @@ export const articleService = {
 
         await resourceAxios.post<void, void>('/articles', formData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
-                ...requireTokenHeader
+                'Content-Type': 'multipart/form-data'
             }
         })
     },
@@ -22,16 +21,13 @@ export const articleService = {
                 pageNum,
                 ...(title !== '' ? { title } : {}),
                 ...(summary !== '' ? { summary } : {})
-            },
-            headers: requireTokenHeader
+            }
         })
         return result
     },
 
     getArticleDetails: async (id: number) => {
-        const result = await resourceAxios.get<void, ArticleDetails>(`/articles/${id}`, {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.get<void, ArticleDetails>(`/articles/${id}`)
         return result
     },
 
@@ -43,17 +39,14 @@ export const articleService = {
 
         const result = await resourceAxios.put<void, Article>(`/articles/${id}`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
-                ...requireTokenHeader
+                'Content-Type': 'multipart/form-data'
             }
         })
         return result
     },
 
     deleteArticle: async (id: number) => {
-        const result = await resourceAxios.delete<void, void>(`/articles/${id}`, {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.delete<void, void>(`/articles/${id}`)
         return result
     }
 

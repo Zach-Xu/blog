@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.response.*;
 import com.zach.blog.dto.request.ChangeStatusRequest;
@@ -26,6 +27,8 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
 
+    @AccessLimit()
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:query')")
     @GetMapping("/all")
     public ResponseResult<?> getAllCategories() {
         List<Category> allCategories = categoryService.getAllCategories();
@@ -33,7 +36,8 @@ public class CategoryController {
         return ResponseResult.ok(categories);
     }
 
-    @PreAuthorize("hasAuthority('content:category:list')")
+    @AccessLimit()
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:query')")
     @GetMapping
     public ResponseResult<?> getCategories(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                            @RequestParam(required = false) String name, @RequestParam(required = false) Boolean enable) {
@@ -43,6 +47,8 @@ public class CategoryController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit()
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:query')")
     @GetMapping("/parent")
     public ResponseResult<?> getParentCategories(){
         List<Category> categories = categoryService.getParentCategories();
@@ -50,6 +56,8 @@ public class CategoryController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit(maxCount = 3)
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:add')")
     @Validate
     @PostMapping
     public ResponseResult<?> createCategory(@AuthenticationPrincipal SessionUser user, @RequestBody @Valid CreateCategoryRequest request, BindingResult bindingResult) {
@@ -58,6 +66,8 @@ public class CategoryController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit(maxCount = 2)
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:edit')")
     @Validate
     @PutMapping("/{id}/status")
     public ResponseResult<?> updateCategoryStatus(@PathVariable Long id, @AuthenticationPrincipal SessionUser user, @RequestBody @Valid ChangeStatusRequest request, BindingResult bindingResult) {
@@ -65,6 +75,8 @@ public class CategoryController {
         return ResponseResult.ok();
     }
 
+    @AccessLimit(maxCount = 3)
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:edit')")
     @Validate
     @PutMapping("/{id}")
     public ResponseResult<?> updateCategory(@PathVariable Long id, @AuthenticationPrincipal SessionUser user, @RequestBody @Valid UpdateCategoryRequest request, BindingResult bindingResult) {
@@ -72,6 +84,8 @@ public class CategoryController {
         return ResponseResult.ok();
     }
 
+    @AccessLimit(maxCount = 5)
+    @PreAuthorize("hasAnyAuthority('content', 'content:category', 'content:category:remove')")
     @DeleteMapping("/{id}")
     public ResponseResult<?> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);

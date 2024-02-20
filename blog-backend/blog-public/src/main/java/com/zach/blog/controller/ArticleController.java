@@ -1,5 +1,6 @@
 package com.zach.blog.controller;
 
+import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.dto.response.*;
 import com.zach.blog.model.Article;
 import com.zach.blog.service.ArticleService;
@@ -22,12 +23,15 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
+
+    @AccessLimit(maxCount = 20)
     @Operation(summary = "Get Article Detail", description = "Retrieve detailed information about an article by its ID.")
     @GetMapping("/{id}")
     public ResponseResult<?> getArticleDetails(@PathVariable("id") Long id) {
         return ResponseResult.ok( articleService.getArticleDetail(id));
     }
 
+    @AccessLimit()
     @Operation(summary = "Get Featured Articles", description = "Retrieve a list of featured articles.")
     @GetMapping("/featured")
     public ResponseResult<?> getFeaturedArticles() {
@@ -44,6 +48,7 @@ public class ArticleController {
         return ResponseResult.ok(response);
     }
 
+    @AccessLimit()
     @Operation(summary = "Get Articles", description = "Retrieve a list of articles with optional pagination and category filter.")
     @GetMapping
     public ResponseResult<?> getArticles(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,

@@ -19,13 +19,6 @@ const AuthGuard = ({ children }: Props) => {
 
 
     useEffect(() => {
-        const token = localStorage.getItem('tk')
-
-        if (!token) {
-            setIsLoading(false)
-            setValid(false)
-            return
-        }
 
         if (!user) {
             dispatch(verifyToken()).unwrap()

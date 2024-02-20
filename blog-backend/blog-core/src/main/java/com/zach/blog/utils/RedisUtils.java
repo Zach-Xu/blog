@@ -30,8 +30,12 @@ public class RedisUtils {
         }
     }
 
-    public void set(String key, String value) {
+    private void set(String key, String value) {
         stringRedisTemplate.opsForValue().set(key, value);
+    }
+
+    public Boolean setExpire(String key, long timeout, TimeUnit timeUnit){
+        return stringRedisTemplate.expire(key, timeout, timeUnit);
     }
 
     public void set(String key, String value, Long time, TimeUnit unit) {
@@ -46,8 +50,8 @@ public class RedisUtils {
         return JsonUtils.parse(value, type);
     }
 
-    public void increase(String key, int value){
-        stringRedisTemplate.opsForValue().increment(key, value);
+    public Long increase(String key, long value){
+        return stringRedisTemplate.opsForValue().increment(key, value);
     }
 
     public void setMap(String key, Map<String, String> map) {

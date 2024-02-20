@@ -1,10 +1,8 @@
-import { requireTokenHeader, resourceAxios } from "../../utils/axios-utils"
+import { resourceAxios } from "../../utils/axios-utils"
 
 export const categoryService = {
     getAll: async () => {
-        const result = await resourceAxios.get<void, Category[]>('/categories/all', {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.get<void, Category[]>('/categories/all')
 
         return result
     },
@@ -16,8 +14,7 @@ export const categoryService = {
                 pageNum,
                 ...(name !== '' ? { name } : {}),
                 ...(enable !== null ? { enable } : {})
-            },
-            headers: requireTokenHeader
+            }
         })
         return result
     },
@@ -25,39 +22,29 @@ export const categoryService = {
     changeCategoryStatus: async ({ id, enable }: ChangeStatusRequest) => {
         const result = await resourceAxios.put<void, void>(`/categories/${id}/status`, {
             enable
-        }, {
-            headers: requireTokenHeader
         })
 
         return result
     },
 
     createCategory: async (data: CreateCategory) => {
-        const result = await resourceAxios.post<void, Category>('/categories', data, {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.post<void, Category>('/categories', data)
         return result
     },
 
     updateCategory: async ({ id, category }: UpdateCategory) => {
-        const result = await resourceAxios.put<void, void>(`/categories/${id}`, category, {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.put<void, void>(`/categories/${id}`, category)
 
         return result
     },
 
     getParentCategories: async () => {
-        const result = await resourceAxios.get<void, ParentCategory[]>('/categories/parent', {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.get<void, ParentCategory[]>('/categories/parent')
         return result
     },
 
     deleteCategory: async (id: number) => {
-        const result = await resourceAxios.delete<void, void>(`/categories/${id}`, {
-            headers: requireTokenHeader
-        })
+        const result = await resourceAxios.delete<void, void>(`/categories/${id}`)
 
         return result
     }

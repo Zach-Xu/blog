@@ -1,6 +1,13 @@
 package com.zach.blog.dto.request;
 
 import com.zach.blog.enums.Gender;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
-public record UpdateUserInfoRequest(String email, Gender gender, String nickname, String phoneNumber, String password) {
+public record UpdateUserInfoRequest(
+//        Gender gender,
+        String username,
+        String password,
+        MultipartFile avatarImage)
+{
 }
