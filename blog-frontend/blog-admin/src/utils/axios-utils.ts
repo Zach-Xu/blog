@@ -18,13 +18,15 @@ export const injectStore = (_store: ToolkitStore) => {
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 export const authAxios = axios.create({
-    baseURL: 'http://localhost:8081/api/auth',
+    // baseURL: 'http://localhost:8081/api/auth',
+    baseURL: `${import.meta.env.VITE_BASE_URL}/auth`,
     withCredentials: true
     // timeout: 10000
 })
 
 export const resourceAxios = axios.create({
-    baseURL: 'http://localhost:8081/api',
+    // baseURL: 'http://localhost:8081/api',
+    baseURL: import.meta.env.VITE_BASE_URL,
     withCredentials: true
     // timeout: 10000
 })

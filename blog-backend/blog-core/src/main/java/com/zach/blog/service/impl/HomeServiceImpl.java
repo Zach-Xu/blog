@@ -24,6 +24,7 @@ import java.util.Objects;
 import static com.zach.blog.constants.RedisKeyPrefix.SITE_VISIT_COUNT_KEY;
 import static com.zach.blog.constants.RedisKeyPrefix.SITE_VISIT_IP_KEY;
 import static com.zach.blog.enums.code.ResourceNotFoundCode.SITE_INFO_NOT_FOUND;
+import static com.zach.blog.repository.ArticleRepository.Specs.byDeleted;
 
 @RequiredArgsConstructor
 @Service
@@ -44,9 +45,11 @@ public class HomeServiceImpl implements HomeService {
         ownerCardInfo.setAvatar(owner.getAvatar());
         ownerCardInfo.setUsername(owner.getUsername());
         ownerCardInfo.setSocials(siteInfo.getSocials());
-        ownerCardInfo.setArticleCount(articleRepository.count());
-        ownerCardInfo.setCategoryCount(categoryRepository.count());
-        ownerCardInfo.setTagCount(tagRepository.count());
+
+
+        ownerCardInfo.setArticleCount(articleRepository.count(byDeleted(false)));
+        ownerCardInfo.setCategoryCount(categoryRepository.getCategoryCount());
+        ownerCardInfo.setTagCount(tagRepository.getTagCount());
 
         return ownerCardInfo;
     }

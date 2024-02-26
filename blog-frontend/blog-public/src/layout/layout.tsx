@@ -13,7 +13,7 @@ const Layout = () => {
     const isSideBarShown = useSettingStore(state => state.isSideBarShown)
 
     return (
-        <div className='relative min-h-screen '>
+        <div className={`relative min-h-screen `}>
             <ScrollToTop />
             <Header />
             <SideDrawer />

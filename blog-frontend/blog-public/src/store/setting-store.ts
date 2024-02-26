@@ -24,7 +24,7 @@ const useSettingStore = create<SettingState>()((set) => ({
     toggleRegisterModal: (shown: boolean) => set(state => ({
         ...state,
         isRegisterModalShown: shown
-    }))
+    })),
 }))
 
 export default useSettingStore

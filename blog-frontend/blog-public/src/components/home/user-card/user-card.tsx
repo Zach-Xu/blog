@@ -4,6 +4,7 @@ import { SocialIcon } from 'react-social-icons'
 import { homeService } from '../../../services/resources/home-service'
 import LazyLoadAvatar from './lazy-load-avatar'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
 
 const UserCard = () => {
 
@@ -20,30 +21,30 @@ const UserCard = () => {
                 user &&
                 <>
                     <LazyLoadAvatar src="https://avatars.githubusercontent.com/u/111215609?v=4" alt="My avatar"
-                        className='max-w-[10rem] mt-2 rounded-[50%] shadow-[0_0_1rem_0.625rem_#000] border-[0.0625rem] border-black
+                        className='max-w-[10rem] mt-2 rounded-[50%] shadow-[0_0_1rem_0.625rem_#000] border-[0.0625rem] dark:border-black
                  hover:animate-shake'
                     />
-                    <p className='text-gray-300'>{user.username}</p>
-                    <p className='text-gray-400' >Road to full stack developer</p>
+                    <p className='dark:text-gray-300'>{user.username}</p>
+                    <p className='dark:text-gray-400' >Road to full stack developer</p>
                     {/* Article Stats */}
-                    <div className='flex text-gray-300'>
+                    <div className='flex dark:text-gray-300'>
                         <div >
-                            <a href="" className='text-center'>
+                            <Link to={'/archive'} className='text-center'>
                                 <div className='font-bold'>{user.articleCount}</div>
                                 <div>Article</div>
-                            </a>
+                            </Link>
                         </div>
                         <div className='border-x-[1px] px-4 mx-4'>
-                            <a href="" className='text-center'>
-                                <div className='font-bold'>{user.categoryCount}</div>
+                            <Link to={'/category'} className='text-center'>
+                                <div className='font-bold'>{user.categoryCount || 0}</div>
                                 <div>Category</div>
-                            </a>
+                            </Link>
                         </div>
                         <div>
-                            <a href="" className='text-center'>
-                                <div className='font-bold'>{user.tagCount}</div>
+                            <Link to={'/tag'} className='text-center'>
+                                <div className='font-bold'>{user.tagCount || 0}</div>
                                 <div>Tag</div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     {/* Social Contacts */}

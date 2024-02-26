@@ -19,10 +19,10 @@ public class CookieUtils {
         return ResponseCookie.from(jwtName, jwt)
                 .path("/")
                 .httpOnly(true)
-                .domain(null)   // for development env
-                .secure(true)  // true to make the cookie HTTPS only
+                .domain("zachxu.com")   // for development env
+                .secure(false)  // true to make the cookie HTTPS only
                 .maxAge(jwtExpirationMs / 1000)
-                .sameSite("None")
+                .sameSite("Strict")
                 .build();
     }
 
@@ -30,10 +30,10 @@ public class CookieUtils {
         return  ResponseCookie.from(jwtName, null)
                 .path("/")
                 .httpOnly(true)
-                .domain(null)   // for development env
-                .secure(true)  // true to make the cookie HTTPS only
+                .domain("zachxu.com")   // for development env
+                .secure(false)  // true to make the cookie HTTPS only
                 .maxAge(0)
-                .sameSite("None")
+                .sameSite("Strict")
                 .build();
     }
 }

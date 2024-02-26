@@ -15,7 +15,18 @@ const Header = () => {
 
     const [headerClassName, setHeaderClassName] = useState('')
 
-    const [isDay, setIsDay] = useState(true)
+    const [isDark, setIsDark] = useState(true)
+
+    const setDarkTheme = () => {
+        setIsDark(true)
+        return toast.error('To be implemented')
+        document.documentElement.classList.add("dark")
+    }
+    const setLightTheme = () => {
+        setIsDark(false)
+        return toast.error('To be implemented')
+        document.documentElement.classList.remove("dark")
+    }
 
     const handleScroll = () => {
         const currentScrollPosition = window.scrollY
@@ -58,19 +69,13 @@ const Header = () => {
                     />
             }
 
-            <span className="md:hidden lg:inline-block">Hello World</span>
+            <span className="md:hidden lg:inline-block text-inherit">Hello World</span>
             <NavBar />
             {
-                isDay ?
-                    <MoonIcon className="w-5 cursor-pointer" onClick={() => {
-                        setIsDay(false)
-                        toast.error('To be implemented')
-                    }} />
+                isDark ?
+                    <MoonIcon className="w-5 cursor-pointer" onClick={setLightTheme} />
                     :
-                    <SunIcon className="w-5 cursor-pointer" onClick={() => {
-                        setIsDay(true)
-                        toast.error('To be implemented')
-                    }} />
+                    <SunIcon className="w-5 cursor-pointer" onClick={setDarkTheme} />
             }
 
         </header>

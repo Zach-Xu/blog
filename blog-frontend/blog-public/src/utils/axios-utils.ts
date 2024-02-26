@@ -6,7 +6,7 @@ import { INVALID_TOKEN } from '../constants/error-messages'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 export const resourceAxios = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: import.meta.env.VITE_BASE_URL,
     withCredentials: true
 })
 

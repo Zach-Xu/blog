@@ -45,7 +45,7 @@ const WriteSubmitButtons = ({ fileInputRef }: Props) => {
 
         dispatch(createArticle(data)).
             unwrap().then(() => {
-                dispatch(getArticles({})).unwrap().then(() => navigate('/article'))
+                dispatch(getArticles({})).unwrap().then(() => navigate('/content/article'))
             })
 
     }, [article, fileInputRef.current])

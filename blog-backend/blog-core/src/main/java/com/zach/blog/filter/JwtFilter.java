@@ -12,6 +12,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -33,6 +34,7 @@ import static com.zach.blog.constants.RedisKeyPrefix.USER_KEY;
 import static com.zach.blog.enums.code.AuthErrorCode.INVALID_TOKEN;
 import static com.zach.blog.enums.code.AuthErrorCode.REQUIRE_LOGIN;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -85,6 +87,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 throw new AuthException(INVALID_TOKEN);
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
             ResponseResult<?> result = ResponseResult.error(HttpStatusCode.INVALID_TOKEN);
             ResponseCookie cookie = cookieUtils.destroyJwtCookie();
             response.setHeader(HttpHeaders.SET_COOKIE,  cookie.toString());

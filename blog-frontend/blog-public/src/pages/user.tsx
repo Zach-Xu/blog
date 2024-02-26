@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Wave from '../layout/wave'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { authService } from '../services/resources/auth-service'
 import UserAvatar from '../components/user/user-avatar'
 import UserInfoForm from '../components/user/user-info-form'
 import { userService } from '../services/resources/user-service'
+import useUserStore from '../store/user-store'
 
 const User = () => {
 
@@ -13,22 +13,27 @@ const User = () => {
 
     const croppedImgRef = useRef<File>(null)
 
-    const { data: user, isFetched } = useQuery({
-        queryKey: ['verifyToken'],
-        queryFn: authService.verifyToken,
-        enabled: false,
-    })
-
     const queryClient = useQueryClient()
 
-    useEffect(() => {
-        if (!isFetched) {
-            return
-        }
-        if (!user) {
-            navigate('/')
-        }
-    }, [user, isFetched])
+    // const user = useUserStore(state => state.user)
+
+    const isFetching = queryClient.isFetching({ queryKey: ['verifyToken'] })
+
+    const user = queryClient.getQueryData(['verifyToken'])
+
+    if (!isFetching && !user) {
+        navigate('/')
+    }
+
+    // useEffect(() => {
+    //     if (queryClient.isFetching({ queryKey: ['verifyToken'] })) {
+    //         return
+    //     }
+
+    //     if (!user) {
+    //         navigate('/')
+    //     }
+    // }, [user])
 
     const { mutate } = useMutation({
         mutationKey: ['updateUserInfo'],

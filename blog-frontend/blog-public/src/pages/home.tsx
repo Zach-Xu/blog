@@ -5,14 +5,25 @@ import NoticeCard from '../components/home/notice-card'
 import LatestComments from '../components/home/latest-comment/latest-comment'
 import Wave from '../layout/wave'
 import FeaturedArticles from '../components/home/featured-articles/featured-articles'
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 
 const Home = () => {
+
+    const scrollDown = () => {
+        window.scrollTo({
+            behavior: "smooth",
+            top: document.documentElement.clientHeight,
+        });
+    }
 
     return (
         <div className='min-h-screen caret-transparent'>
             <div className='h-screen flex relative bg-[#2b2b2b] justify-center items-center z-[1]'>
                 <h1 className='fixed text-[#f7f7f7] text-[3rem] '>Hello World </h1>
                 <Wave />
+                <ChevronDownIcon className='h-12 w-12 absolute bottom-3 cursor-pointer text-gray-300 z-50 animate-bounce'
+                    onClick={scrollDown}
+                />
             </div>
             {/* Main Container */}
             <div className='bg-[#222222] relative z-10 py-4'>

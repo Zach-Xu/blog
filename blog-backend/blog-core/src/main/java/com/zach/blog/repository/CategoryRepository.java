@@ -35,10 +35,24 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
             FROM Category c
             JOIN Article  a
             ON c.id = a.category.id
+            WHERE a.deleted = false 
+            AND a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED
             GROUP BY c.id
             HAVING COUNT (a) > 0
             """)
     List<CategoryStatsResponse> getCategoryStats();
+
+    @Query(value = """
+        SELECT COUNT(c)
+        FROM Category c 
+        WHERE c IN 
+        (SELECT c
+        FROM Article a
+        JOIN a.category c
+        WHERE a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED
+        GROUP BY c.id)
+    """)
+    Long getCategoryCount();
 
     interface Specs {
         static Specification<Category> containsName(String name) {

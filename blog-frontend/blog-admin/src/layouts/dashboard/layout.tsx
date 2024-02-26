@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import SideNav from '../../components/side-nav';
 import TopNav from '../../components/top-nav';
@@ -9,7 +9,11 @@ import { Outlet } from 'react-router-dom';
 
 const SIDE_NAV_WIDTH = '280px';
 
-const Layout = () => {
+interface Props {
+    children?: ReactElement
+}
+
+const Layout = ({ children }: Props) => {
     const [openNav, setOpenNav] = useState(false);
 
     const theme = useTheme()

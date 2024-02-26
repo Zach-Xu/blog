@@ -19,10 +19,24 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
             SELECT new com.zach.blog.dto.response.TagStatsResponse(c.id, c.name, COUNT(a))
             FROM Article a
             JOIN a.tags c
+            where a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED
             GROUP BY c.id
             HAVING COUNT (a) > 0
             """)
     List<TagStatsResponse> getTagStats();
+
+
+    @Query(value = """
+    SELECT COUNT(t) 
+    FROM Tag t WHERE t IN (
+     SELECT t
+            FROM Article a
+            JOIN a.tags t
+            WHERE a.publishStatus = com.zach.blog.enums.PublishStatus.PUBLISHED
+            GROUP BY t.id
+            HAVING COUNT (a) > 0)
+    """)
+    Long getTagCount();
 
     interface Specs {
         static Specification<Tag> containsTagName(String tagName) {

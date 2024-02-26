@@ -36,6 +36,7 @@ public class SecurityConfig {
     private final AccessDeniedHandlerImpl accessDeniedHandler;
     private final JwtFilter jwtFilter;
     private final AccessLimitInterceptor accessLimitInterceptor;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -61,7 +62,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173", "http://localhost:81")
+                        .allowedOrigins("http://localhost:5173", "http://localhost:80", "http://zachxu.com:80", "http://zachxu.com:80")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true)
                         .allowedHeaders("*")

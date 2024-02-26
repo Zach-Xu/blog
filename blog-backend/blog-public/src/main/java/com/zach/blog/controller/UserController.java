@@ -34,7 +34,7 @@ public class UserController {
         return ResponseResult.ok(BeanCopyUtils.copyBean(user, UserInfoResponse.class));
     }
 
-    @PreAuthorize("hasAuthority('system:user:infoUpdate')")
+    @PreAuthorize("hasAnyAuthority('system','system:user','system:user:infoUpdate')")
     @AccessLimit(maxCount = 1)
     @Operation(summary = "Upload Avatar Image", description = "Upload or update the user's avatar image.")
     @SystemLog(businessName = "Upload avatar image")
@@ -44,7 +44,7 @@ public class UserController {
         return ResponseResult.ok();
     }
 
-    @PreAuthorize("hasAuthority('system:user:infoUpdate')")
+    @PreAuthorize("hasAnyAuthority('system','system:user','system:user:infoUpdate')")
     @AccessLimit(maxCount = 3)
     @Operation(summary = "Update User Info", description = "Update user information.")
     @PutMapping("/userInfo")

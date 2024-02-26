@@ -117,6 +117,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpec
             };
         }
 
+        static Specification<Article> byDeleted(Boolean isDeleted) {
+            return (root, query, builder) ->
+                    builder.equal(root.get("deleted"), isDeleted);
+        }
+
     }
 
 }

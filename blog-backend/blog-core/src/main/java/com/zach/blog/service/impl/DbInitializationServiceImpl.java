@@ -83,19 +83,19 @@ public class DbInitializationServiceImpl implements DbInitializationService {
         user1.setPhoneNumber("416-123-4567");
         user1.setAvatar("https://avatars.githubusercontent.com/u/111215609?v=4");
 
-        ApplicationUser user2 = new ApplicationUser();
-        user2.addRole(adminRole);
-        user2.setUsername("John");
-        user2.setPassword(passwordEncoder.encode("123456"));
-        user2.setEnable(true);
-        user2.setEmail("random.unknown@gmail.com");
-        user2.setGender(Gender.MALE);
-        user2.setPhoneNumber("000-123-4567");
-        user2.setAvatar("https://avatars.githubusercontent.com/u/111215609?v=4");
+//        ApplicationUser user2 = new ApplicationUser();
+//        user2.addRole(adminRole);
+//        user2.setUsername("John");
+//        user2.setPassword(passwordEncoder.encode("123456"));
+//        user2.setEnable(true);
+//        user2.setEmail("random.unknown@gmail.com");
+//        user2.setGender(Gender.MALE);
+//        user2.setPhoneNumber("000-123-4567");
+//        user2.setAvatar("https://avatars.githubusercontent.com/u/111215609?v=4");
 
         List<ApplicationUser> users = new ArrayList<>();
         users.add(user1);
-        users.add(user2);
+//        users.add(user2);
         userRepository.saveAll(users);
     }
 

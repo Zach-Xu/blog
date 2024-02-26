@@ -2,8 +2,8 @@ interface UserCard {
     avatar: string
     username: string
     articleCount: number
-    categoryCount: number
-    tagCount: number
+    categoryCount: number | null
+    tagCount: number | null
     socials: {
         id: number
         name: string

@@ -48,7 +48,7 @@ const EditSubmitButtons = ({ id, fileInputRef }: Props) => {
         }
 
         dispatch(updateArticle(data)).
-            unwrap().then(() => navigate('/article'))
+            unwrap().then(() => navigate('/content/article'))
 
     }, [article, fileInputRef.current])
 

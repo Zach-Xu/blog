@@ -20,14 +20,16 @@ const ArticleCard = ({ article, reverse }: Props) => {
     return (
         <div className={`flex flex-col group ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} shadow-around hover:shadow-around-hover bg-[#222222] text-[#aaa] rounded-xl overflow-hidden m-3  border-gray-900`}>
             <div className={`h-[14rem] md:w-1/2 overflow-hidden} ${reverse ? 'clip-image-bl md:clip-image-lb' : 'clip-image-br md:clip-image-rt'}`}>
-                <LazyLoadImage className={`object-cover w-full h-full group-hover:scale-105 group-hover:rotate-1 transition-all ease-in-out duration-200`} src={article.thumbnail} />
+                <LazyLoadImage
+                    onClick={() => toArticleDetailsPage(article.id)}
+                    className={`object-cover w-full h-full group-hover:scale-105 group-hover:rotate-1 transition-all ease-in-out duration-200`} src={article.thumbnail} />
             </div>
             <div className='h-[14rem] md:w-1/2 flex flex-col justify-between space-y-5'>
                 {/* Article Info */}
                 <div className={`flex ${reverse ? 'justify-start ml-4' : 'justify-end mr-4'} space-x-6 lg:space-x-4 md:mt-4 md:ml-4`}>
                     {
                         article.pinned &&
-                        <div className='flex items-center space-x-1 text-[#d96d7f]'>
+                        <div className='flex items-center space-x-1 text-orange-600'>
                             <EyeDropperIcon className='w-4' />
                             <span className=''>Pinned</span>
                         </div>

@@ -4,7 +4,7 @@ import useSettingStore from '../../store/setting-store'
 import useUserStore from '../../store/user-store'
 import { Link } from 'react-router-dom'
 import { authService } from '../../services/resources/auth-service'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const UserMenu = () => {
     const isLoginModalShown = useSettingStore(state => state.isLoginModalShown)
@@ -13,9 +13,16 @@ const UserMenu = () => {
     const user = useUserStore(state => state.user)
     const updateUser = useUserStore(state => state.updateUser)
 
+    const queryClient = useQueryClient()
+
     const { mutate } = useMutation({
         mutationKey: ['logout'],
-        mutationFn: authService.logout
+        mutationFn: authService.logout,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['verifyToken']
+            })
+        }
     })
 
     const logOut = () => {
