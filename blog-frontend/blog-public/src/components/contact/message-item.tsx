@@ -1,14 +1,11 @@
-import { HandThumbUpIcon } from '@heroicons/react/24/solid'
 import React, { useState } from 'react'
-import ReplyBox from './reply-box'
-
+import MessageBox from './message-box'
 
 interface Props {
     comment: Comment
 }
 
-const CommentItem = ({ comment }: Props) => {
-
+const MessageItem = ({ comment }: Props) => {
     const [replyUser, setReplyUser] = useState<ReplyUser | null>(null)
 
     // store reply user info in redux so that only one ReplyBox can be shown at a time
@@ -25,6 +22,7 @@ const CommentItem = ({ comment }: Props) => {
     return (
         <div className='flex justify-start mt-6'>
             <img src={comment.userAvatar || '/assets/default-user.jpg'} alt="user avatar" className='h-[50px] object-cover rounded-full mr-2' />
+
             <div className='flex-1 border-b pb-3 border-gray-500'>
                 {/* Main Comment */}
                 <div className='flex flex-col justify-between'>
@@ -33,12 +31,6 @@ const CommentItem = ({ comment }: Props) => {
                     {/* Reply Time */}
                     <div className='flex items-center space-x-6 text-sm'>
                         <div>{new Date(comment.createdTime).toLocaleDateString()}</div>
-                        {/* Like comment */}
-                        {/* To be implemented */}
-                        {/* <div className='flex items-center space-x-2'>
-                            <HandThumbUpIcon className='w-4' />
-                            <span>{comment.like}</span>
-                        </div> */}
                         <button className='hover:text-[#ea7e90]'
                             onClick={() => handleReplyClick({ commentId: comment.commentId, username: comment.username })}>reply</button>
                     </div>
@@ -70,12 +62,6 @@ const CommentItem = ({ comment }: Props) => {
                                     {/* Reply Time */}
                                     <div className='flex items-center space-x-6 text-sm'>
                                         <div>{new Date(subComment.createdTime).toLocaleDateString()}</div>
-                                        {/* To be implemented */}
-                                        {/* <div className='flex items-center space-x-2'>
-                                            <HandThumbUpIcon className='w-4' />
-                                            <span>{subComment.like}</span>
-                                        </div> */}
-                                        {/* use subComment id for UI design phase  */}
                                         <button className='hover:text-[#ea7e90]'
                                             onClick={() => handleReplyClick({ commentId: subComment.commentId, username: subComment.username })}>reply</button>
                                     </div>
@@ -85,11 +71,10 @@ const CommentItem = ({ comment }: Props) => {
                         </div>
                     ))
                 }
-
-                {replyUser && <ReplyBox rootCommentId={comment.commentId} toCommentId={replyUser.commentId} articleId={comment.articleId} placeholder={`reply @${replyUser.username}:`} />}
+                {replyUser && <MessageBox rootCommentId={comment.commentId} toCommentId={replyUser.commentId} placeholder={`reply @${replyUser.username}:`} />}
             </div>
         </div>
     )
 }
 
-export default CommentItem
+export default MessageItem

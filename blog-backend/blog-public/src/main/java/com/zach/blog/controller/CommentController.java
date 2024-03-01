@@ -4,6 +4,7 @@ import com.zach.blog.annotation.AccessLimit;
 import com.zach.blog.annotation.Validate;
 import com.zach.blog.dto.request.CommentRequest;
 import com.zach.blog.dto.response.CommentQueryResult;
+import com.zach.blog.dto.response.ContactCommentResponse;
 import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.dto.response.ResponseResult;
 import com.zach.blog.model.ApplicationUser;
@@ -31,29 +32,38 @@ public class CommentController {
 
     @AccessLimit()
     @Operation(summary = "Get Comments", description = "Retrieve comments with optional pagination and filtering by article.")
-    @GetMapping
-    public ResponseResult<?> getComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
+    @GetMapping("/article")
+    public ResponseResult<?> getArticleComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize,
                                          @RequestParam Long articleId) {
-        PageResponse response = commentService.getComments(pageNum, pageSize, articleId);
+        PageResponse response = commentService.getArticleComments(pageNum, pageSize, articleId);
         return ResponseResult.ok(response);
     }
 
-    @AccessLimit(maxCount = 10)
+    @AccessLimit()
     @PreAuthorize("hasAuthority('content:comment:reply')")
     @Validate
     @Operation(summary = "Create Comment", description = "Create a new comment.")
-    @PostMapping
-    public ResponseResult<?> createComment(@AuthenticationPrincipal SessionUser user, @Valid @RequestBody CommentRequest commentRequest, BindingResult bindingResult){
-        commentService.createComment(user, commentRequest);
+    @PostMapping("/article")
+    public ResponseResult<?> createArticleComment(@AuthenticationPrincipal SessionUser user, @Valid @RequestBody CommentRequest commentRequest, BindingResult bindingResult){
+        commentService.createArticleComment(user, commentRequest);
         return ResponseResult.ok();
     }
 
+    @AccessLimit(maxCount = 5)
+    @Validate
+    @Operation(summary = "Create contact Comment", description = "Create a contact comment.")
+    @PostMapping("/contact")
+    public ResponseResult<?> createContactComment(@AuthenticationPrincipal SessionUser user, @Valid @RequestBody CommentRequest commentRequest, BindingResult bindingResult){
+        String tempUsername = commentService.createContactComment(user, commentRequest);
+        return tempUsername == null ? ResponseResult.ok() : ResponseResult.ok(new ContactCommentResponse(tempUsername));
+    }
+
     @AccessLimit()
-    @Operation(summary = "Get Link Comments", description = "Retrieve comments containing links with optional pagination.")
-    @GetMapping("/link")
-    public ResponseResult<?> getLinkComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize){
-        List<CommentQueryResult> comments = commentService.getLinkComments(pageNum,pageSize);
-        return ResponseResult.ok(comments);
+    @Operation(summary = "Get Contact Comments", description = "Retrieve comments containing links with optional pagination.")
+    @GetMapping("/contact")
+    public ResponseResult<?> getContactComments(@RequestParam(defaultValue = "0") Integer pageNum, @RequestParam(defaultValue = "5") Integer pageSize){
+        PageResponse response = commentService.getContactComments(pageNum, pageSize);
+        return ResponseResult.ok(response);
     }
 
     @AccessLimit()

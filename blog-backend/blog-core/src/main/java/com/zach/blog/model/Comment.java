@@ -39,4 +39,7 @@ public class Comment extends BaseEntity {
 
     @Column(name = "updated_by")
     private Long updatedBy;
+
+    @Column(name ="temp_username", columnDefinition = "VARCHAR(32) COMMENT 'temporary username for unregistered site visitors '")
+    private String tempUsername;
 }

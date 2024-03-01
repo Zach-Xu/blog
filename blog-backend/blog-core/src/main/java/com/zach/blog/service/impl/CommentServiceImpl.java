@@ -1,6 +1,7 @@
 package com.zach.blog.service.impl;
 
 
+import com.github.javafaker.Faker;
 import com.zach.blog.dto.request.CommentRequest;
 import com.zach.blog.dto.response.PageResponse;
 import com.zach.blog.enums.CommentType;
@@ -12,15 +13,16 @@ import com.zach.blog.repository.ApplicationUserRepository;
 import com.zach.blog.repository.ArticleRepository;
 import com.zach.blog.repository.CommentRepository;
 import com.zach.blog.service.CommentService;
-import io.jsonwebtoken.lang.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import static com.zach.blog.enums.code.ResourceNotFoundCode.*;
 
@@ -34,31 +36,22 @@ public class CommentServiceImpl implements CommentService {
     private final ApplicationUserRepository userRepository;
 
     @Override
-    public PageResponse getComments(Integer pageNum, Integer pageSize, Long articleId) {
+    public PageResponse getArticleComments(Integer pageNum, Integer pageSize, Long articleId) {
         PageRequest rootPageRequest = PageRequest.of(pageNum, pageSize);
-        Page<CommentQueryResult> page = commentRepository.findRootCommentsByArticleId(articleId, rootPageRequest);
+        Page<CommentQueryResult> page = commentRepository.findRootArticleComments(articleId, rootPageRequest);
         List<CommentQueryResult> rootComments = page.getContent();
         int totalPages = page.getTotalPages();
-        return new PageResponse( getSubComments(rootComments), totalPages, page.getTotalElements());
+        return new PageResponse(getSubArticleComments(rootComments), totalPages, page.getTotalElements());
     }
 
-    @Override
-    public void createComment(SessionUser user, CommentRequest commentRequest) {
-
-        if (commentRequest.type() == CommentType.ARTICLE) {
-            createArticleComment(user, commentRequest);
-        } else {
-            createLinkComment(user, commentRequest);
-        }
-    }
-
-    private void createArticleComment(SessionUser user, CommentRequest commentRequest) {
+    public void createArticleComment(SessionUser user, CommentRequest commentRequest) {
         validateArticleComment(commentRequest);
 
         Comment comment = new Comment();
-        comment.setType(commentRequest.type());
+        comment.setType(CommentType.ARTICLE);
         comment.setContent(commentRequest.content());
         comment.setUser(userRepository.getReferenceById(user.getId()));
+        comment.setTempUsername(user.getUsername());
         comment.setArticle(articleRepository.getReferenceById(commentRequest.articleId()));
         // Set ToComment association only when this is a sub comment
         if (commentRequest.rootCommentId() != -1L) {
@@ -69,19 +62,32 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
-    private void createLinkComment(SessionUser user, CommentRequest commentRequest) {
+    public String createContactComment(SessionUser user, CommentRequest commentRequest) {
         validateComment(commentRequest);
 
         Comment comment = new Comment();
-        comment.setType(commentRequest.type());
+        comment.setType(CommentType.CONTACT);
         comment.setContent(commentRequest.content());
-        comment.setUser(userRepository.getReferenceById(user.getId()));
+
+        String tempUsername = null;
+        if (Objects.nonNull(user)) {
+            comment.setUser(userRepository.getReferenceById(user.getId()));
+            comment.setTempUsername(user.getUsername());
+        } else if (Objects.nonNull(commentRequest.tempUsername()) && commentRepository.existsByTempUsername(commentRequest.tempUsername())) {
+            comment.setTempUsername(commentRequest.tempUsername());
+        } else {
+            Faker faker = new Faker(new Random(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)));
+            tempUsername = faker.name().name();
+            comment.setTempUsername(tempUsername);
+        }
+
         // Set ToComment association only when this is a sub comment
         if (commentRequest.rootCommentId() != -1L) {
             comment.setToComment(commentRepository.getReferenceById(commentRequest.toCommentId()));
         }
         comment.setRootCommentId(commentRequest.rootCommentId());
         commentRepository.save(comment);
+        return tempUsername;
     }
 
     private void validateArticleComment(CommentRequest commentRequest) {
@@ -110,16 +116,16 @@ public class CommentServiceImpl implements CommentService {
                 throw new ResourceNotFoundException(TO_COMMENT_NOT_FOUND);
             }
         }
-        if (!Strings.hasText(commentRequest.content())) {
-            throw new MissingParameterException("Content is missing!");
-        }
     }
 
     @Override
-    public List<CommentQueryResult> getLinkComments(Integer pageNum, Integer pageSize) {
+    public PageResponse getContactComments(Integer pageNum, Integer pageSize) {
         PageRequest rootPageRequest = PageRequest.of(pageNum, pageSize);
-        List<CommentQueryResult> rootLinkComments = commentRepository.findRootLinkComments(rootPageRequest).getContent();
-        return getSubComments(rootLinkComments);
+        Page<CommentQueryResult> page = commentRepository.findRootContactComments(rootPageRequest);
+        List<CommentQueryResult> rootContactComments = page.getContent();
+        int totalPages = page.getTotalPages();
+        return new PageResponse(getSubContactComments(rootContactComments), totalPages, page.getTotalElements());
+
     }
 
     @Override
@@ -129,11 +135,21 @@ public class CommentServiceImpl implements CommentService {
         return page.getContent();
     }
 
-    private List<CommentQueryResult> getSubComments(List<CommentQueryResult> rootComments) {
+    private List<CommentQueryResult> getSubArticleComments(List<CommentQueryResult> rootComments) {
         PageRequest subPageRequest = PageRequest.of(0, 5);
 
         rootComments.forEach(rootComment -> {
-            List<CommentQueryResult> subComments = commentRepository.findSubCommentsByRootCommentId(rootComment.getCommentId(), subPageRequest).getContent();
+            List<CommentQueryResult> subComments = commentRepository.findSubArticleComments(rootComment.getCommentId(), subPageRequest).getContent();
+            rootComment.setSubComments(subComments);
+        });
+        return rootComments;
+    }
+
+    private List<CommentQueryResult> getSubContactComments(List<CommentQueryResult> rootComments) {
+        PageRequest subPageRequest = PageRequest.of(0, 5);
+
+        rootComments.forEach(rootComment -> {
+            List<CommentQueryResult> subComments = commentRepository.findSubContactComments(rootComment.getCommentId(), subPageRequest).getContent();
             rootComment.setSubComments(subComments);
         });
         return rootComments;

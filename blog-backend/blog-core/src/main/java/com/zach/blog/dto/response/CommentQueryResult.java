@@ -24,6 +24,9 @@ public class CommentQueryResult {
 
     private List<CommentQueryResult> subComments;
 
+    /**
+     *  Constructor for sub article comments
+     * */
     public CommentQueryResult(Long articleId, Long commentId, Long toCommentId, String content, Long userId, Long toUserId, LocalDateTime createdTime, Long rootCommentId, String username, String toUsername,
                               String userAvatar) {
         this.articleId = articleId;
@@ -39,6 +42,9 @@ public class CommentQueryResult {
         this.userAvatar = userAvatar;
     }
 
+    /**
+     *  Constructor for root article comments
+     * */
     public CommentQueryResult(Long articleId, Long commentId, String content, Long userId, LocalDateTime createdTime, Long rootCommentId, String username, String userAvatar) {
         this.articleId = articleId;
         this.commentId = commentId;
@@ -50,16 +56,34 @@ public class CommentQueryResult {
         this.userAvatar = userAvatar;
     }
 
-    public CommentQueryResult(Long articleId, Long commentId, String content, Long userId, LocalDateTime createdTime, Long rootCommentId, String username) {
-        this.articleId = articleId;
+    /**
+     *  Constructor for root contact comments
+     * */
+    public CommentQueryResult(Long commentId, Long rootCommentId, String content, LocalDateTime createdTime,  String username, String userAvatar ) {
         this.commentId = commentId;
         this.content = content;
-        this.userId = userId;
         this.createdTime = createdTime;
         this.rootCommentId = rootCommentId;
         this.username = username;
+        this.userAvatar = userAvatar;
     }
 
+    /**
+     *  Constructor for sub contact comments
+     * */
+    public CommentQueryResult(Long commentId, Long rootCommentId, String content, LocalDateTime createdTime, String username, String userAvatar, String toUsername) {
+        this.commentId = commentId;
+        this.content = content;
+        this.createdTime = createdTime;
+        this.rootCommentId = rootCommentId;
+        this.username = username;
+        this.toUsername = toUsername;
+        this.userAvatar = userAvatar;
+    }
+
+    /**
+     *  Constructor for latest comments
+     * */
     public CommentQueryResult(String content, LocalDateTime createdTime, String username, String userAvatar) {
         this.content = content;
         this.createdTime = createdTime;

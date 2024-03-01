@@ -9,6 +9,7 @@ import NotFound from "../pages/not-found";
 import CategoryStats from "../pages/category-stats";
 import TagStats from "../pages/tag-stats";
 import User from "../pages/user";
+import Contact from "../pages/contact";
 
 export const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
             {
                 path: '/article/:articleId',
                 element: <ArticleDetails />
+            },
+            {
+                path: '/contact',
+                element: <Contact />
             },
             {
                 path: '/user',

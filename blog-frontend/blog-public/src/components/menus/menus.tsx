@@ -29,6 +29,11 @@ export const menus: Menu[] = [
             }
         ]
     },
+    {
+        name: 'Contact',
+        path: '/contact',
+        icon: <ChatBubbleOvalLeftEllipsisIcon />
+    },
     // {
     //     name: 'Links',
     //     path: '/links',

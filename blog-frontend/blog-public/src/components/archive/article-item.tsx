@@ -9,7 +9,7 @@ interface Props {
 const ArticleItem = ({ article }: Props) => {
     return (
         <div className='flex relative archive-circle-md pl-5'>
-            <Link to={`/article/${article.id}`} className='w-[120px] h-[120px]  rounded-2xl overflow-hidden'>
+            <Link to={`/article/${article.id}`} className='w-[120px] h-[120px] flex-shrink-0  rounded-2xl overflow-hidden'>
                 <img src={article.thumbnail} alt="article image" className='w-full h-full object-cover hover:scale-110 hover-image ' />
             </Link>
 

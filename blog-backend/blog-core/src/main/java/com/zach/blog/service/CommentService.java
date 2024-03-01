@@ -9,11 +9,13 @@ import com.zach.blog.model.SessionUser;
 import java.util.List;
 
 public interface CommentService {
-    PageResponse getComments(Integer pageNum, Integer pageSize, Long articleId);
+    PageResponse getArticleComments(Integer pageNum, Integer pageSize, Long articleId);
 
-    void createComment(SessionUser user, CommentRequest commentRequest);
-
-    List<CommentQueryResult> getLinkComments(Integer pageNum, Integer pageSize);
+    PageResponse getContactComments(Integer pageNum, Integer pageSize);
 
     List<CommentQueryResult> getLatestComments();
+
+    String createContactComment(SessionUser user, CommentRequest commentRequest);
+
+    void createArticleComment(SessionUser user, CommentRequest commentRequest);
 }

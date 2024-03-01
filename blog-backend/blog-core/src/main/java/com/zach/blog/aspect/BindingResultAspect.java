@@ -34,6 +34,7 @@ public class BindingResultAspect {
 
         // get BeanPropertyBindingResult(bindingResult) from joinPoint
         BeanPropertyBindingResult optional = (BeanPropertyBindingResult) listObj.stream()
+                .filter(p -> Objects.nonNull(p))
                 .filter(p -> "BeanPropertyBindingResult".equals(p.getClass().getSimpleName()))
                 .findFirst()
                 .orElse(null);

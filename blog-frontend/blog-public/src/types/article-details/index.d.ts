@@ -21,12 +21,21 @@ interface AdjacentArticle {
     thumbnail: string
 }
 
+interface ReplyUser {
+    commentId: number
+    username: string
+}
+
 interface PostCommentReq {
-    articleId: number
-    type: 'ARTICLE' | 'LINK'
+    articleId?: number
     content: string
+    tempUsername?: string
     rootCommentId: number
     toCommentId?: number
+}
+
+interface PostContactCommentResp {
+    tempUsername?: string
 }
 
 interface GetCommentsReq extends PageRequest {

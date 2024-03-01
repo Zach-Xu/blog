@@ -18,7 +18,7 @@ const UserInfoForm = ({ onSubmit, isAvatarChanged = false }: Props) => {
 
     const updateUserInfo = (event: React.FormEvent) => {
         event.preventDefault()
-        if (username === user?.username && !isAvatarChanged && password === '') {
+        if (username === user?.username && isAvatarChanged && password === '') {
             return
         }
 

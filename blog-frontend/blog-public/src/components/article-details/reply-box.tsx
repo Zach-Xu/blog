@@ -22,11 +22,10 @@ const ReplyBox = ({ placeholder = 'Leave a comment...', allowedComment = true, a
 
     const { mutate } = useMutation({
         mutationKey: ['postComment', articleId],
-        mutationFn: () => commentService.postComment({
+        mutationFn: () => commentService.postArticleComment({
             articleId,
             content,
             rootCommentId,
-            type: 'ARTICLE',
             ...(toCommentId ? { toCommentId } : {})
         }),
         onSuccess: () => {

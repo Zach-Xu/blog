@@ -19,20 +19,25 @@ public class CookieUtils {
         return ResponseCookie.from(jwtName, jwt)
                 .path("/")
                 .httpOnly(true)
+                .maxAge(jwtExpirationMs / 1000)
                 .domain("zachxu.com")   // for development env
                 .secure(false)  // true to make the cookie HTTPS only
-                .maxAge(jwtExpirationMs / 1000)
                 .sameSite("Strict")
+//                .domain("")   // for development env
+//                .secure(true)  // true to make the cookie HTTPS only
+//                .sameSite("None")
                 .build();
     }
+
+
 
     public ResponseCookie destroyJwtCookie(){
         return  ResponseCookie.from(jwtName, null)
                 .path("/")
                 .httpOnly(true)
+                .maxAge(0)
                 .domain("zachxu.com")   // for development env
                 .secure(false)  // true to make the cookie HTTPS only
-                .maxAge(0)
                 .sameSite("Strict")
                 .build();
     }

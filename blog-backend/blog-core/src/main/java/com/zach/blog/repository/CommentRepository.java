@@ -19,11 +19,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username, u.avatar)
             FROM Comment c1
             LEFT JOIN c1.user u
-            LEFT JOIN c1.toComment c2
             WHERE c1.article.id = :articleId
             AND c1.rootCommentId = -1
             ORDER BY c1.createdTime ASC""")
-    Page<CommentQueryResult> findRootCommentsByArticleId(@Param("articleId") Long articleId, Pageable pageable);
+    Page<CommentQueryResult> findRootArticleComments(@Param("articleId") Long articleId, Pageable pageable);
 
     @Query(value = """
             SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.article.id, c1.id , c2.id, c1.content, u.id , u2.id, c1.createdTime, c1.rootCommentId, u.username, u2.username, u.avatar)
@@ -32,24 +31,34 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             LEFT JOIN c1.toComment c2
             LEFT JOIN c2.user u2
             WHERE c1.rootCommentId = :commentId
-            ORDER BY c1.createdTime ASC""")
-    Page<CommentQueryResult> findSubCommentsByRootCommentId(@Param("commentId") Long commentId, Pageable pageable);
-
+            ORDER BY c1.createdTime ASC
+            """)
+    Page<CommentQueryResult> findSubArticleComments(@Param("commentId") Long commentId, Pageable pageable);
 
     @Query(value = """
-            SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.article.id, c1.id , c1.content, u.id , c1.createdTime, c1.rootCommentId, u.username)
+            SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.id, c1.rootCommentId, c1.content, c1.createdTime, c1.tempUsername, u.avatar)
             FROM Comment c1
             LEFT JOIN c1.user u
-            LEFT JOIN c1.toComment c2
-            WHERE c1.type = com.zach.blog.enums.CommentType.LINK
+            WHERE c1.type = com.zach.blog.enums.CommentType.CONTACT
             AND c1.rootCommentId = -1
             ORDER BY c1.createdTime ASC
             """)
-    Page<CommentQueryResult> findRootLinkComments(Pageable pageable);
-
+    Page<CommentQueryResult> findRootContactComments(Pageable pageable);
 
     @Query(value = """
-            SELECT new com.zach.blog.dto.response.CommentQueryResult(c.content, c.createdTime, u.username, u.avatar)
+            SELECT new com.zach.blog.dto.response.CommentQueryResult(c1.id, c1.rootCommentId, c1.content, c1.createdTime, c1.tempUsername, u.avatar, c2.tempUsername)
+            FROM Comment c1 
+            LEFT JOIN c1.toComment c2 
+            LEFT JOIN c1.user u
+            WHERE c1.rootCommentId = :commentId
+            ORDER BY c1.createdTime ASC 
+            """)
+    Page<CommentQueryResult> findSubContactComments(@Param("commentId") Long commentId, Pageable pageable);
+
+    boolean existsByTempUsername(String username);
+
+    @Query(value = """
+            SELECT new com.zach.blog.dto.response.CommentQueryResult(c.content, c.createdTime, c.tempUsername, u.avatar)
             FROM Comment c
             LEFT JOIN c.user u
             ORDER BY c.createdTime DESC 

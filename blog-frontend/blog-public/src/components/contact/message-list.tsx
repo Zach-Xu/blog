@@ -1,21 +1,13 @@
-import React, { Fragment, useState } from 'react'
-import ReplyBox from './reply-box'
-import { commentService } from '../../services/resources/comment-service'
-import CommentItem from './comment-item'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import React, { Fragment } from 'react'
+import { commentService } from '../../services/resources/comment-service'
+import MessageItem from './message-item'
 
-
-
-
-interface Props {
-    articleId: number
-}
-
-const CommentList = ({ articleId }: Props) => {
+const MessageList = () => {
 
     const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-        queryKey: ['articleComments', articleId],
-        queryFn: ({ pageParam }) => commentService.getArticleComments({ articleId, pageNum: pageParam, pageSize: 5 }),
+        queryKey: ['contactComments'],
+        queryFn: ({ pageParam }) => commentService.getContactComments({ pageNum: pageParam, pageSize: 5 }),
         initialPageParam: 0,
         getNextPageParam: (lastPage, _, lastPageParams) => {
             const { totalPages } = lastPage
@@ -24,6 +16,7 @@ const CommentList = ({ articleId }: Props) => {
     })
 
     return (
+
         <>
             {/* Comment List */}
             {
@@ -31,7 +24,7 @@ const CommentList = ({ articleId }: Props) => {
                     <Fragment key={i}>
                         {
                             group.rows.map(comment => (
-                                <CommentItem key={comment.commentId} comment={comment} />
+                                <MessageItem key={comment.commentId} comment={comment} />
                             ))
                         }
                     </Fragment>
@@ -51,8 +44,7 @@ const CommentList = ({ articleId }: Props) => {
                 </div>
             }
         </>
-
     )
 }
 
-export default CommentList
+export default MessageList
